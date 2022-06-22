@@ -3,6 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { ReactiveFormsModule } from '@angular/forms'; 
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './components/layouts/auth/auth.component';
@@ -15,8 +18,13 @@ import { MenuSidebarComponent } from './components/main/menu-sidebar/menu-sideba
 import { MenuItemComponent } from './components/shared/menu-item/menu-item.component';
 import { SearchComponent } from './components/main/header/search/search.component';
 import { UserPanelComponent } from './components/main/menu-sidebar/user-panel/user-panel.component';
-
-
+import { HomePageComponent } from './components/main/home-page/home-page.component';
+import { IonicModule } from '@ionic/angular';
+import { StaffsListComponent } from './components/main/users/staffs/staffs-list/staffs-list.component';
+import { CalendarComponent } from './components/main/users/calendar/calendar.component';
+import { StaffsCalendarComponent } from './components/main/users/staffs/staffs-calendar/staffs-calendar.component';
+import { SigninComponent } from './components/auth/signin/signin.component';
+import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -30,12 +38,22 @@ import { UserPanelComponent } from './components/main/menu-sidebar/user-panel/us
     MenuSidebarComponent,
     MenuItemComponent,
     SearchComponent,
-    UserPanelComponent
+    UserPanelComponent,
+    HomePageComponent,
+    StaffsListComponent,
+    CalendarComponent,
+    StaffsCalendarComponent,
+    SigninComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    IonicModule.forRoot(),
+    MatTableModule,
+    FullCalendarModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

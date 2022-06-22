@@ -1,0 +1,36 @@
+html, body { 
+    height: 100%; 
+    overflow-y: auto !important;
+}
+
+body { 
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+.content-wrapper {
+    .content{
+        padding: 0 0.5rem;
+    }
+}
+
+.fc-event{
+    &-main {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between;
+    } 
+
+    &-content {
+        margin-left: 0.3rem;
+    }
+
+    &-delete {
+        margin-right: 0.3rem;
+
+        &:hover{
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+    }
+}

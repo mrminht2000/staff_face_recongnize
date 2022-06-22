@@ -1,0 +1,40 @@
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { filter, map, startWith, Subject, withLatestFrom, tap } from 'rxjs';
+import { AuthenticateParam } from 'src/app/model/auth/authenticate-param';
+import { Md5 } from 'ts-md5/dist/md5';
+
+@Component({
+  selector: 'app-signin',
+  templateUrl: './signin.component.html',
+  styleUrls: ['./signin.component.scss']
+})
+export class SigninComponent implements OnInit {
+  loginForm = new FormGroup({
+    username: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
+    remember: new FormControl(false)
+  });
+  
+  formSubmit$ = new Subject<void>();
+
+  constructor(
+  ) {}
+
+  ngOnInit(): void {
+    this.formSubmit$
+      .pipe(
+        withLatestFrom(this.loginForm.valueChanges.pipe(startWith({}))),
+        map(([, loginValue]) => loginValue as AuthenticateParam),
+        filter((value) => {
+          return !!value.username || !!value.password;
+        }),
+        tap((value) => {
+          value.password = Md5.hashStr(value.password);
+        })
+      )
+      .subscribe((value) => {
+        console.log(value);
+      });
+  }
+}
