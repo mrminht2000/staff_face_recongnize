@@ -15,11 +15,9 @@ import { FooterComponent } from './components/main/footer/footer.component';
 import { MessagesComponent } from './components/main/header/messages/messages.component';
 import { NotificationsComponent } from './components/main/header/notifications/notifications.component';
 import { MenuSidebarComponent } from './components/main/menu-sidebar/menu-sidebar.component';
-import { MenuItemComponent } from './components/shared/menu-item/menu-item.component';
 import { SearchComponent } from './components/main/header/search/search.component';
 import { UserPanelComponent } from './components/main/menu-sidebar/user-panel/user-panel.component';
 import { HomePageComponent } from './components/main/home-page/home-page.component';
-import { IonicModule } from '@ionic/angular';
 import { StaffsListComponent } from './components/main/users/staffs/staffs-list/staffs-list.component';
 import { CalendarComponent } from './components/main/users/calendar/calendar.component';
 import { StaffsCalendarComponent } from './components/main/users/staffs/staffs-calendar/staffs-calendar.component';
@@ -36,7 +34,6 @@ import { ForgotPasswordComponent } from './components/auth/forgot-password/forgo
     MessagesComponent,
     NotificationsComponent,
     MenuSidebarComponent,
-    MenuItemComponent,
     SearchComponent,
     UserPanelComponent,
     HomePageComponent,
@@ -50,7 +47,6 @@ import { ForgotPasswordComponent } from './components/auth/forgot-password/forgo
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    IonicModule.forRoot(),
     MatTableModule,
     FullCalendarModule,
     ReactiveFormsModule
