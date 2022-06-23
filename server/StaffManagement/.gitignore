@@ -276,3 +276,6 @@ src/**/log/**/*
 
 #Sqlite
 EventTools/Infras/UserDb/UserDb
+
+#appsettings
+appsettings.json
