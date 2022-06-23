@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { filter, map, startWith, Subject, withLatestFrom, tap } from 'rxjs';
 import { AuthenticateParam } from 'src/app/model/auth/authenticate-param';
-import { Md5 } from 'ts-md5/dist/md5';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-signin',
@@ -18,7 +18,8 @@ export class SigninComponent implements OnInit {
   
   formSubmit$ = new Subject<void>();
 
-  constructor(
+  constructor( 
+    private readonly authService: AuthenticationService
   ) {}
 
   ngOnInit(): void {
@@ -30,11 +31,11 @@ export class SigninComponent implements OnInit {
           return !!value.username || !!value.password;
         }),
         tap((value) => {
-          value.password = Md5.hashStr(value.password);
+          value.password = value.password;
         })
       )
       .subscribe((value) => {
-        console.log(value);
+        this.authService.loginUser(value);
       });
   }
 }

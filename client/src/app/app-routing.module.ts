@@ -9,14 +9,23 @@ import { CalendarComponent } from './components/main/users/calendar/calendar.com
 import { StaffsCalendarComponent } from './components/main/users/staffs/staffs-calendar/staffs-calendar.component';
 import { StaffsListComponent } from './components/main/users/staffs/staffs-list/staffs-list.component';
 
+import { AuthGuardService as AuthGuard } from './services/guard-services/auth-guard.service';
+import { LoginGuardService as LoginGuard } from './services/guard-services/login-guard.service';
+
 const routes: Routes = [
-  {path: '', component: MainComponent, children: [
+  {path: '', component: MainComponent, 
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
+    children: [
     {path: '', component: HomePageComponent},
     {path: 'staffs', component: StaffsListComponent},
     {path: 'staffs-calendar', component: StaffsCalendarComponent},
     {path: 'calendar', component:CalendarComponent}
   ]},
-  {path: 'auth', component: AuthComponent, children: [
+  {path: 'auth', component: AuthComponent, 
+    canActivate: [LoginGuard],
+    canActivateChild: [LoginGuard],
+    children: [
     {path: 'signin', component: SigninComponent},
     {path: 'forgot-password', component: ForgotPasswordComponent}
   ]}

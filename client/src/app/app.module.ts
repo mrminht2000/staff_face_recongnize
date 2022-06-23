@@ -23,6 +23,8 @@ import { CalendarComponent } from './components/main/users/calendar/calendar.com
 import { StaffsCalendarComponent } from './components/main/users/staffs/staffs-calendar/staffs-calendar.component';
 import { SigninComponent } from './components/auth/signin/signin.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { ErrorHandlerService } from './services/error-handler.service';
 
 @NgModule({
   declarations: [
@@ -49,9 +51,16 @@ import { ForgotPasswordComponent } from './components/auth/forgot-password/forgo
     BrowserAnimationsModule,
     MatTableModule,
     FullCalendarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorHandlerService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
