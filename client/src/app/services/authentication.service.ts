@@ -6,7 +6,10 @@ import { environment } from 'src/environments/environment';
 import { authToken } from '../common/constant';
 import { AuthenticateParam } from '../models/auth/authenticate-param';
 import { AuthResponseDto } from '../models/auth/dtos/get-authentication';
-import { User } from '../models/auth/user.model';
+import { User } from '../models/user/user.model';
+import { parseJwt } from '../common/jwt-heplers';
+import { CookieService } from 'ngx-cookie';
+
 
 @Injectable({
   providedIn: 'root',
@@ -19,11 +22,12 @@ export class AuthenticationService {
 
   constructor(
     private readonly http: HttpClient,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly cookieService: CookieService
   ) {
     this.authenApi = new URL(`/api/authentication`, environment.apiUrl).href;
     this.currentUser$.asObservable();
-    var token = localStorage.getItem(authToken) || '';
+    var token = this.cookieService.get(authToken);
 
     if (!!token && token != '') {
       this.jwtToCurrentUser(token);
@@ -37,7 +41,7 @@ export class AuthenticationService {
   public loginUser(body: AuthenticateParam) {
     return this.http.post<AuthResponseDto>(this.authenApi, body).subscribe({
       next: (result) => {
-        localStorage.setItem(authToken, result.token);
+        this.cookieService.put(authToken, result.token, { expires: new Date(result.expires) })
         this.jwtToCurrentUser(result.token);
 
         this.router.navigate(['']);
@@ -51,33 +55,12 @@ export class AuthenticationService {
 
   public logout() {
     this.currentUser$.next({} as User);
-    localStorage.removeItem(authToken);
+    this.cookieService.remove(authToken);
     this.router.navigate(['auth/signin']);
   }
 
   jwtToCurrentUser(token: string) {
-    var tokenPayload = this.parseJwt(token);
-
-    this.currentUser$.next({
-      id: tokenPayload.nameid,
-      userName: tokenPayload.email,
-      fullName: tokenPayload.given_name,
-    });
-  }
-
-  parseJwt(token: string) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(
-      window
-        .atob(base64)
-        .split('')
-        .map(function (c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join('')
-    );
-
-    return JSON.parse(jsonPayload);
+    var currentUser = parseJwt(token);
+    this.currentUser$.next(currentUser);
   }
 }

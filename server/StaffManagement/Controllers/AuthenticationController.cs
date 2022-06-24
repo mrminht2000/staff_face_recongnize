@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace StaffManagement.Controllers
 {
@@ -14,10 +15,12 @@ namespace StaffManagement.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthUserService _authUserService;
+        private readonly IConfiguration _configuration;
 
-        public AuthenticationController(IAuthUserService authUserService)
+        public AuthenticationController(IAuthUserService authUserService, IConfiguration configuration)
         {
             _authUserService = authUserService ?? throw new ArgumentNullException(nameof(authUserService));
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -31,7 +34,8 @@ namespace StaffManagement.Controllers
             });
 
             return new AuthUserResp { 
-                Token = result
+                Token = result,
+                Expires = DateTime.Now.AddDays(long.Parse(_configuration["Jwt:ExpiryInDays"]))
             };  
         }
 

@@ -21,7 +21,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
   ) {}
 
   canActivateChild(childRoute: ActivatedRouteSnapshot) {
-    //const expectedRole = route.data.expectedRole;
+    const expectedRole = childRoute.data['expectedRole'] || 0;
 
     if (!this.authService.currentUser.id) {
       this.router.navigate(['/auth/signin']);
@@ -31,7 +31,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
   }
 
   canActivate(route: ActivatedRouteSnapshot) {
-    //const expectedRole = route.data.expectedRole;
+    const expectedRole = route.data['expectedRole'] || 0;
 
     if (!this.authService.currentUser.id) {
       this.router.navigate(['/auth/signin']);

@@ -46,6 +46,7 @@ namespace StaffManagement.Core.Services.Impls
                 Id = currentUser.Id,
                 UserName = currentUser.UserName,
                 FullName = currentUser.FullName,
+                Role = currentUser.Role
             });
         }
 

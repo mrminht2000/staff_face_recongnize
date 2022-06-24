@@ -30,9 +30,10 @@ namespace StaffManagement.Core.Services.Impls
 
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
-                new Claim(JwtRegisteredClaimNames.NameId, data.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, data.UserName),
-                new Claim(JwtRegisteredClaimNames.GivenName, data.FullName)
+                new Claim("user_id", data.Id.ToString()),
+                new Claim("user_name", data.UserName),
+                new Claim("full_name", data.FullName),
+                new Claim("role", data.Role.ToString())
             };
 
             var token = new JwtSecurityToken(

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { Role } from './common/constant';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 import { SigninComponent } from './components/auth/signin/signin.component';
 import { AuthComponent } from './components/layouts/auth/auth.component';
@@ -18,9 +19,9 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
     children: [
     {path: '', component: HomePageComponent},
-    {path: 'staffs', component: StaffsListComponent},
+    {path: 'staffs', component: StaffsListComponent, data: {expectedRole: Role.Admin}},
     {path: 'staffs-calendar', component: StaffsCalendarComponent},
-    {path: 'calendar', component:CalendarComponent}
+    {path: 'calendar', component:CalendarComponent},
   ]},
   {path: 'auth', component: AuthComponent, 
     canActivate: [LoginGuard],

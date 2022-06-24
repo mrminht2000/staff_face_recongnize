@@ -2,8 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
-        <img src="assets/img/logo.png" alt="Logo" class="brand-image img-circle elevation-3"
-            style="opacity: .8">
+        <img src="assets/img/logo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Staff Management</span>
     </a>
 
@@ -24,59 +23,59 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-header">QUẢN LÝ</li>
-                <li class="nav-item menu-open">
-                    <a class="nav-link nav-link-menu">
-                        <i class="nav-icon fa fa-users"></i>
-                        <p>
-                            Nhân viên
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a routerLink="staffs" class="nav-link" routerLinkActive="active">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách nhân viên</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a routerLink="info" class="nav-link" routerLinkActive="active">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Bảng lương</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a routerLink="calendar" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
-                        <p>
-                            Quản lý lịch
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a routerLink="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Simple Tables</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a routerLink="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>DataTables</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a routerLink="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>jsGrid</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                    <li class="nav-header" *ngIf="isAdmin()">QUẢN LÝ</li>
+                    <li class="nav-item menu-open" *ngIf="isAdmin()">
+                        <a class="nav-link nav-link-menu">
+                            <i class="nav-icon fa fa-users"></i>
+                            <p>
+                                Nhân viên
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a routerLink="staffs" class="nav-link" routerLinkActive="active">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Danh sách nhân viên</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a routerLink="info" class="nav-link" routerLinkActive="active">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Bảng lương</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item" *ngIf="isAdmin()">
+                        <a routerLink="calendar" class="nav-link">
+                            <i class="nav-icon fas fa-table"></i>
+                            <p>
+                                Quản lý lịch
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a routerLink="" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Simple Tables</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a routerLink="" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>DataTables</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a routerLink="" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>jsGrid</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 <li class="nav-header">LÀM VIỆC</li>
                 <li class="nav-item">
                     <a routerLink="staffs-calendar" class="nav-link" routerLinkActive="active">

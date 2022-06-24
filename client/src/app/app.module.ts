@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { ReactiveFormsModule } from '@angular/forms'; 
+import { CookieModule } from 'ngx-cookie';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './components/layouts/auth/auth.component';
@@ -24,7 +25,8 @@ import { StaffsCalendarComponent } from './components/main/users/staffs/staffs-c
 import { SigninComponent } from './components/auth/signin/signin.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { ErrorHandlerService } from './services/error-handler.service';
+import { ErrorHandlerService } from './services/intercept/error-handler.service';
+import { AuthorizationHeaderService } from './services/intercept/authorization-header.service';
 
 @NgModule({
   declarations: [
@@ -52,12 +54,18 @@ import { ErrorHandlerService } from './services/error-handler.service';
     MatTableModule,
     FullCalendarModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    CookieModule.forRoot()
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorHandlerService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthorizationHeaderService,
       multi: true
     }
   ],

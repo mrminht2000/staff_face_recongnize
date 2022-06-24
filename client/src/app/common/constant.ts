@@ -19,8 +19,8 @@ export const CSVFile : FileExport = {
 
 export const MaxExportValue : number = 1000;
 
-export const MaxAggregateIdQuery = 5;
-
-export const MaxUuIdQuery = 5;
-
 export const authToken = "authToken";
+
+export enum Role {
+    User, Admin, Manager
+}
