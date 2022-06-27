@@ -32,6 +32,9 @@ namespace StaffManagement.Middlewares
                     case UnauthorizedAccessException e:
                         context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         break;
+                    case NullReferenceException e:
+                        context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                        break;
                     default:
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;

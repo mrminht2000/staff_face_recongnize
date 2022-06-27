@@ -52,7 +52,9 @@ export class ErrorHandlerService implements HttpInterceptor {
     this.authService.logout();
   }
 
-  private handleNotFound(error: HttpErrorResponse) { }
+  private handleNotFound(error: HttpErrorResponse) { 
+    this.router.navigate(['**']);
+  }
 
   private handleBadRequest(error: HttpErrorResponse) { 
     Object.entries(error.error.errors).forEach( ([key, value]) => {

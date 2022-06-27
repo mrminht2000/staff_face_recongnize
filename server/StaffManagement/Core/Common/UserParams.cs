@@ -12,5 +12,10 @@ namespace StaffManagement.Core.Common
         {
             Filters = filters;
         }
+
+        public UserParams()
+        {
+            Filters = null;
+        }
     }
 }

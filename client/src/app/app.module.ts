@@ -7,6 +7,9 @@ import { MatTableModule } from '@angular/material/table';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { ReactiveFormsModule } from '@angular/forms'; 
 import { CookieModule } from 'ngx-cookie';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './components/layouts/auth/auth.component';
@@ -24,9 +27,13 @@ import { CalendarComponent } from './components/main/users/calendar/calendar.com
 import { StaffsCalendarComponent } from './components/main/users/staffs/staffs-calendar/staffs-calendar.component';
 import { SigninComponent } from './components/auth/signin/signin.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+
+import { CapitalizePipe } from './common/pipes/capitalize.pipe';
+
 import { ErrorHandlerService } from './services/intercept/error-handler.service';
 import { AuthorizationHeaderService } from './services/intercept/authorization-header.service';
+import { StaffsProfileComponent } from './components/main/users/staffs/staffs-profile/staffs-profile.component';
+import { NotFoundComponent } from './components/main/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +52,10 @@ import { AuthorizationHeaderService } from './services/intercept/authorization-h
     CalendarComponent,
     StaffsCalendarComponent,
     SigninComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    CapitalizePipe,
+    StaffsProfileComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +65,9 @@ import { AuthorizationHeaderService } from './services/intercept/authorization-h
     FullCalendarModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CookieModule.forRoot()
+    CookieModule.forRoot(),
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [
     {

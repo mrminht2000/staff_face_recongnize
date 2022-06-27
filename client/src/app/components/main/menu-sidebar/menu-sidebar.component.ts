@@ -8,7 +8,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   styleUrls: ['./menu-sidebar.component.scss']
 })
 export class MenuSidebarComponent {
-  constructor(private readonly authService: AuthenticationService) {}
+  constructor(public readonly authService: AuthenticationService) {}
 
   isAdmin() {
     return this.authService.currentUser.role >= Role.Admin;

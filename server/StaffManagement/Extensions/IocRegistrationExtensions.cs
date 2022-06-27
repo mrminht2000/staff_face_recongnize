@@ -27,6 +27,7 @@ namespace StaffManagement.Extensions
         {
             services.AddScoped<IAuthTokenService, JwtAuthService>();
             services.AddScoped<IAuthUserService, AuthUserService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }

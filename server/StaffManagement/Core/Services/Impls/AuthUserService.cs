@@ -41,13 +41,7 @@ namespace StaffManagement.Core.Services.Impls
 
             var currentUser = result.Users.First();
 
-            return _authTokenService.GenerateToken(new UserData
-            {
-                Id = currentUser.Id,
-                UserName = currentUser.UserName,
-                FullName = currentUser.FullName,
-                Role = currentUser.Role
-            });
+            return _authTokenService.GenerateToken(currentUser);
         }
 
         public static string GenerateMD5(string input)

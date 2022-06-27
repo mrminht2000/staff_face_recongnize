@@ -34,7 +34,7 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a routerLink="staffs" class="nav-link" routerLinkActive="active">
+                                <a routerLink="staffs/all" class="nav-link" routerLinkActive="active">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Danh sách nhân viên</p>
                                 </a>
@@ -78,7 +78,7 @@
                     </li>
                 <li class="nav-header">LÀM VIỆC</li>
                 <li class="nav-item">
-                    <a routerLink="staffs-calendar" class="nav-link" routerLinkActive="active">
+                    <a [routerLink]="['/staffs/calendar', authService.currentUser.id]" class="nav-link" routerLinkActive="active">
                         <i class="nav-icon fas fa-calendar-alt"></i>
                         <p>
                             Lịch

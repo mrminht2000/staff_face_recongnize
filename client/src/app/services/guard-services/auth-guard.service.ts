@@ -27,6 +27,12 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
       this.router.navigate(['/auth/signin']);
       return false;
     }
+
+    if(this.authService.currentUser.role < expectedRole) {
+      this.router.navigate(['']);
+      return false;
+    }
+    
     return true;
   }
 
@@ -37,6 +43,12 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
       this.router.navigate(['/auth/signin']);
       return false;
     }
+    
+    if(this.authService.currentUser.role < expectedRole) {
+      this.router.navigate(['']);
+      return false;
+    }
+
     return true;
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { filter, map, startWith, Subject, withLatestFrom, tap } from 'rxjs';
-import { AuthenticateParam } from 'src/app/model/auth/authenticate-param';
+import { AuthenticateParam } from 'src/app/models/auth/authenticate-param';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({

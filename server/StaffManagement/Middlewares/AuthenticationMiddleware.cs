@@ -56,9 +56,10 @@ namespace StaffManagement.Middlewares
                     }, out SecurityToken validatedToken);
 
                     var jwtToken = (JwtSecurityToken)validatedToken;
-                    var claimValue = jwtToken.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.NameId).Value;
 
-                    context.Items["Account"] = claimValue;
+                    context.Items["Account"] = jwtToken.Claims.First(claim => claim.Type == "user_id").Value;
+                    context.Items["AccountRole"] = jwtToken.Claims.First(claim => claim.Type == "role").Value;
+
                 }
                 catch   
                 {
