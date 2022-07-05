@@ -1,54 +1,54 @@
 <body class="hold-transition login-page">
-    <div class="login-box">
-      <!-- /.login-logo -->
-      <div class="card card-outline card-primary">
-        <div class="card-header text-center">
-          <div class="h1"><b>Sign in</b></div>
-        </div>
-        <div class="card-body">
-          <p class="login-box-msg">Đăng nhập để bắt đầu phiên làm việc</p>
-    
-          <form [formGroup]="loginForm" autocomplete="off" (ngSubmit)="formSubmit$.next()">
-            <div class="input-group mb-3">
-              <input type="username" class="form-control" placeholder="Username" formControlName="username">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-envelope"></span>
-                </div>
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <input type="password" class="form-control" placeholder="Password" formControlName="password">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-lock"></span>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-7">
-                <div class="icheck-primary">
-                  <input type="checkbox" id="remember" formControlName="remember">
-                  <label for="remember">
-                    Lưu đăng nhập
-                  </label>
-                </div>
-              </div>
-              <!-- /.col -->
-              <div class="col-5">
-                <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
-              </div>
-              <!-- /.col -->
-            </div>
-          </form>
-          <!-- /.social-auth-links -->
-          <p class="mb-1">
-            <a routerLink="/auth/forgot-password">Quên mật khẩu</a>
-          </p>
-        </div>
-        <!-- /.card-body -->
+  <div class="login-box">
+    <!-- /.login-logo -->
+    <div class="card card-outline card-primary">
+      <div class="card-header text-center">
+        <div class="h1"><b>Sign in</b></div>
       </div>
-      <!-- /.card -->
+      <div class="card-body">
+        <p class="login-box-msg">Đăng nhập để bắt đầu phiên làm việc</p>
+
+        <form [formGroup]="loginForm" autocomplete="off" (ngSubmit)="formSubmit$.next()">
+          <div class="input-group mb-3">
+            <input type="username" class="form-control" placeholder="Username" formControlName="username">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" placeholder="Password" formControlName="password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-7">
+              <div class="icheck-primary">
+                <input type="checkbox" id="remember" formControlName="remember">
+                <label for="remember">
+                  Lưu đăng nhập
+                </label>
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-5">
+              <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
+        <!-- /.social-auth-links -->
+        <p class="mb-1">
+          <a routerLink="/auth/forgot-password">Quên mật khẩu</a>
+        </p>
+      </div>
+      <!-- /.card-body -->
     </div>
-    <!-- /.login-box -->
-    </body>
+    <!-- /.card -->
+  </div>
+  <!-- /.login-box -->
+</body>

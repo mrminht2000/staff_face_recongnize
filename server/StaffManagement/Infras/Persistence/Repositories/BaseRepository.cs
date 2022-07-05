@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace StaffManagement.Infras.Persistence.Repositories
 {
@@ -18,7 +19,14 @@ namespace StaffManagement.Infras.Persistence.Repositories
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public virtual async Task<PaginationResult<TModel>> GetWithPaginationAsync(PaginationParams<TModel> @params, 
+        public virtual async Task<TModel> CreateAsync(TModel obj, CancellationToken cancellationToken)
+        {
+            var model = await _dbContext.Set<TModel>().AddAsync(obj, cancellationToken);
+
+            return model.Entity;
+;       }
+
+        public virtual async Task<QueryResult<TModel>> GetValueAsync(QueryParams<TModel> @params, 
             CancellationToken cancellationToken)
         {
             var query = _dbContext.Set<TModel>().AsQueryable();
@@ -29,23 +37,62 @@ namespace StaffManagement.Infras.Persistence.Repositories
 
             }
 
-            if (!String.IsNullOrEmpty(@params.SortDirection) && !String.IsNullOrEmpty(@params.SortField))
+            var data = await query.ToListAsync(cancellationToken);
+
+            return new QueryResult<TModel>(data);
+        }
+
+        public virtual async Task UpdateAsync(QueryParams<TModel> @params, TModel obj, CancellationToken cancellationToken)
+        {
+            var query = _dbContext.Set<TModel>().AsQueryable();
+
+            if (@params.Filters != null)
             {
-                switch (@params.SortDirection)
-                {
-                    case "asc":
-                        query = query.OrderBy(@params.SortField);
-                        break;
-                    case "desc":
-                        query = query.OrderByDescending(@params.SortField);
-                        break;
-                }
+                query = query.Where(@params.Filters);
+
+            } else
+            {
+                throw new NullReferenceException("Invalid request");
             }
 
-            var total = await query.CountAsync(cancellationToken);
-            var data = await query.Skip(@params.Skip).Take(@params.Take).ToListAsync(cancellationToken);
+            if (query.Count() <= 0)
+            {
+                throw new NullReferenceException("Record not found");
+            }
 
-            return new PaginationResult<TModel>(data, total);
+            var item = query.FirstOrDefault();
+
+            item = obj;
+
+            _dbContext.Update(item);
+
+            await _dbContext.CommitAsync(cancellationToken);
+        }
+
+        public virtual async Task DeleteAsync(QueryParams<TModel> @params, CancellationToken cancellationToken)
+        {
+            var query = _dbContext.Set<TModel>().AsQueryable();
+
+            if (@params.Filters != null)
+            {
+                query = query.Where(@params.Filters);
+
+            }
+            else
+            {
+                throw new NullReferenceException("Invalid request");
+            }
+
+            if (query.Count() <= 0)
+            {
+                throw new NullReferenceException("Record not found");
+            }
+
+            var item = query.FirstOrDefault();
+
+            _dbContext.Remove(item);
+
+            await _dbContext.CommitAsync(cancellationToken);
         }
     }
 }

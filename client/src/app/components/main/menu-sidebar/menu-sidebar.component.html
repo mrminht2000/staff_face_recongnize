@@ -48,7 +48,7 @@
                         </ul>
                     </li>
                     <li class="nav-item" *ngIf="isAdmin()">
-                        <a routerLink="calendar" class="nav-link">
+                        <a routerLink="calendar/all" class="nav-link">
                             <i class="nav-icon fas fa-table"></i>
                             <p>
                                 Quản lý lịch
@@ -57,9 +57,9 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a routerLink="" class="nav-link">
+                                <a routerLink="calendar/unconfirmed" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Simple Tables</p>
+                                    <p>Lịch nghỉ nhân viên</p>
                                 </a>
                             </li>
                             <li class="nav-item">

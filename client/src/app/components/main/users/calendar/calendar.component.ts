@@ -1,98 +1,54 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Calendar } from '@fullcalendar/core';
-import { CalendarOptions, FullCalendarComponent } from '@fullcalendar/angular';
-import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
+import { Component, OnInit } from '@angular/core';
+import { Calendar, CalendarOptions } from '@fullcalendar/angular';
+import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import { EventCalendar } from 'src/app/models/event/event-calendar';
+import { BehaviorSubject } from 'rxjs';
+import { EventService } from 'src/app/services/model-services/event.service';
+import { toEventCalendarArray } from 'src/app/common/event-helpers';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss'],
+  styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit, AfterViewInit {
+export class CalendarComponent implements OnInit {
   calendarOptions: CalendarOptions = {};
   externalEvent = [];
-  
-  event = [
-    {
-      title: 'event 1',
-      color: '#FF5733',
-      date: '2022-06-31', 
-    },
-    {
-      title: 'event 2',
-      date: '2022-06-28',
-    },
-    {
-      title: 'event 3',
-      date: '2022-06-01',
-    },
-  ];
+  events = [] as EventCalendar[];
+  afterGetEvent$ = new BehaviorSubject<EventCalendar[]>([]);
 
-  @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
-
-  constructor() {
-    const name = Calendar.name;
+  constructor(
+    private readonly eventService: EventService
+  ) {
+    const name = Calendar.name
   }
 
   ngOnInit(): void {
-    this.calendarOptions = {
-      plugins: [dayGridPlugin, interactionPlugin],
-      initialView: 'dayGridMonth',
-      headerToolbar: {
-        left: 'prev,next',
-        center: 'title',
-        right: 'dayGridDay,dayGridWeek,dayGridMonth',
-      },
-      themeSystem: 'bootstrap',
-      weekends: true,
-      events: this.event,
-      editable: false,
-      droppable: false,
-      contentHeight: 'auto',
-    };
+    this.eventService.getCompanyEvents().subscribe(res => {
+      this.afterGetEvent$.next(toEventCalendarArray(res.events));
+    })
 
-    this.calendarOptions.eventContent = (arg) => {
-      if(arg.event.title == '*') {
-        
-      }
-      let content = document.createElement('div');
-      content.className = 'fc-event-content';
-      content.innerHTML = arg.event.title;
-      
-      if (arg.event.title[0] != '*') {
-        return { domNodes: [content] };
-      }
-
-      let icon = document.createElement('i');
-      icon.className = 'fc-event-delete fa fa-times';
-
-      icon.addEventListener('click', (e: Event) => {
-        e.stopPropagation(); 
-        arg.event.remove();
-      });
-
-      let arrayOfDomNodes = [content, icon];
-      return { domNodes: arrayOfDomNodes };
-    };
-
-    setTimeout(() => {
-      this.calendarComponent.getApi().render();
-    }, 100);
-  }
-
-  ngAfterViewInit() {
-    let draggableEl = document.getElementById('external-events')!;
-
-    new Draggable(draggableEl, {
-      itemSelector: '.external-event',
-      eventData: (eventEl) => {
-        return {
-          title: eventEl.innerText.trim(),
-          color: eventEl.dataset['color'],
-          className: "external-event-dropped"
-        };
-      },
-    });
+    this.afterGetEvent$.pipe(
+    ).subscribe(events =>{
+      this.calendarOptions = {
+        plugins: [dayGridPlugin, interactionPlugin],
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next',
+          center: 'title',
+          right: 'dayGridDay,dayGridWeek,dayGridMonth',
+        },
+        themeSystem: 'bootstrap',
+        weekends: true,
+        events: events,
+        editable: false,
+        droppable: false,
+        contentHeight: 'auto',
+        eventClick: (arg) => {
+          console.log(arg.event.id);
+        }
+      };
+    })
   }
 }

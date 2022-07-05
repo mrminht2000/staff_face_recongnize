@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Core\Context\" />
+    <Folder Include="ViewModels\Abtractions\" />
   </ItemGroup>
 
   <ItemGroup>

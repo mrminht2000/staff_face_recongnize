@@ -27,7 +27,25 @@ namespace StaffManagement.Infras.Persistence.Repositories
 
             }
 
-            var result = await query.ToListAsync(cancellationToken);
+            var result = await query.Include(user => user.Department)
+                                    .Include(user => user.Job)
+                                    .ToListAsync(cancellationToken);
+
+            return new UserResult(result);
+        }
+
+        public async Task<UserResult> GetUserEventsAsync(UserParams @params, CancellationToken cancellationToken)
+        {
+            var query = _dbContext.Set<User>().AsQueryable();
+
+            if (@params.Filters != null)
+            {
+                query = query.Where(@params.Filters);
+
+            }
+
+            var result = await query.Include(user => user.Events)
+                                    .ToListAsync(cancellationToken);
 
             return new UserResult(result);
         }

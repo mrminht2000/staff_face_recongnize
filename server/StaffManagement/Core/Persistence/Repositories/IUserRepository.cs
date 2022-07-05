@@ -8,5 +8,7 @@ namespace StaffManagement.Core.Persistence.Repositories
     public interface IUserRepository 
     {
         Task<UserResult> GetUserAsync(UserParams @param, CancellationToken cancellationToken);
+
+        Task<UserResult> GetUserEventsAsync(UserParams @params, CancellationToken cancellationToken);
     }
 }

@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../authentication.service';
+import { NotificationService } from '../notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ import { AuthenticationService } from '../authentication.service';
 export class ErrorHandlerService implements HttpInterceptor {
   
   constructor(private readonly router: Router,
-              private readonly authService: AuthenticationService
+              private readonly authService: AuthenticationService,
+              private readonly notification: NotificationService
              ) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req)
@@ -45,7 +47,7 @@ export class ErrorHandlerService implements HttpInterceptor {
   } 
 
   private handleInternetError(error: HttpErrorResponse) {
-    alert(error.error.Message);
+    this.notification.showError(error.error.Message);
   }
 
   private handleUnauthorized(error: HttpErrorResponse) {
@@ -58,7 +60,7 @@ export class ErrorHandlerService implements HttpInterceptor {
 
   private handleBadRequest(error: HttpErrorResponse) { 
     Object.entries(error.error.errors).forEach( ([key, value]) => {
-      alert(key + ': ' + value)
+      this.notification.showError(key + ': ' + value)
     })
   }
 }

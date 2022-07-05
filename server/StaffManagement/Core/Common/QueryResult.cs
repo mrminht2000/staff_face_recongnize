@@ -2,16 +2,13 @@
 
 namespace StaffManagement.Core.Common
 {
-    public class PaginationResult<TModel>
+    public class QueryResult<TModel>
     {
         public List<TModel> Data { get; private set; }
 
-        public int Total { get; private set; }
-
-        public PaginationResult(List<TModel> data, int total)
+        public QueryResult (List<TModel> data)
         {
             Data = data;
-            Total = total;
         }
     }
 }

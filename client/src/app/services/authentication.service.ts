@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { authToken } from '../common/constant';
 import { AuthenticateParam } from '../models/auth/authenticate-param';
@@ -9,6 +9,7 @@ import { AuthResponseDto } from '../models/auth/dtos/get-authentication';
 import { User } from '../models/user/user.model';
 import { parseJwt } from '../common/jwt-heplers';
 import { CookieService } from 'ngx-cookie';
+import { NotificationService } from './notification.service';
 
 
 @Injectable({
@@ -23,7 +24,8 @@ export class AuthenticationService {
   constructor(
     private readonly http: HttpClient,
     private readonly router: Router,
-    private readonly cookieService: CookieService
+    private readonly cookieService: CookieService,
+    private readonly notifitcation: NotificationService
   ) {
     this.authenApi = new URL(`/api/authentication`, environment.apiUrl).href;
     this.currentUser$.asObservable();
@@ -39,17 +41,18 @@ export class AuthenticationService {
   }
 
   public loginUser(body: AuthenticateParam) {
-    return this.http.post<AuthResponseDto>(this.authenApi, body).subscribe({
+    return this.http.post<AuthResponseDto>(this.authenApi, body)
+    .subscribe({
       next: (result) => {
         this.cookieService.put(authToken, result.token, { expires: new Date(result.expires) })
         this.jwtToCurrentUser(result.token);
 
         this.router.navigate(['']);
-        console.log("Dang nhap thanh cong")
+        this.notifitcation.showSuccess("Đăng nhập thành công");
       },
       error: () => {
-        console.log("Dang nhap that bai")
-      },
+        this.notifitcation.showError("Sai tài khoản hoặc mật khẩu")
+      }
     });
   }
 

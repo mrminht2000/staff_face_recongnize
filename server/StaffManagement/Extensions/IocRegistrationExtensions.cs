@@ -5,6 +5,7 @@ using StaffManagement.Infras.Persistence;
 using StaffManagement.Infras.Persistence.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace StaffManagement.Extensions
 {
@@ -17,10 +18,18 @@ namespace StaffManagement.Extensions
             services.AddScoped(sp =>
             {
                 return new MsSqlStaffManagementDbContext(configuration.GetConnectionString(PersistenceConnectionKey));
-            });
+            }); 
+
+            /*
+            services.AddDbContext<MsSqlStaffManagementDbContext>(options => 
+            {
+                options.UseSqlServer(connectionStringForMigration);
+            });*/
+
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<MsSqlStaffManagementDbContext>());
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IEventRepository, EventRepository>();
         }
 
         public static void AddCoreService(this IServiceCollection services)
@@ -28,6 +37,7 @@ namespace StaffManagement.Extensions
             services.AddScoped<IAuthTokenService, JwtAuthService>();
             services.AddScoped<IAuthUserService, AuthUserService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEventService, EventService>();
         }
     }
 }

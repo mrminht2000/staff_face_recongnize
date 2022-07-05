@@ -34,3 +34,21 @@ body {
         }
     }
 }
+
+.tag {
+    &-danger{
+        color:red;
+    }
+
+    &-success{
+        color: rgb(11, 161, 11);
+    }
+
+    &-warning{
+        color: rgba(186, 186, 37, 0.723);
+    }
+}
+
+td {
+    vertical-align: middle !important;
+}

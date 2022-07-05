@@ -6,7 +6,7 @@ import { SigninComponent } from './components/auth/signin/signin.component';
 import { AuthComponent } from './components/layouts/auth/auth.component';
 import { MainComponent } from './components/layouts/main/main.component';
 import { HomePageComponent } from './components/main/home-page/home-page.component';
-import { NotFoundComponent } from './components/main/not-found/not-found.component';
+import { NotFoundComponent } from './components/shared/not-found/not-found.component';
 import { CalendarComponent } from './components/main/users/calendar/calendar.component';
 import { StaffsCalendarComponent } from './components/main/users/staffs/staffs-calendar/staffs-calendar.component';
 import { StaffsListComponent } from './components/main/users/staffs/staffs-list/staffs-list.component';
@@ -14,6 +14,7 @@ import { StaffsProfileComponent } from './components/main/users/staffs/staffs-pr
 
 import { AuthGuardService as AuthGuard } from './services/guard-services/auth-guard.service';
 import { LoginGuardService as LoginGuard } from './services/guard-services/login-guard.service';
+import { UnconfirmedEventsComponent } from './components/main/users/calendar/unconfirmed-events/unconfirmed-events.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent, 
@@ -21,7 +22,10 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
     children: [
     {path: '', component: HomePageComponent},
-    {path: 'calendar', component:CalendarComponent},
+    {path: 'calendar', data: {expectedRole: Role.Admin}, children: [
+      {path: 'all', component: CalendarComponent},
+      {path: 'unconfirmed', component: UnconfirmedEventsComponent}
+    ]},
     {path: 'staffs', children: [
       {path: 'all', component: StaffsListComponent, data: {expectedRole: Role.Admin}},
       {path: ':id', component:StaffsProfileComponent},

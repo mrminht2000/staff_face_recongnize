@@ -20,20 +20,28 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
-                <div class="sticky-top mb-3">
+                <div class="mb-3">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Đăng ký lịch</h4>
+                            <h4 class="card-title">Ghi chú</h4>
                         </div>
                         <div class="card-body">
                             <!-- the events -->
                             <div id="external-events">
-                                <div class="external-event bg-success" data-color="#28a745">*Đi làm</div>
-                                <div class="external-event bg-warning" data-color="#ffc107">*Nghỉ phép</div>
-                                <div class="external-event bg-danger" data-color="#dc3545">*Nghỉ không lương</div>
+                                <div class="external-event bg-success" data-color="#28a745">Đi làm</div>
+                                <div class="external-event bg-warning" data-color="#ffc107">Nghỉ phép</div>
+                                <div class="external-event bg-danger" data-color="#dc3545">Nghỉ không lương</div>
+                                <small class="text-muted">(*) Chưa được quản lý xác nhận</small>
                             </div>
                         </div>
                         <!-- /.card-body -->
+                        <div class="card-footer">
+                            <h4 class="card-subtitle text-muted">Thêm vào lịch</h4>
+                            <div class="row ">
+                                <button class="col-5 btn btn-warning" (click)="openVacationDialog()">Ngày nghỉ</button>
+                                <button class="col-5 btn btn-primary">Sự kiện</button>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.card -->
                 </div>

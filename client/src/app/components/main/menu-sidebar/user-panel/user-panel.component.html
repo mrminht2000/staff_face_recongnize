@@ -3,6 +3,6 @@
         <img src="assets/img/default-profile.png" class="img-circle elevation-2" alt="User Image">
     </div>
     <div class="info">
-        <a href="#" class="d-block">{{authService.currentUser.fullName}}</a>
+        <a (click)="navProfile()" class="d-block">{{authService.currentUser.fullName}}</a>
     </div>
 </div>

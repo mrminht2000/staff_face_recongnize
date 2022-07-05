@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace StaffManagement.ViewModels
 {
-    public class EventQueryResp: PagingQueryResp
+    public class EventQueryResp
     {
-        public List<Event> Data { get; set; }
-
+        public List<Event> Events { get; set; }
     }
 }

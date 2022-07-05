@@ -1,98 +1,73 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Calendar } from '@fullcalendar/core';
-import { CalendarOptions, FullCalendarComponent } from '@fullcalendar/angular';
-import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CalendarOptions } from '@fullcalendar/angular';
+import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { EventService } from 'src/app/services/model-services/event.service';
+import { toEventCalendarArray } from 'src/app/common/event-helpers';
+import { EventCalendar } from 'src/app/models/event/event-calendar';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateVacationComponent } from '../../calendar/dialogs/create-vacation/create-vacation.component';
 
 @Component({
   selector: 'app-staffs-calendar',
   templateUrl: './staffs-calendar.component.html',
   styleUrls: ['./staffs-calendar.component.scss'],
 })
-export class StaffsCalendarComponent implements OnInit, AfterViewInit {
+export class StaffsCalendarComponent implements OnInit, OnDestroy {
   calendarOptions: CalendarOptions = {};
   externalEvent = [];
-  
-  event = [
-    {
-      title: 'event 1',
-      color: '#FF5733',
-      date: '2022-06-31', 
-    },
-    {
-      title: 'event 2',
-      date: '2022-06-28',
-    },
-    {
-      title: 'event 3',
-      date: '2022-06-01',
-    },
-  ];
+  events = [] as EventCalendar[];
+  routeSub = new Subscription();
+  userId = 0;
+  afterGetEvent$ = new BehaviorSubject<EventCalendar[]>([]);
 
-  @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
-
-  constructor() {
-    const name = Calendar.name;
+  constructor(
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly eventService: EventService,
+    private readonly dialog: MatDialog
+  ) {
+    this.routeSub = this.activatedRoute.params.subscribe(params => {
+      this.userId = params['id'];
+    })
   }
 
-  ngOnInit(): void {
-    this.calendarOptions = {
-      plugins: [dayGridPlugin, interactionPlugin],
-      initialView: 'dayGridMonth',
-      headerToolbar: {
-        left: 'prev,next',
-        center: 'title',
-        right: 'dayGridDay,dayGridWeek,dayGridMonth',
-      },
-      themeSystem: 'bootstrap',
-      weekends: true,
-      events: this.event,
-      editable: false,
-      droppable: false,
-      contentHeight: 'auto',
-    };
+  ngOnInit(): void { 
+    this.eventService.getEventsByUser(this.userId).subscribe(res => {
+      this.afterGetEvent$.next(toEventCalendarArray(res.events));
+    })
 
-    this.calendarOptions.eventContent = (arg) => {
-      if(arg.event.title == '*') {
-        
-      }
-      let content = document.createElement('div');
-      content.className = 'fc-event-content';
-      content.innerHTML = arg.event.title;
-      
-      if (arg.event.title[0] != '*') {
-        return { domNodes: [content] };
-      }
-
-      let icon = document.createElement('i');
-      icon.className = 'fc-event-delete fa fa-times';
-
-      icon.addEventListener('click', (e: Event) => {
-        e.stopPropagation(); 
-        arg.event.remove();
-      });
-
-      let arrayOfDomNodes = [content, icon];
-      return { domNodes: arrayOfDomNodes };
-    };
-
-    setTimeout(() => {
-      this.calendarComponent.getApi().render();
-    }, 100);
+    this.afterGetEvent$.pipe(
+    ).subscribe(events =>{
+      this.calendarOptions = {
+        plugins: [dayGridPlugin, interactionPlugin],
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next',
+          center: 'title',
+          right: 'dayGridDay,dayGridWeek,dayGridMonth',
+        },
+        themeSystem: 'bootstrap',
+        weekends: true,
+        events: events,
+        editable: false,
+        droppable: false,
+        contentHeight: 'auto',
+        eventClick: (arg) => {
+          console.log(arg.event.id);
+        }
+      };
+    })
   }
 
-  ngAfterViewInit() {
-    let draggableEl = document.getElementById('external-events')!;
+  ngOnDestroy(): void {
+    this.routeSub.unsubscribe();
+  }
 
-    new Draggable(draggableEl, {
-      itemSelector: '.external-event',
-      eventData: (eventEl) => {
-        return {
-          title: eventEl.innerText.trim(),
-          color: eventEl.dataset['color'],
-          className: "external-event-dropped"
-        };
-      },
-    });
+  openVacationDialog() {
+    this.dialog.open(CreateVacationComponent, {
+      width: '700px'
+    })
   }
 }

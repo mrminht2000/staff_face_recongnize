@@ -14,5 +14,10 @@ namespace StaffManagement.Core.Common
         {
             Users = users.ConvertAll(user => new UserData(user));
         }
+
+        public UserResult(List<UserData> users)
+        {
+            Users = users;
+        }
     }
 }

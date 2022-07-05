@@ -24,3 +24,7 @@ export const authToken = "authToken";
 export enum Role {
     User, Admin, Manager
 }
+
+export enum EventType {
+    Default, Register, Vacation, Absent
+}

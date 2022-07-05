@@ -41,11 +41,9 @@ namespace StaffManagement.Infras.Persistence.EntityTypeConfigurations
                 .HasColumnType("NVARCHAR(50)");
 
             builder.Property(t => t.DepartmentId)
-                .IsRequired()
                 .HasColumnType("BIGINT");
 
             builder.Property(t => t.JobId)
-                .IsRequired()
                 .HasColumnType("BIGINT");
 
             builder.Property(t => t.StartDay)
@@ -54,7 +52,15 @@ namespace StaffManagement.Infras.Persistence.EntityTypeConfigurations
 
             builder.Property(t => t.IsConfirmed)
                 .IsRequired()
-                .HasColumnType("BOOLEAN");
+                .HasColumnType("BIT");
+
+            builder.HasOne(i => i.Department)
+                .WithMany(d => d.Users)
+                .HasForeignKey(e => e.DepartmentId);
+
+            builder.HasOne(i => i.Job)
+                .WithMany(d => d.Users)
+                .HasForeignKey(e => e.JobId);
         }
     }
 }

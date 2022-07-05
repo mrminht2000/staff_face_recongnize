@@ -274,8 +274,11 @@ src/Presentations/Api/KiotVietFnB.OrderingService.Api/appsettings.Local.json
 /src/Presentations/Api/KiotVietFnB.OrderingService.Api/Logging
 src/**/log/**/*
 
-#Sqlite
+# Sqlite
 EventTools/Infras/UserDb/UserDb
 
-#appsettings
+# appsettings
 appsettings.json
+
+# Migrations
+Migrations

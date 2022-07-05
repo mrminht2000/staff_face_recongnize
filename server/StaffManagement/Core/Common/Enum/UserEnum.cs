@@ -1,11 +1,12 @@
 ﻿namespace StaffManagement.Core.Common.Enum
 {
-    public class UserRole
+    public class UserEnum
     {
         public enum Role
         {
             User,
-            Admin
+            Admin,
+            Manager
         }
     }
 }

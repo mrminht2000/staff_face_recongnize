@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using StaffManagement.Extensions;
 using StaffManagement.Middlewares;
 
@@ -37,7 +38,11 @@ namespace StaffManagement
 
             services.AddCoreService();
 
-            services.AddControllers().AddNewtonsoftJson(o => o.AllowInputFormatterExceptionMessages = false);
+            services.AddControllers().AddNewtonsoftJson(o =>
+            {
+                o.AllowInputFormatterExceptionMessages = false;
+                o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -69,7 +74,9 @@ namespace StaffManagement
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
             });
         }
     }

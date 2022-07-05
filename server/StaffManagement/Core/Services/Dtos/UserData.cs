@@ -1,19 +1,20 @@
 ﻿using StaffManagement.Core.Persistence.Models;
 using System;
+using System.Collections.Generic;
 
 namespace StaffManagement.Core.Services.Dtos
 {
     public class UserData
     {
         public string UserName { get; set; } 
-
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string FullName { get; set; }
         public int Role { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public int DepartmentId { get; set; }
-        public int JobId { get; set; }
+        public Department? Department { get; set; }
+        public Job? Job { get; set; }
+        public ICollection<Event>? Events { get; set; }
         public DateTime StartDay { get; set; }
         public bool IsConfirmed { get; set; }
 
@@ -25,8 +26,9 @@ namespace StaffManagement.Core.Services.Dtos
             Role = user.Role;
             PhoneNumber = user.PhoneNumber;
             Email = user.Email;
-            DepartmentId = user.DepartmentId;
-            JobId = user.JobId;
+            Department = user.Department;
+            Job = user.Job;
+            Events = user.Events;
             StartDay = user.StartDay;
             IsConfirmed = user.IsConfirmed;
         }

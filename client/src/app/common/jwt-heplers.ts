@@ -1,6 +1,6 @@
 import { User } from "../models/user/user.model";
 
-export const  parseJwt = (token: string): User => {
+export const parseJwt = (token: string): User => {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     var jsonPayload = decodeURIComponent(

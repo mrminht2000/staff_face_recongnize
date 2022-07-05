@@ -85,7 +85,10 @@
 
                     <ng-container matColumnDef="isConfirmed">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Xác nhận</th>
-                        <td mat-cell *matCellDef="let element">{{element.isConfirmed}}</td>
+                        <td mat-cell *matCellDef="let element">
+                            <div *ngIf="element.isConfirmed"><span class="tag tag-success">Yes</span></div>
+                            <div *ngIf="!element.isConfirmed"><span class="tag tag-danger">No</span></div>
+                        </td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

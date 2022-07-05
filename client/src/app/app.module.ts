@@ -5,11 +5,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { ReactiveFormsModule } from '@angular/forms'; 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { CookieModule } from 'ngx-cookie';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ToastrModule } from 'ngx-toastr';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './components/layouts/auth/auth.component';
@@ -27,13 +32,19 @@ import { CalendarComponent } from './components/main/users/calendar/calendar.com
 import { StaffsCalendarComponent } from './components/main/users/staffs/staffs-calendar/staffs-calendar.component';
 import { SigninComponent } from './components/auth/signin/signin.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
+import { StaffsProfileComponent } from './components/main/users/staffs/staffs-profile/staffs-profile.component';
+import { NotFoundComponent } from './components/shared/not-found/not-found.component';
+import { LoadingComponent } from './components/shared/loading/loading.component';
+import { LoadingHandlerService } from './services/intercepts/loading-handler.service';
+import { NotificationComponent } from './components/shared/notification/notification.component';
+import { CreateVacationComponent } from './components/main/users/calendar/dialogs/create-vacation/create-vacation.component';
 
 import { CapitalizePipe } from './common/pipes/capitalize.pipe';
 
-import { ErrorHandlerService } from './services/intercept/error-handler.service';
-import { AuthorizationHeaderService } from './services/intercept/authorization-header.service';
-import { StaffsProfileComponent } from './components/main/users/staffs/staffs-profile/staffs-profile.component';
-import { NotFoundComponent } from './components/main/not-found/not-found.component';
+import { ErrorHandlerService } from './services/intercepts/error-handler.service';
+import { AuthorizationHeaderService } from './services/intercepts/authorization-header.service';
+import { UnconfirmedEventsComponent } from './components/main/users/calendar/unconfirmed-events/unconfirmed-events.component';
+
 
 @NgModule({
   declarations: [
@@ -55,7 +66,11 @@ import { NotFoundComponent } from './components/main/not-found/not-found.compone
     ForgotPasswordComponent,
     CapitalizePipe,
     StaffsProfileComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    LoadingComponent,
+    NotificationComponent,
+    CreateVacationComponent,
+    UnconfirmedEventsComponent
   ],
   imports: [
     BrowserModule,
@@ -63,11 +78,17 @@ import { NotFoundComponent } from './components/main/not-found/not-found.compone
     BrowserAnimationsModule,
     MatTableModule,
     FullCalendarModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     CookieModule.forRoot(),
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatProgressSpinnerModule,
+    ToastrModule.forRoot(),
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     {
@@ -79,7 +100,13 @@ import { NotFoundComponent } from './components/main/not-found/not-found.compone
       provide: HTTP_INTERCEPTORS,
       useClass: AuthorizationHeaderService,
       multi: true
-    }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingHandlerService,
+      multi: true
+    },
+    MatDatepickerModule
   ],
   bootstrap: [AppComponent]
 })

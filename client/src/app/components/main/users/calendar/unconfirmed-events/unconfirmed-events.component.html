@@ -1,0 +1,97 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Lịch nghỉ nhân viên</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a routerLink="">Staff Management</a></li>
+                    <li class="breadcrumb-item"><a routerLink="calendar">Quản lý lịch</a></li>
+                    <li class="breadcrumb-item active">Lịch nghỉ nhân viên</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<div class="row content">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0">
+                <table mat-table [dataSource]="dataSource" 
+                       class="table table-hover text-nowrap" 
+                       matSort>
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+                        <td mat-cell *matCellDef="let element">{{element.id}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="fullName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tên nhân viên</th>
+                        <td mat-cell *matCellDef="let element">
+                            <a [routerLink]="['/staffs', element.id]">{{element.fullName}}</a>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="role">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Quyền tài khoản</th>
+                        <td mat-cell *matCellDef="let element">{{role[element.role]}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="workingProgress">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tiến độ làm việc</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="progress progress-xs" style="width: 70%;">
+                                <div class="progress-bar progress-bar-info" style="width: 71%"></div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="workingStatus">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Trạng thái làm việc</th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="tag tag-success">Đang làm việc</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="unconfirmedEvents">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ngày nghỉ mới</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="badge badge-pill badge-danger">
+                                {{countEvent(element)}}
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+
+                <mat-paginator 
+                    [pageSize]="paging.defaultPageSize" 
+                    [pageSizeOptions]="paging.pageSizeOptions"
+                    showFirstLastButtons aria-label="Select page of periodic events">
+                </mat-paginator>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+<!-- /.row -->
