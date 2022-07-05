@@ -8,7 +8,9 @@ namespace StaffManagement.Core.Services.Interfaces
 {
     public interface IEventService
     {
-        Task<Event> CreateVacationAsync(Event @event, CancellationToken cancellationToken = default);
+        Task CreateEventAsync(Event @event, CancellationToken cancellationToken = default);
+
+        Task CreateVacationAsync(Event @event, CancellationToken cancellationToken = default);
         
         Task<QueryResult<Event>> QueryEventsByUserIdAsync(QueryEventRequest request, CancellationToken cancellationToken = default);
 
@@ -20,8 +22,10 @@ namespace StaffManagement.Core.Services.Interfaces
 
         Task<QueryResult<Event>> QueryCompanyEventsAsync(CancellationToken cancellationToken = default);
 
+        Task EditEventAsync(Event request, CancellationToken cancellationToken = default);
+
         Task AcceptEventAsync(Event request, CancellationToken cancellationToken = default);
 
-        Task DeclineEventAsync(QueryEventRequest request, CancellationToken cancellationToken = default);
+        Task DeleteEventAsync(QueryEventRequest request, CancellationToken cancellationToken = default);
     }
 }

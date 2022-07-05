@@ -10,13 +10,13 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import { CreateEventReq } from 'src/app/models/event/dtos/create-event-req';
-import { VacationValue } from 'src/app/models/event/vacationValue';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { EventService } from 'src/app/services/model-services/event.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { EventType } from 'src/app/common/constant';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/services/notification.service';
+import { EventValue } from 'src/app/models/event/event-value';
+import { DialogComponent } from '../dialog.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -31,12 +31,11 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-create-vacation',
-  templateUrl: './create-vacation.component.html',
-  styleUrls: ['./create-vacation.component.scss'],
-  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }],
+  selector: 'app-create-event',
+  templateUrl: './create-event.component.html',
+  styleUrls: ['./create-event.component.scss']
 })
-export class CreateVacationComponent implements OnInit, OnDestroy {
+export class CreateEventComponent extends DialogComponent implements OnInit, OnDestroy {
   formSubmit$ = new Subject<void>();
   destroyed$ = new Subject<void>();
 
@@ -44,29 +43,32 @@ export class CreateVacationComponent implements OnInit, OnDestroy {
     eventName: new FormControl(''),
     startTime: new FormControl(''),
     endTime: new FormControl(''),
+    allDay: new FormControl(true)
   });
 
   constructor(
-    private readonly dialogRef: MatDialogRef<CreateVacationComponent>,
+    override dialogRef: MatDialogRef<CreateEventComponent>,
     @Inject(MAT_DIALOG_DATA) public data: CreateEventReq,
     private readonly eventService: EventService,
     private readonly authService: AuthenticationService,
     private readonly router: Router,
     private readonly notification: NotificationService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.formSubmit$
       .pipe(
         withLatestFrom(this.createEventForm.valueChanges.pipe(startWith({}))),
-        map(([, eventValue]) => eventValue as VacationValue),
+        map(([, eventValue]) => eventValue as EventValue),
         filter((value) => {
           if (!(!!value && !!value.eventName && !!value.startTime)) {
             return false;
           }
 
-          if (value.startTime.setHours(0, 0, 0, 0) < (new Date()).setHours(0, 0, 0, 0) || (!!value.endTime && value.startTime > value.endTime)){
-            this.notification.showError("Ngày nghỉ không hợp lệ");
+          if (!!value.endTime && value.startTime > value.endTime){
+            this.notification.showError("Thời gian không hợp lệ");
             return false;
           }
 
@@ -76,34 +78,22 @@ export class CreateVacationComponent implements OnInit, OnDestroy {
       )
       .subscribe((eventValue) => {
         this.eventService
-          .createVacationByUser({
+          .createUserEvent({
             eventName: eventValue.eventName,
             startTime: eventValue.startTime,
             endTime: eventValue.endTime,
-            allDay: true,
+            allDay: eventValue.allDay,
             userId: this.authService.currentUser.id,
-            eventType: EventType.Vacation,
+            eventType: EventType.Default
           } as CreateEventReq)
           .subscribe((res) => {
-            this.onNoClick();
-            this.notification.showSuccess('Thêm ngày nghỉ thành công');
-            this.router
-              .navigateByUrl('/', { skipLocationChange: true })
-              .then(() =>
-                this.router.navigate([
-                  '/staffs/calendar',
-                  this.authService.currentUser.id,
-                ])
-              );
+            this.confirm();
+            this.notification.showSuccess('Thêm sự kiện thành công');
           });
       });
   }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
   }
 }

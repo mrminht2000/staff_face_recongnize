@@ -1,8 +1,8 @@
 import { FileExport } from "../models/file-export";
 
 export const DefaultPaging = {
-    pageSizeOptions: [50, 100, 150, 200, 500],
-    defaultPageSize: 50
+    pageSizeOptions: [10, 20, 50, 100],
+    defaultPageSize: 10
 };
 
 export const ExcelFile : FileExport = {
@@ -27,4 +27,8 @@ export enum Role {
 
 export enum EventType {
     Default, Register, Vacation, Absent
+}
+
+export enum UserStatuses {
+    Working, Unregister, Absent
 }

@@ -17,6 +17,7 @@ namespace StaffManagement.Core.Services.Dtos
         public ICollection<Event>? Events { get; set; }
         public DateTime StartDay { get; set; }
         public bool IsConfirmed { get; set; }
+        public int? Status { get; set; }
 
         public UserData(User user)
         {

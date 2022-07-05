@@ -21,12 +21,51 @@ namespace StaffManagement.Controllers
             _eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
         }
 
+        [AdminRequire]
+        [HttpPost]
+        [Route("create")]
+        public async Task<IActionResult> CreateCompanyEventAsync([FromBody] EventCreateReq req)
+        {
+            await _eventService.CreateEventAsync(new Event
+            {
+                EventName = req.EventName,
+                EventType = req.EventType,
+                StartTime = req.StartTime,
+                EndTime = req.EndTime,
+                AllDay = req.AllDay,
+                Per = req.Per,
+                IsConfirmed = true,
+                UserId = null
+            });
+            return Ok();
+        }
+
+        [AdminOrOwner]
+        [HttpPost]
+        [Route("event")]
+        public async Task<IActionResult> CreateUserEventAsync([FromBody] EventCreateReq req)
+        {
+            await _eventService.CreateEventAsync(new Event
+            {
+                EventName = req.EventName,
+                EventType = req.EventType,
+                StartTime = req.StartTime,
+                EndTime = req.EndTime,
+                AllDay = req.AllDay,
+                Per = req.Per,
+                IsConfirmed = true,
+                UserId = req.UserId
+            });
+             
+            return Ok();
+        }
+
         [AdminOrOwner]
         [HttpPost]
         [Route("vacation")]
         public async Task<IActionResult> CreateVacationAsync([FromBody] EventCreateReq req)
         {
-            var result = await _eventService.CreateVacationAsync(new Event
+            await _eventService.CreateVacationAsync(new Event
             {
                 EventName = req.EventName,
                 EventType = req.EventType,
@@ -38,12 +77,7 @@ namespace StaffManagement.Controllers
                 UserId = req.UserId
             });
 
-            if (result == null)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result);
+            return Ok();
         }
 
         [HttpGet]
@@ -101,11 +135,31 @@ namespace StaffManagement.Controllers
             };
         }
 
+        [AdminOrOwner]
+        [HttpPut]
+        [Route("edit")]
+        public async Task<IActionResult> EditEventAsync([FromBody] Event req)
+        {
+            if (req == null)
+            {
+                return BadRequest();
+            }
+
+            await _eventService.EditEventAsync(req);
+
+            return Ok();
+        }
+
         [AdminRequire]
         [HttpPut]
         [Route("confirmed")]
         public async Task<IActionResult> AcceptEventAsync([FromBody] Event unconfirmedEvent)
         {
+            if (unconfirmedEvent == null)
+            {
+                return BadRequest();
+            }
+
             await _eventService.AcceptEventAsync(unconfirmedEvent);
 
             return Ok();
@@ -113,10 +167,10 @@ namespace StaffManagement.Controllers
 
         [AdminOrOwner]
         [HttpDelete]
-        [Route("decline")]
-        public async Task<IActionResult> DeclineEventAsync([FromQuery] EventQueryReq req)
+        [Route("delete")]
+        public async Task<IActionResult> DeleteEventAsync([FromQuery] EventQueryReq req)
         {
-            await _eventService.DeclineEventAsync(new QueryEventRequest
+            await _eventService.DeleteEventAsync(new QueryEventRequest
             {
                 EventId = req.EventId
             });

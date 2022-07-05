@@ -16,6 +16,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
+import { CapitalizePipe } from './common/pipes/capitalize.pipe';
+
 import { AppComponent } from './app.component';
 import { AuthComponent } from './components/layouts/auth/auth.component';
 import { MainComponent } from './components/layouts/main/main.component';
@@ -35,15 +37,16 @@ import { ForgotPasswordComponent } from './components/auth/forgot-password/forgo
 import { StaffsProfileComponent } from './components/main/users/staffs/staffs-profile/staffs-profile.component';
 import { NotFoundComponent } from './components/shared/not-found/not-found.component';
 import { LoadingComponent } from './components/shared/loading/loading.component';
-import { LoadingHandlerService } from './services/intercepts/loading-handler.service';
 import { NotificationComponent } from './components/shared/notification/notification.component';
-import { CreateVacationComponent } from './components/main/users/calendar/dialogs/create-vacation/create-vacation.component';
-
-import { CapitalizePipe } from './common/pipes/capitalize.pipe';
-
-import { ErrorHandlerService } from './services/intercepts/error-handler.service';
+import { CreateVacationComponent } from './components/shared/dialogs/create-vacation/create-vacation.component';
 import { AuthorizationHeaderService } from './services/intercepts/authorization-header.service';
 import { UnconfirmedEventsComponent } from './components/main/users/calendar/unconfirmed-events/unconfirmed-events.component';
+import { CreateEventComponent } from './components/shared/dialogs/create-event/create-event.component';
+
+import { ErrorHandlerService } from './services/intercepts/error-handler.service';
+import { LoadingHandlerService } from './services/intercepts/loading-handler.service';
+import { ConfirmationComponent } from './components/shared/dialogs/confirmation/confirmation.component';
+import { UnconfirmedEventsDialogComponent } from './components/shared/dialogs/unconfirmed-events-dialog/unconfirmed-events-dialog.component';
 
 
 @NgModule({
@@ -70,7 +73,10 @@ import { UnconfirmedEventsComponent } from './components/main/users/calendar/unc
     LoadingComponent,
     NotificationComponent,
     CreateVacationComponent,
-    UnconfirmedEventsComponent
+    UnconfirmedEventsComponent,
+    CreateEventComponent,
+    ConfirmationComponent,
+    UnconfirmedEventsDialogComponent
   ],
   imports: [
     BrowserModule,

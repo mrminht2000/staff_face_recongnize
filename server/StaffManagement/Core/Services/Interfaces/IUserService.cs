@@ -10,7 +10,10 @@ namespace StaffManagement.Core.Services.Interfaces
     {
         Task<UserResult> QueryUsersAsync(CancellationToken cancellationToken = default);
 
+        Task<UserResult> QueryUsersEventsAsync(CancellationToken cancellationToken = default);
+
         Task<UserData> QueryUserByIdAsync(QueryUserRequest request, CancellationToken cancellationToken = default);
+
     }
 
 }

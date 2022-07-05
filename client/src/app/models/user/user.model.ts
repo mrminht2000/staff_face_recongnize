@@ -24,4 +24,6 @@ export interface User {
     job: Job;
 
     events: Event[];
+
+    status: number;
 }

@@ -1,0 +1,10 @@
+.header, .dialog-message {
+    text-transform: lowercase;
+}
+.header::first-letter, .dialog-message::first-letter {
+    text-transform: uppercase;
+}
+.btn-confirm {
+    background-color: rgb(25, 162, 25);
+    color: #fff;
+}

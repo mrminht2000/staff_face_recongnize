@@ -18,13 +18,19 @@ export class UserService {
   }
 
   getUsers() {
-    return this.httpClient.get<GetUserResp>(this.userApi + 's').pipe(
+    return this.httpClient.get<GetUserResp>(this.userApi).pipe(
+      catchError(() => of({} as GetUserResp))
+    );
+  }
+
+  getUsersEvents() {
+    return this.httpClient.get<GetUserResp>(this.userApi + '/events').pipe(
       catchError(() => of({} as GetUserResp))
     );
   }
 
   getUserById(id: number) {
-    return this.httpClient.get<User>(this.userApi, {
+    return this.httpClient.get<User>(this.userApi + '/info', {
       params: {id: id}
     }).pipe(
       catchError(() => of({} as User))

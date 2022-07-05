@@ -1,16 +1,16 @@
 <div class="card card-primary">
     <div class="card-header">
-        <h3 class="card-title">Đăng ký ngày nghỉ</h3>
+        <h3 class="card-title">Tạo sự kiện</h3>
     </div>
     <form [formGroup]="createEventForm" (ngSubmit)="formSubmit$.next()">
         <div class="card-body">
             <div class="form-group">
-                <label for="eventName">Lý do nghỉ</label>
+                <label for="eventName">Thông tin sự kiện: </label>
                 <input type="name" class="form-control" id="eventName" formControlName="eventName">
             </div>
 
             <div class="form-group">
-                <label>Ngày bắt đầu nghỉ:</label>
+                <label>Ngày bắt đầu: </label>
                 <div class="input-group date">
                     <input type="text" class="form-control datetimepicker-input" [matDatepicker]="pickerStartTime"
                         formControlName="startTime"/>
@@ -22,7 +22,7 @@
             </div>
 
             <div class="form-group">
-                <label>Ngày kết thúc:</label>
+                <label>Ngày kết thúc: </label>
                 <div class="input-group date">
                     <input type="text" class="form-control datetimepicker-input" [matDatepicker]="pickerEndTime"
                         formControlName="endTime"/>
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Lưu sự kiện</button>
         </div>
     </form>
 </div>

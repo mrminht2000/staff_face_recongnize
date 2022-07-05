@@ -5,7 +5,6 @@ import { environment } from 'src/environments/environment';
 import { Event } from 'src/app/models/event/event.model'
 import { GetEventResp } from 'src/app/models/event/dtos/get-event-resp';
 import { CreateEventReq } from 'src/app/models/event/dtos/create-event-req';
-import { User } from 'src/app/models/user/user.model';
 import { GetUserResp } from 'src/app/models/user/dtos/get-user-resp';
 import { AuthenticationService } from '../authentication.service';
 
@@ -22,12 +21,20 @@ export class EventService {
     this.eventApi =  new URL('/api/event', environment.apiUrl).href;
   }
 
-  createVacationByUser(req: CreateEventReq) {
-    return this.httpClient.post<Event>(this.eventApi + '/vacation', req, {
+  createCompantEvent(req: CreateEventReq) {
+    return this.httpClient.post(this.eventApi + '/create', req);
+  }
+
+  createUserEvent(req: CreateEventReq) {
+    return this.httpClient.post(this.eventApi + '/event', req, {
       params: {userid: this.authService.currentUser.id}
-    }).pipe(
-      catchError(() => of({} as Event))
-    );
+    });
+  }
+
+  createVacationByUser(req: CreateEventReq) {
+    return this.httpClient.post(this.eventApi + '/vacation', req, {
+      params: {userid: this.authService.currentUser.id}
+    });
   }
 
   getEventsByUser(userId: number) {
@@ -66,12 +73,16 @@ export class EventService {
     );
   }
 
-  acceptEvent(event: Event) {
-    return this.httpClient.put<Event>(this.eventApi + '/confirmed', event)
+  editEvent(event: Event) {
+    return this.httpClient.put(this.eventApi + '/edit', event)
   }
 
-  declineEvent(id: number) {
-    return this.httpClient.delete<Event>(this.eventApi + '/decline', {
+  acceptEvent(event: Event) {
+    return this.httpClient.put(this.eventApi + '/confirmed', event)
+  }
+
+  deleteEvent(id: number) {
+    return this.httpClient.delete(this.eventApi + '/delete', {
       params: {eventId: id}
     })
   }

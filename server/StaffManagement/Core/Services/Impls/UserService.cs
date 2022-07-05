@@ -8,6 +8,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static StaffManagement.Core.Common.Enum.EventEnum;
+using static StaffManagement.Core.Common.Enum.UserEnum;
 
 namespace StaffManagement.Core.Services.Impls
 {
@@ -39,6 +41,45 @@ namespace StaffManagement.Core.Services.Impls
             var result = await _userRepository.GetUserAsync(new UserParams(), cancellationToken);
 
             return result;
+        }
+
+        public async Task<UserResult> QueryUsersEventsAsync(CancellationToken cancellationToken = default)
+        {
+            var users = await _userRepository.GetUserEventsAsync(new UserParams(), cancellationToken);
+
+            var dateNow = DateTime.Now.Date;
+
+            var result = users.Users.Select(u =>
+            {
+                var user = u;
+                user.Events = user.Events.Where(e =>
+                    e.IsConfirmed == true &&
+                    e.EventType != (int)EventType.Default &&
+                    ((e.EndTime == null && e.StartTime.Date == dateNow) ||
+                    (e.EndTime != null && e.StartTime.Date <= dateNow && e.EndTime.GetValueOrDefault() >= dateNow))
+                ).ToList();
+
+                var absentCount = user.Events.Where(e => e.EventType == (int)EventType.Vacation || e.EventType == (int)EventType.Absent).Count();
+                
+                if( absentCount > 0 )
+                {
+                    user.Status = (int)Status.Absent;
+                    return user;
+                }
+
+                var registerCount = user.Events.Where(e => e.EventType == (int)EventType.Register).Count();
+
+                if (registerCount > 0)
+                {
+                    user.Status = (int)Status.Working;
+                    return user;
+                }
+
+                user.Status = (int)Status.Unregister;
+                return user;
+            }).ToList();
+
+            return new UserResult(result);
         }
     }
 }

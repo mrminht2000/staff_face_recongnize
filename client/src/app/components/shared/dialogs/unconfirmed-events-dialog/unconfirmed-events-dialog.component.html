@@ -1,0 +1,49 @@
+
+  <div class="card-header">
+    <h3 class="card-title">Ngày nghỉ chưa xác nhận</h3>
+  </div>
+  <div class="card-body table-responsive p-0">
+    <table mat-table [dataSource]="dataEventSource" class="table table-hover text-nowrap" matSort>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+        <td mat-cell *matCellDef="let element">{{element.id}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="eventName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Lý do nghỉ</th>
+        <td mat-cell *matCellDef="let element">{{element.eventName}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="startTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ngày bắt đầu</th>
+        <td mat-cell *matCellDef="let element">{{element.startTime | date: 'dd/MM/yyyy'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="endTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ngày kết thúc</th>
+        <td mat-cell *matCellDef="let element">{{element.endTime || element.startTime | date:
+          'dd/MM/yyyy'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Hành động</th>
+        <td mat-cell *matCellDef="let element">
+          <div>
+            <button class="btn btn-success btn-sm" [hidden]="!isAdmin()" (click)="acceptEvent(element)">Accept</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteEvent(element)">Decline</button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedEventColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedEventColumns"></tr>
+    </table>
+
+    <mat-paginator [pageSize]="paging.defaultPageSize" [pageSizeOptions]="paging.pageSizeOptions" showFirstLastButtons
+      aria-label="Select page of periodic events">
+    </mat-paginator>
+  </div>
+
+  <div class="card-footer">
+    <button class="btn btn-danger" (click)="cancel()">Đóng</button>
+  </div>

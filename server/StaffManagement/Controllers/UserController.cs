@@ -10,6 +10,7 @@ namespace StaffManagement.Controllers
 {
     [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -19,7 +20,7 @@ namespace StaffManagement.Controllers
         }
 
         [AdminRequire]
-        [HttpGet("api/users")]
+        [HttpGet]
         public async Task<UserQueryResp> QueryUsersAsync()
         {
             var result = await _userService.QueryUsersAsync();
@@ -30,7 +31,21 @@ namespace StaffManagement.Controllers
             };
         }
 
-        [HttpGet("api/user/{id=id}")]
+        [AdminRequire]
+        [HttpGet]
+        [Route("events")]
+        public async Task<UserQueryResp> QueryUsersEventsAsync()
+        {
+            var result = await _userService.QueryUsersEventsAsync();
+
+            return new UserQueryResp
+            {
+                Users = result.Users
+            };
+        }
+
+        [HttpGet]
+        [Route("info")]
         public async Task<UserData> QueryUserByIdAsync([FromQuery] UserQueryReq req)
         {
             var result = await _userService.QueryUserByIdAsync(new QueryUserRequest { Id = req.Id });

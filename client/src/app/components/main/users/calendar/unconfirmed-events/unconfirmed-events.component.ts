@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DefaultPaging, Role } from 'src/app/common/constant';
 import { User } from 'src/app/models/user/user.model';
+import { DialogService } from 'src/app/services/dialog.service';
 import { EventService } from 'src/app/services/model-services/event.service';
 import { UserService } from 'src/app/services/model-services/user.service';
 
@@ -34,7 +35,8 @@ export class UnconfirmedEventsComponent implements OnInit {
 
   constructor(
     private readonly userService: UserService,
-    private readonly eventService: EventService
+    private readonly eventService: EventService,
+    private readonly dialog: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -47,6 +49,10 @@ export class UnconfirmedEventsComponent implements OnInit {
 
   countEvent(user: User) {
     return user.events.length;
+  }
+
+  openEventsDialog(user: User) {
+    this.dialog.openUnconfirmedEvents(user);
   }
 
 }

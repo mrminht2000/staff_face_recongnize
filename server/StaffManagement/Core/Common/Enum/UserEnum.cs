@@ -8,5 +8,12 @@
             Admin,
             Manager
         }
+
+        public enum Status
+        {
+            Working,
+            Unregister,
+            Absent
+        }
     }
 }

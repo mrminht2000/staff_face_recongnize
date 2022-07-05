@@ -2,13 +2,16 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CalendarOptions } from '@fullcalendar/angular';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, Subject, Subscription, takeUntil } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from 'src/app/services/model-services/event.service';
 import { toEventCalendarArray } from 'src/app/common/event-helpers';
 import { EventCalendar } from 'src/app/models/event/event-calendar';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateVacationComponent } from '../../calendar/dialogs/create-vacation/create-vacation.component';
+import { CreateVacationComponent } from '../../../../shared/dialogs/create-vacation/create-vacation.component'
+import { CreateEventComponent } from '../../../../shared/dialogs/create-event/create-event.component';
+import { DialogService } from 'src/app/services/dialog.service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-staffs-calendar',
@@ -19,16 +22,20 @@ export class StaffsCalendarComponent implements OnInit, OnDestroy {
   calendarOptions: CalendarOptions = {};
   externalEvent = [];
   events = [] as EventCalendar[];
-  routeSub = new Subscription();
+  destroyed$ = new Subject<boolean>();
   userId = 0;
   afterGetEvent$ = new BehaviorSubject<EventCalendar[]>([]);
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly eventService: EventService,
-    private readonly dialog: MatDialog
+    private readonly authService: AuthenticationService,
+    private readonly dialog: DialogService,
+    private readonly router: Router
   ) {
-    this.routeSub = this.activatedRoute.params.subscribe(params => {
+    this.activatedRoute.params.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe(params => {
       this.userId = params['id'];
     })
   }
@@ -59,15 +66,32 @@ export class StaffsCalendarComponent implements OnInit, OnDestroy {
         }
       };
     })
+
+    this.dialog.confirmed().pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe((confirmed) => {
+      if (confirmed) {
+        this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() =>
+            this.router.navigate([
+              '/staffs/calendar',
+              this.authService.currentUser.id,
+            ])
+          );
+      }
+    })
   }
 
   ngOnDestroy(): void {
-    this.routeSub.unsubscribe();
+    this.destroyed$.next(true);
   }
 
   openVacationDialog() {
-    this.dialog.open(CreateVacationComponent, {
-      width: '700px'
-    })
+    this.dialog.openCreateVacation();
+  }
+
+  openEventDialog() {
+    this.dialog.openCreateVacation();
   }
 }
