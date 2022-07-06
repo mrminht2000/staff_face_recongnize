@@ -94,4 +94,8 @@ export class StaffsCalendarComponent implements OnInit, OnDestroy {
   openEventDialog() {
     this.dialog.openCreateVacation();
   }
+
+  isOwner(){
+    return this.authService.currentUser.id == this.userId;
+  }
 }
