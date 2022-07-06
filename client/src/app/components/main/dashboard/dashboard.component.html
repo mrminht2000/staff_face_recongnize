@@ -1,0 +1,81 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Trang chủ</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active">Staff Management</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>{{usersCount}}</h3>
+
+                        <p>Nhân viên</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-stalker"></i>
+                    </div>
+                    <a routerLink="staffs/all" class="small-box-footer">Chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{registerCount}}</h3>
+
+                        <p>Đang làm việc</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-checkmark-round"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>{{unregisterCount}}</h3>
+
+                        <p>Chưa chấm công</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-help"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>{{absentCount}}</h3>
+
+                        <p>Xin phép nghỉ</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-close-round"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>

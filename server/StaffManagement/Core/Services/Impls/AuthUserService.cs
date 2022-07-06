@@ -3,6 +3,7 @@ using StaffManagement.Core.Persistence.Models;
 using StaffManagement.Core.Persistence.Repositories;
 using StaffManagement.Core.Services.Dtos;
 using StaffManagement.Core.Services.Interfaces;
+using StaffManagement.Extensions;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -28,7 +29,7 @@ namespace StaffManagement.Core.Services.Impls
             if (request.UserName == null || request.Password == null) 
                 throw new ArgumentNullException("UserName and Password invalid");
 
-            var passwordMd5 = GenerateMD5(request.Password);
+            var passwordMd5 = request.Password.GenerateMD5();
 
             Expression<Func<User, bool>> filters = @user => request.UserName == @user.UserName && passwordMd5 == @user.Password;
 
@@ -42,22 +43,6 @@ namespace StaffManagement.Core.Services.Impls
             var currentUser = result.Users.First();
 
             return _authTokenService.GenerateToken(currentUser);
-        }
-
-        public static string GenerateMD5(string input)
-        {
-            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
-            {
-                byte[] inputBytes = Encoding.ASCII.GetBytes(input);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < hashBytes.Length; i++)
-                {
-                    sb.Append(hashBytes[i].ToString("X2"));
-                }
-                return sb.ToString().ToLower();
-            }
         }
     }
 }

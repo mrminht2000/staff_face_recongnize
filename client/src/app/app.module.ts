@@ -47,7 +47,9 @@ import { ErrorHandlerService } from './services/intercepts/error-handler.service
 import { LoadingHandlerService } from './services/intercepts/loading-handler.service';
 import { ConfirmationComponent } from './components/shared/dialogs/confirmation/confirmation.component';
 import { UnconfirmedEventsDialogComponent } from './components/shared/dialogs/unconfirmed-events-dialog/unconfirmed-events-dialog.component';
-
+import { ProfileSettingsComponent } from './components/main/users/staffs/staffs-profile/profile-settings/profile-settings.component';
+import { EditProfileComponent } from './components/shared/dialogs/edit-profile/edit-profile.component';
+import { DashboardComponent } from './components/main/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,10 @@ import { UnconfirmedEventsDialogComponent } from './components/shared/dialogs/un
     UnconfirmedEventsComponent,
     CreateEventComponent,
     ConfirmationComponent,
-    UnconfirmedEventsDialogComponent
+    UnconfirmedEventsDialogComponent,
+    ProfileSettingsComponent,
+    EditProfileComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

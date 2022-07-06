@@ -1,17 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DefaultPaging, EventType, Role } from 'src/app/common/constant';
+import { EventType, Role } from 'src/app/common/constant';
 import { User } from 'src/app/models/user/user.model';
-import { Event } from 'src/app/models/event/event.model';
 import { UserService } from 'src/app/services/model-services/user.service';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { EventService } from 'src/app/services/model-services/event.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { NotificationService } from 'src/app/services/notification.service';
-import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-staffs-profile',
@@ -23,30 +16,13 @@ export class StaffsProfileComponent implements OnInit, OnDestroy {
   user = {} as User;
   role = Role;
   routeSub = new Subscription();
-  displayedEventColumns = [
-    'id',
-    'eventName',
-    'startTime',
-    'endTime',
-    'actions',
-  ];
-
-  dataEventSource = new MatTableDataSource([] as Event[]);
-
-  paging = DefaultPaging;
 
   eventType = EventType;
-
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly userService: UserService,
-    private readonly eventService: EventService,
     private readonly authService: AuthenticationService,
-    private readonly notification: NotificationService,
-    private readonly dialog: DialogService
   ) {
     this.routeSub = this.activatedRoute.params.subscribe((params) => {
       this.userId = params['id'];
@@ -59,16 +35,6 @@ export class StaffsProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  onUnconfirmedEvents() {
-    this.eventService
-      .getUnconfirmEventsByUserId(this.user.id)
-      .subscribe((res) => {
-        this.dataEventSource = new MatTableDataSource(res.events as Event[]);
-        this.dataEventSource.sort = this.sort;
-        this.dataEventSource.paginator = this.paginator;
-      });
-  }
-
   ngOnDestroy(): void {
     this.routeSub.unsubscribe();
   }
@@ -79,37 +45,5 @@ export class StaffsProfileComponent implements OnInit, OnDestroy {
 
   isAdminOrOwner() {
     return this.user.id == this.authService.currentUser.id || this.isAdmin();
-  }
-
-  acceptEvent(event: Event) {
-    this.dialog.openConfirm({
-      title: 'Xác nhận',
-      message: 'Bạn có xác nhận cho nhân viên nghỉ ngày này không ?',
-    });
-    this.dialog.confirmed().subscribe((confirmed) => {
-      if (confirmed) {
-        event.isConfirmed = true;
-        this.eventService.acceptEvent(event).subscribe((res) => {
-          this.notification.showSuccess('Đồng ý ngày nghỉ thành công');
-          this.onUnconfirmedEvents();
-        });
-      }
-    });
-  }
-
-  deleteEvent(event: Event) {
-    this.dialog.openConfirm({
-      title: 'Xác nhận',
-      message: 'Bạn có xác nhận từ chối nhân viên nghỉ ngày này không ?',
-    });
-
-     this.dialog.confirmed().subscribe((confirmed) => {
-      if (confirmed) {
-        this.eventService.deleteEvent(event.id).subscribe((res) => {
-          this.notification.showError('Đã từ chối ngày nghỉ');
-          this.onUnconfirmedEvents();
-        });
-      }
-    });
   }
 }

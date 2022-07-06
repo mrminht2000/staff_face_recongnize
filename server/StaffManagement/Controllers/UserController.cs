@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StaffManagement.Core.Persistence.Models;
 using StaffManagement.Core.Services.Dtos;
 using StaffManagement.Core.Services.Interfaces;
 using StaffManagement.Middlewares.Attributes;
@@ -17,6 +18,32 @@ namespace StaffManagement.Controllers
         public UserController(IUserService userService)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+        }
+
+        [AdminRequire]
+        [HttpPost]
+        [Route("create")]
+        public async Task<IActionResult> CreateUserAsync([FromBody] UserCreateReq req)
+        {
+            if(req == null)
+            {
+                return BadRequest();
+            }
+
+            await _userService.CreateUserAsync(new User
+            {
+                UserName = req.UserName,
+                Password = req.Password,
+                FullName = req.FullName,
+                Email = req.Email,
+                PhoneNumber = req.PhoneNumber,
+                Role = req.Role,
+                JobId = req.JobId,
+                DepartmentId = req.DepartmentId,
+                IsConfirmed = true
+            });
+
+            return Ok();
         }
 
         [AdminRequire]
@@ -51,6 +78,20 @@ namespace StaffManagement.Controllers
             var result = await _userService.QueryUserByIdAsync(new QueryUserRequest { Id = req.Id });
 
             return result;
+        }
+
+        [HttpPut]
+        [Route("edit")]
+        public async Task<IActionResult> EditUserAsync([FromBody] User user)
+        {
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            await _userService.UpdateUserAsync(user);
+
+            return Ok();
         }
     }
 }

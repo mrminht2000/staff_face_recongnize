@@ -1,0 +1,51 @@
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Chỉnh sửa thông tin</h3>
+    </div>
+    <form [formGroup]="editUserForm" (ngSubmit)="formSubmit$.next()">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="userName">Tên đăng nhập</label>
+                <input type="text" class="form-control" id="userName" formControlName="userName">
+            </div>
+
+            <div class="form-group">
+                <label for="fullName">Tên đầy đủ</label>
+                <input type="text" class="form-control" id="fullName" formControlName="fullName">
+            </div>
+
+            <div class="form-group">
+                <label for="role">Quyền tài khoản</label>
+                <select formControlName="role" id="role" class="form-control">
+                    <option *ngFor="let role of roleKeys; index as i" [ngValue]="i">
+                     {{ role }}
+                    </option>
+                  </select> 
+            </div>
+
+            <div class="form-group">
+                <label for="phoneNumber">Số điện thoại</label>
+                <input type="text" class="form-control" id="phoneNumber" formControlName="phoneNumber">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" formControlName="email">
+            </div>
+
+            <div class="form-group">
+                <label for="departmentId">Phòng/ban</label>
+                <input type="number" class="form-control" id="departmentId" formControlName="departmentId">
+            </div>
+
+            <div class="form-group">
+                <label for="jobId">Chức vụ</label>
+                <input type="number" class="form-control" id="jobId" formControlName="jobId">
+            </div>
+        </div>
+        <div class="card-footer d-flex">
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            <button class="btn btn-danger ml-auto" (click)="cancel()">Huỷ bỏ</button>
+        </div>
+    </form>
+</div>

@@ -17,6 +17,11 @@ namespace StaffManagement.Infras.Persistence.Repositories
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
+        public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
+        {
+            await _dbContext.Set<User>().AddAsync(user, cancellationToken);
+        }
+
         public async Task<UserResult> GetUserAsync(UserParams @params, CancellationToken cancellationToken)
         {
             var query = _dbContext.Set<User>().AsQueryable();
@@ -48,6 +53,37 @@ namespace StaffManagement.Infras.Persistence.Repositories
                                     .ToListAsync(cancellationToken);
 
             return new UserResult(result);
+        }
+
+        public async Task UpdateUserAsync(UserParams @params, User user, CancellationToken cancellationToken)
+        {
+            var query = _dbContext.Set<User>().AsQueryable();
+
+            if (@params.Filters != null)
+            {
+                query = query.Where(@params.Filters);
+
+            }
+            else
+            {
+                throw new ArgumentNullException("Invalid request");
+            }
+
+            if (query.Count() <= 0)
+            {
+                throw new NullReferenceException("Record not found");
+            }
+
+            var item = query.FirstOrDefault();
+
+            if (user.Password == null)
+            {
+                user.Password = item.Password;
+            }
+
+            _dbContext.Update(user);
+
+            await _dbContext.CommitAsync(cancellationToken);
         }
     }
 }

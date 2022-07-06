@@ -52,3 +52,16 @@ body {
 td {
     vertical-align: middle !important;
 }
+
+a {
+    cursor: pointer;
+}
+
+.main-header {
+    z-index: 999 !important;
+}
+
+.cdk-global-overlay-wrapper {
+    overflow: auto;
+    pointer-events: auto;
+  }

@@ -1,8 +1,10 @@
 ﻿using StaffManagement.Core.Common;
+using StaffManagement.Core.Context;
 using StaffManagement.Core.Persistence.Models;
 using StaffManagement.Core.Persistence.Repositories;
 using StaffManagement.Core.Services.Dtos;
 using StaffManagement.Core.Services.Interfaces;
+using StaffManagement.Extensions;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,10 +18,23 @@ namespace StaffManagement.Core.Services.Impls
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        private readonly IAuthenticationContext _authenContext;
+        public UserService(IUserRepository userRepository, IAuthenticationContext authenContext)
         {
             _userRepository = userRepository;
+            _authenContext = authenContext;
         }
+
+        public async Task CreateUserAsync(User @user, CancellationToken cancellationToken = default)
+        {
+            if (@user == null)
+            {
+                throw new ArgumentNullException(nameof(@user));
+            }
+
+            await _userRepository.CreateUserAsync(@user, cancellationToken);
+        }
+
         public async Task<UserData> QueryUserByIdAsync(QueryUserRequest request, CancellationToken cancellationToken = default)
         {
             Expression<Func<User, bool>> filters = @user => request.Id == @user.Id;
@@ -80,6 +95,28 @@ namespace StaffManagement.Core.Services.Impls
             }).ToList();
 
             return new UserResult(result);
+        }
+
+        public async Task UpdateUserAsync(User request, CancellationToken cancellationToken = default)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (request.Password != null)
+            {
+                request.Password = request.Password.GenerateMD5();
+            }
+
+            if (_authenContext.UserRole < (int)Role.Admin)
+            {
+                request.IsConfirmed = false;
+            }
+
+            Expression<Func<User, bool>> filters = @user => request.Id == @user.Id;
+
+            await _userRepository.UpdateUserAsync(new UserParams(filters), request, cancellationToken);
         }
     }
 }

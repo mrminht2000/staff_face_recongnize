@@ -15,6 +15,7 @@ import { StaffsProfileComponent } from './components/main/users/staffs/staffs-pr
 import { AuthGuardService as AuthGuard } from './services/guard-services/auth-guard.service';
 import { LoginGuardService as LoginGuard } from './services/guard-services/login-guard.service';
 import { UnconfirmedEventsComponent } from './components/main/users/calendar/unconfirmed-events/unconfirmed-events.component';
+import { DashboardComponent } from './components/main/dashboard/dashboard.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent, 
@@ -22,6 +23,7 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
     children: [
     {path: '', component: HomePageComponent},
+    {path: 'dashboard', component: DashboardComponent, data: {expectedRole: Role.Admin}},
     {path: 'calendar', data: {expectedRole: Role.Admin}, children: [
       {path: 'all', component: CalendarComponent},
       {path: 'unconfirmed', component: UnconfirmedEventsComponent}
@@ -29,7 +31,7 @@ const routes: Routes = [
     {path: 'staffs', children: [
       {path: 'all', component: StaffsListComponent, data: {expectedRole: Role.Admin}},
       {path: ':id', component:StaffsProfileComponent},
-      {path: 'calendar/:id', component: StaffsCalendarComponent}
+      {path: ':id/calendar', component: StaffsCalendarComponent}
     ]}
   ]},
   {path: 'auth', component: AuthComponent, 

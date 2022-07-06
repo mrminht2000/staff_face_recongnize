@@ -27,6 +27,8 @@ namespace StaffManagement.Middlewares
                 context.Response.ContentType = "application/json";
                 var response = new ErrorRespond();
 
+                Console.WriteLine(error);
+
                 switch (error)
                 {
                     case UnauthorizedAccessException e:

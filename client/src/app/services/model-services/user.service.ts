@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, of } from 'rxjs';
 import { GetUserResp } from 'src/app/models/user/dtos/get-user-resp';
+import { UserData } from 'src/app/models/user/user-data';
 import { User } from 'src/app/models/user/user.model';
 import { environment } from 'src/environments/environment';
 
@@ -15,6 +16,10 @@ export class UserService {
     private readonly httpClient: HttpClient
   ) { 
     this.userApi =  new URL('/api/user', environment.apiUrl).href;
+  }
+
+  createUser(user: UserData) {
+    this.httpClient.post(this.userApi + '/create', user);
   }
 
   getUsers() {
@@ -35,5 +40,9 @@ export class UserService {
     }).pipe(
       catchError(() => of({} as User))
     );
+  }
+
+  updateUser(user: UserData) {
+    return this.httpClient.put(this.userApi + '/edit', user);
   }
 }

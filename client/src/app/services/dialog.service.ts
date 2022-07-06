@@ -1,3 +1,4 @@
+import { Overlay, RepositionScrollStrategy } from '@angular/cdk/overlay';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, take, map } from 'rxjs';
@@ -5,6 +6,7 @@ import { ConfirmationComponent } from '../components/shared/dialogs/confirmation
 import { CreateEventComponent } from '../components/shared/dialogs/create-event/create-event.component';
 import { CreateVacationComponent } from '../components/shared/dialogs/create-vacation/create-vacation.component';
 import { DialogComponent } from '../components/shared/dialogs/dialog.component';
+import { EditProfileComponent } from '../components/shared/dialogs/edit-profile/edit-profile.component';
 import { UnconfirmedEventsDialogComponent } from '../components/shared/dialogs/unconfirmed-events-dialog/unconfirmed-events-dialog.component';
 import { DialogData } from '../models/dialog-data';
 import { User } from '../models/user/user.model';
@@ -14,9 +16,14 @@ import { User } from '../models/user/user.model';
 })
 export class DialogService {
 
+  scrollStrategy: RepositionScrollStrategy;
+
   constructor(
-    private readonly dialog: MatDialog
-  ) { }
+    private readonly dialog: MatDialog,
+    private readonly overlay: Overlay
+  ) { 
+    this.scrollStrategy = this.overlay.scrollStrategies.reposition();
+  }
 
   dialogRef!: MatDialogRef<DialogComponent>;
 
@@ -40,6 +47,13 @@ export class DialogService {
 
   public openUnconfirmedEvents(user: User) {
     this.dialogRef = this.dialog.open(UnconfirmedEventsDialogComponent, {
+      data: user,
+      width: '700px'
+    })
+  }
+
+  public openEditUser(user: User) {
+    this.dialogRef = this.dialog.open(EditProfileComponent, {
       data: user,
       width: '700px'
     })

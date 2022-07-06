@@ -6,12 +6,17 @@ using StaffManagement.Infras.Persistence.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using StaffManagement.Core.Context;
+using Microsoft.AspNetCore.Http;
+using System;
 
 namespace StaffManagement.Extensions
 {
     public static class IocRegistrationExtensions
     {
         private const string PersistenceConnectionKey = "MasterDb";
+        private const string UserIdKey = "Account";
+        private const string UserRoleKey = "AccountRole";
 
         public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
@@ -38,6 +43,23 @@ namespace StaffManagement.Extensions
             services.AddScoped<IAuthUserService, AuthUserService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEventService, EventService>();
+        }
+
+        public static void AddAuthenticationContext(this IServiceCollection services)
+        {
+            services.AddScoped<IAuthenticationContext>(sp =>
+            {
+                var context = sp.GetRequiredService<IHttpContextAccessor>();
+
+                if (context.HttpContext.Items.ContainsKey(UserIdKey) && context.HttpContext.Items.ContainsKey(UserRoleKey))
+                {
+                    var userId = int.Parse((string)context.HttpContext.Items[UserIdKey]);
+                    var userRole = int.Parse((string)context.HttpContext.Items[UserRoleKey]);
+                    return new AuthenticationContext(userId, userRole);
+                }
+
+                throw new UnauthorizedAccessException("Signing in is required");
+            });
         }
     }
 }

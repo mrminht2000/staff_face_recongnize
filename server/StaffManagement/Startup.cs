@@ -49,6 +49,8 @@ namespace StaffManagement
                 options.SaveToken = true;
             });
 
+            services.AddAuthenticationContext();
+
             services.AddControllers();
         }
 

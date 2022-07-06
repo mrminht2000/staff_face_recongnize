@@ -16,10 +16,12 @@ import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-unconfirmed-events',
   templateUrl: './unconfirmed-events-dialog.component.html',
-  styleUrls: ['./unconfirmed-events-dialog.component.scss']
+  styleUrls: ['./unconfirmed-events-dialog.component.scss'],
 })
-export class UnconfirmedEventsDialogComponent extends DialogComponent implements OnInit, OnDestroy {
-
+export class UnconfirmedEventsDialogComponent
+  extends DialogComponent
+  implements OnInit, OnDestroy
+{
   constructor(
     override dialogRef: MatDialogRef<UnconfirmedEventsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public user: User,
@@ -27,7 +29,7 @@ export class UnconfirmedEventsDialogComponent extends DialogComponent implements
     private readonly authService: AuthenticationService,
     private readonly notification: NotificationService,
     private readonly dialog: DialogService
-  ) { 
+  ) {
     super();
   }
 
@@ -50,27 +52,27 @@ export class UnconfirmedEventsDialogComponent extends DialogComponent implements
 
   ngOnInit(): void {
     this.dataEventSource = new MatTableDataSource(this.user.events as Event[]);
-        this.dataEventSource.sort = this.sort;
-        this.dataEventSource.paginator = this.paginator;
+    this.dataEventSource.sort = this.sort;
+    this.dataEventSource.paginator = this.paginator;
+
+    this.onQueryEvents$.pipe(
+      takeUntil(this.destroyed$)
+      ).subscribe((res) => {
+      this.eventService
+        .getUnconfirmEventsByUserId(this.user.id)
+        .subscribe((res) => {
+          this.dataEventSource = new MatTableDataSource(res.events as Event[]);
+          this.dataEventSource.sort = this.sort;
+          this.dataEventSource.paginator = this.paginator;
+        });
+    });
   }
 
   ngOnDestroy(): void {
-      this.destroyed$.next(true);
+    this.destroyed$.next(true);
   }
 
-  onQueryEvent() {
-    this.onQueryEvents$.pipe(
-      takeUntil(this.destroyed$)
-    ).subscribe(res => {
-      this.eventService
-      .getUnconfirmEventsByUserId(this.user.id)
-      .subscribe((res) => {
-        this.dataEventSource = new MatTableDataSource(res.events as Event[]);
-        this.dataEventSource.sort = this.sort;
-        this.dataEventSource.paginator = this.paginator;
-      });
-    })
-  }
+  onQueryEvent() {}
 
   isAdmin() {
     return this.authService.currentUser.role >= Role.Admin;
@@ -102,7 +104,7 @@ export class UnconfirmedEventsDialogComponent extends DialogComponent implements
       message: 'Bạn có xác nhận từ chối nhân viên nghỉ ngày này không ?',
     });
 
-     this.dialog.confirmed().subscribe((confirmed) => {
+    this.dialog.confirmed().subscribe((confirmed) => {
       if (confirmed) {
         this.eventService.deleteEvent(event.id).subscribe((res) => {
           this.notification.showError('Đã từ chối ngày nghỉ');
