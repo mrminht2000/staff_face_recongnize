@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, of } from 'rxjs';
+import { CreateUserReq } from 'src/app/models/user/dtos/create-user-req';
 import { GetUserResp } from 'src/app/models/user/dtos/get-user-resp';
 import { UserData } from 'src/app/models/user/user-data';
 import { User } from 'src/app/models/user/user.model';
@@ -18,8 +19,8 @@ export class UserService {
     this.userApi =  new URL('/api/user', environment.apiUrl).href;
   }
 
-  createUser(user: UserData) {
-    this.httpClient.post(this.userApi + '/create', user);
+  createUser(req: CreateUserReq) {
+    return this.httpClient.post(this.userApi + '/create', req);
   }
 
   getUsers() {
@@ -44,5 +45,11 @@ export class UserService {
 
   updateUser(user: UserData) {
     return this.httpClient.put(this.userApi + '/edit', user);
+  }
+
+  deleteUser(id: number) {
+    return this.httpClient.delete(this.userApi + '/delete', {
+      params: {id: id}
+    })
   }
 }

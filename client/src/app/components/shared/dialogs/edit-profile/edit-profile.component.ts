@@ -37,10 +37,8 @@ export class EditProfileComponent extends DialogComponent implements OnInit {
   constructor(
     override dialogRef: MatDialogRef<EditProfileComponent>,
     @Inject(MAT_DIALOG_DATA) public user: User,
-    private readonly authService: AuthenticationService,
     private readonly userService: UserService,
     private readonly notification: NotificationService,
-    private readonly dialog: DialogService
   ) { 
     super();
   }

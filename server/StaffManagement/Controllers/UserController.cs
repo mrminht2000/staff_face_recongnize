@@ -93,5 +93,17 @@ namespace StaffManagement.Controllers
 
             return Ok();
         }
+
+        [HttpDelete]
+        [Route("delete")]
+        public async Task<IActionResult> DeleteUserAsync([FromQuery] UserQueryReq req)
+        {
+            await _userService.DeleteUserAsync(new QueryUserRequest
+            {
+                Id = req.Id
+            });
+
+            return Ok();
+        }
     }
 }

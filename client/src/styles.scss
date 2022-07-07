@@ -57,11 +57,11 @@ a {
     cursor: pointer;
 }
 
-.main-header {
+.main-header, .main-sidebar {
     z-index: 999 !important;
 }
 
 .cdk-global-overlay-wrapper {
     overflow: auto;
     pointer-events: auto;
-  }
+}

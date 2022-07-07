@@ -50,6 +50,9 @@ import { UnconfirmedEventsDialogComponent } from './components/shared/dialogs/un
 import { ProfileSettingsComponent } from './components/main/users/staffs/staffs-profile/profile-settings/profile-settings.component';
 import { EditProfileComponent } from './components/shared/dialogs/edit-profile/edit-profile.component';
 import { DashboardComponent } from './components/main/dashboard/dashboard.component';
+import { ProfileUserComponent } from './components/shared/dialogs/profile-user/profile-user.component';
+import { ChangePasswordComponent } from './components/shared/dialogs/change-password/change-password.component';
+import { CreateUserComponent } from './components/shared/dialogs/create-user/create-user.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +84,10 @@ import { DashboardComponent } from './components/main/dashboard/dashboard.compon
     UnconfirmedEventsDialogComponent,
     ProfileSettingsComponent,
     EditProfileComponent,
-    DashboardComponent
+    DashboardComponent,
+    ProfileUserComponent,
+    ChangePasswordComponent,
+    CreateUserComponent
   ],
   imports: [
     BrowserModule,

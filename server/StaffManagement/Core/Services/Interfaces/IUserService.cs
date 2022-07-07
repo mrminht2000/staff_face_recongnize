@@ -18,6 +18,7 @@ namespace StaffManagement.Core.Services.Interfaces
 
         Task UpdateUserAsync(User @user, CancellationToken cancellationToken = default);
 
+        Task DeleteUserAsync(QueryUserRequest request, CancellationToken cancellationToken = default);
     }
 
 }

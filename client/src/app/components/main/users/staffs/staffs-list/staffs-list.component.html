@@ -17,8 +17,15 @@
 <div class="row content">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
-                <div class="card-tools">
+            <div class="card-header d-flex">
+                <div class="card-tools mr-auto">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <a class="btn btn-info btn-block form-control" (click)="openCreateUserDialog()">
+                            <i class="fas fa-edit"></i> Tạo tài khoản
+                        </a>
+                    </div>
+                </div>
+                <div class="card-tools ml-auto">
                     <div class="input-group input-group-sm" style="width: 150px;">
                         <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
 

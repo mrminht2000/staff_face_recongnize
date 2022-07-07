@@ -1,9 +1,7 @@
-export interface UserData {
-    id: number,
-    
+export interface CreateUserReq {
     userName: string;
 
-    password?: string;
+    password: string;
 
     fullName: string;
 
@@ -12,8 +10,6 @@ export interface UserData {
     phoneNumber: string;
 
     email: string;
-
-    isConfirmed: boolean;
 
     departmentId: number;
 

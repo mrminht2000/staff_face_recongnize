@@ -19,10 +19,12 @@ namespace StaffManagement.Core.Services.Impls
     {
         private readonly IUserRepository _userRepository;
         private readonly IAuthenticationContext _authenContext;
-        public UserService(IUserRepository userRepository, IAuthenticationContext authenContext)
+        private readonly IUnitOfWork _unitOfWork;
+        public UserService(IUserRepository userRepository, IAuthenticationContext authenContext, IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;
             _authenContext = authenContext;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task CreateUserAsync(User @user, CancellationToken cancellationToken = default)
@@ -33,6 +35,7 @@ namespace StaffManagement.Core.Services.Impls
             }
 
             await _userRepository.CreateUserAsync(@user, cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task<UserData> QueryUserByIdAsync(QueryUserRequest request, CancellationToken cancellationToken = default)
@@ -114,9 +117,14 @@ namespace StaffManagement.Core.Services.Impls
                 request.IsConfirmed = false;
             }
 
+            await _userRepository.UpdateUserAsync(request, cancellationToken);
+        }
+
+        public async Task DeleteUserAsync(QueryUserRequest request, CancellationToken cancellationToken = default)
+        {
             Expression<Func<User, bool>> filters = @user => request.Id == @user.Id;
 
-            await _userRepository.UpdateUserAsync(new UserParams(filters), request, cancellationToken);
+            await _userRepository.DeleteUserAsync(new UserParams(filters), cancellationToken);
         }
     }
 }

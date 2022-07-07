@@ -4,12 +4,24 @@
         <h3 class="card-title">Tuỳ chọn</h3>
     </div>
     <div class="card-body">
+        <a class="btn btn-app" (click)="openProfileDialog()">
+            <i class="fas fa-address-card"></i> Chi tiết
+        </a>
+
         <a class="btn btn-app" (click)="openEditProfileDialog()">
             <i class="fas fa-edit"></i> Chỉnh sửa
         </a>
 
+        <a class="btn btn-app" (click)="openEditProfileDialog()">
+            <i class="fas fa-unlock-alt"></i> Đổi mật khẩu
+        </a>
+
         <a class="btn btn-app" routerLink="calendar">
             <i class="fas fa-calendar"></i> Lịch làm việc
+        </a>
+
+        <a class="btn btn-app bg-danger" (click)="deleteUser()">
+            <i class="fas fa-trash"></i> Xoá người dùng
         </a>
 
         <p>Thông tin thêm</p>
