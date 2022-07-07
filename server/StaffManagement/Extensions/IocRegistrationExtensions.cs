@@ -20,15 +20,16 @@ namespace StaffManagement.Extensions
 
         public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
+            
             services.AddScoped(sp =>
             {
                 return new MsSqlStaffManagementDbContext(configuration.GetConnectionString(PersistenceConnectionKey));
             }); 
-
+            
             /*
             services.AddDbContext<MsSqlStaffManagementDbContext>(options => 
             {
-                options.UseSqlServer(connectionStringForMigration);
+                options.UseSqlServer(configuration.GetConnectionString(PersistenceConnectionKey));
             });*/
 
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<MsSqlStaffManagementDbContext>());

@@ -46,7 +46,8 @@ namespace StaffManagement.Infras.Persistence.EntityTypeConfigurations
 
             builder.HasOne(i => i.User)
                 .WithMany(d => d.Events)
-                .HasForeignKey(e => e.UserId);
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
