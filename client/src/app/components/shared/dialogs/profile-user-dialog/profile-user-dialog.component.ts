@@ -4,27 +4,23 @@ import { Subject } from 'rxjs';
 import { Role } from 'src/app/common/constant';
 import { toUserData } from 'src/app/common/user-helper';
 import { User } from 'src/app/models/user/user.model';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import { DialogService } from 'src/app/services/dialog.service';
 import { UserService } from 'src/app/services/model-services/user.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { DialogComponent } from '../dialog.component';
 
 @Component({
-  selector: 'app-profile-user',
-  templateUrl: './profile-user.component.html',
-  styleUrls: ['./profile-user.component.scss']
+  selector: 'app-profile-user-dialog',
+  templateUrl: './profile-user-dialog.component.html',
+  styleUrls: ['./profile-user-dialog.component.scss']
 })
-export class ProfileUserComponent extends DialogComponent implements OnInit {
+export class ProfileUserDialogComponent extends DialogComponent implements OnInit {
   destroyed$ = new Subject<void>();
 
   roles = Role;
   constructor(
-    override dialogRef: MatDialogRef<ProfileUserComponent>,
+    override dialogRef: MatDialogRef<ProfileUserDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public user: User,
-    private readonly authService: AuthenticationService,
     private readonly userService: UserService,
-    private readonly dialog: DialogService,
     private readonly notification: NotificationService
   ) { 
     super();

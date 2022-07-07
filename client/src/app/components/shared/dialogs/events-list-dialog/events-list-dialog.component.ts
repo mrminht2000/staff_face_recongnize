@@ -14,16 +14,16 @@ import { DialogService } from 'src/app/services/dialog.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-unconfirmed-events',
-  templateUrl: './unconfirmed-events-dialog.component.html',
-  styleUrls: ['./unconfirmed-events-dialog.component.scss'],
+  selector: 'app-events-list-dialog',
+  templateUrl: './events-list-dialog.component.html',
+  styleUrls: ['./events-list-dialog.component.scss'],
 })
-export class UnconfirmedEventsDialogComponent
+export class EventsListDialogComponent
   extends DialogComponent
   implements OnInit, OnDestroy
 {
   constructor(
-    override dialogRef: MatDialogRef<UnconfirmedEventsDialogComponent>,
+    override dialogRef: MatDialogRef<EventsListDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public user: User,
     private readonly eventService: EventService,
     private readonly authService: AuthenticationService,

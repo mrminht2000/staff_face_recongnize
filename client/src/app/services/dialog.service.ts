@@ -2,16 +2,18 @@ import { Overlay } from '@angular/cdk/overlay';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, take, map } from 'rxjs';
-import { ChangePasswordComponent } from '../components/shared/dialogs/change-password/change-password.component';
-import { ConfirmationComponent } from '../components/shared/dialogs/confirmation/confirmation.component';
-import { CreateEventComponent } from '../components/shared/dialogs/create-event/create-event.component';
-import { CreateUserComponent } from '../components/shared/dialogs/create-user/create-user.component';
-import { CreateVacationComponent } from '../components/shared/dialogs/create-vacation/create-vacation.component';
+import { ChangePasswordDialogComponent } from '../components/shared/dialogs/change-password-dialog/change-password-dialog.component';
+import { ConfirmationDialogComponent } from '../components/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { CreateEventDialogComponent } from '../components/shared/dialogs/create-event-dialog/create-event-dialog.component';
+import { CreateUserDialogComponent } from '../components/shared/dialogs/create-user-dialog/create-user-dialog.component';
+import { CreateVacationDialogComponent } from '../components/shared/dialogs/create-vacation-dialog/create-vacation-dialog.component';
 import { DialogComponent } from '../components/shared/dialogs/dialog.component';
-import { EditProfileComponent } from '../components/shared/dialogs/edit-profile/edit-profile.component';
-import { ProfileUserComponent } from '../components/shared/dialogs/profile-user/profile-user.component';
-import { UnconfirmedEventsDialogComponent } from '../components/shared/dialogs/unconfirmed-events-dialog/unconfirmed-events-dialog.component';
+import { EditProfileDialogComponent } from '../components/shared/dialogs/edit-profile-dialog/edit-profile-dialog.component';
+import { EventDetailDialogComponent } from '../components/shared/dialogs/event-detail-dialog/event-detail-dialog.component';
+import { ProfileUserDialogComponent } from '../components/shared/dialogs/profile-user-dialog/profile-user-dialog.component';
+import { EventsListDialogComponent } from '../components/shared/dialogs/events-list-dialog/events-list-dialog.component';
 import { DialogData } from '../models/dialog-data';
+import { EventValue } from '../models/event/event-value';
 import { User } from '../models/user/user.model';
 
 @Injectable({
@@ -28,52 +30,59 @@ export class DialogService {
   dialogRef!: MatDialogRef<DialogComponent>;
 
   openConfirm(data: DialogData) {
-    this.dialogRef = this.dialog.open(ConfirmationComponent, {
+    this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: data
     });
   }
 
   openCreateVacation() {
-    this.dialogRef = this.dialog.open(CreateVacationComponent, {
+    this.dialogRef = this.dialog.open(CreateVacationDialogComponent, {
       width: '700px'
     });
   }
 
   openCreateEvent() {
-    this.dialogRef = this.dialog.open(CreateEventComponent, {
+    this.dialogRef = this.dialog.open(CreateEventDialogComponent, {
       width: '700px'
     });
   }
 
+  openEventDetail(event: EventValue) {
+    this.dialogRef = this.dialog.open(EventDetailDialogComponent, {
+      data: event,
+      width: '500px'
+    })
+  }
+
   openUnconfirmedEvents(user: User) {
-    this.dialogRef = this.dialog.open(UnconfirmedEventsDialogComponent, {
+    this.dialogRef = this.dialog.open(EventsListDialogComponent, {
       data: user,
       width: '700px'
     });
   }
 
   openCreateUser() {
-    this.dialogRef = this.dialog.open(CreateUserComponent, {
+    this.dialogRef = this.dialog.open(CreateUserDialogComponent, {
       width: '700px'
     });
   }
 
   openProfileUser(user: User) {
-    this.dialogRef = this.dialog.open(ProfileUserComponent, {
+    this.dialogRef = this.dialog.open(ProfileUserDialogComponent, {
       data: user,
       width: '700px'
     });
   }
 
   openEditUser(user: User) {
-    this.dialogRef = this.dialog.open(EditProfileComponent, {
+    this.dialogRef = this.dialog.open(EditProfileDialogComponent, {
       data: user,
       width: '700px'
     })
   }
 
   openChangePassword(user: User) {
-    this.dialogRef = this.dialog.open(ChangePasswordComponent, {
+    this.dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
       data: user,
       width: '700px'
     });

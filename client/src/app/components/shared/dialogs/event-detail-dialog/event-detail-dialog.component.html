@@ -1,0 +1,18 @@
+<div class="card card-primary card-outline">
+    <div class="card-body box-profile">
+        <ul class="list-group list-group-unbordered mb-3">
+            <li class="list-group-item">
+                <b>Sự kiện</b>
+                <h3 class="float-right">{{event.eventName}}</h3>
+            </li>
+            <li class="list-group-item">
+                <b>Ngày bắt đầu</b>
+                <h3 class="float-right">{{event.startTime | date: 'dd/MM/yyyy'}}</h3>
+            </li>
+            <li class="list-group-item" *ngIf="event.endTime">
+                <b>Ngày kết thúc</b>
+                <h3 class="float-right">{{event.endTime | date: 'dd/MM/yyyy'}}</h3>
+            </li>
+        </ul>
+    </div>
+</div>

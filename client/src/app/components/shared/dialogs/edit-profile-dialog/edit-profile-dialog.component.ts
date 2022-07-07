@@ -5,18 +5,16 @@ import { Subject, withLatestFrom, map, takeUntil, filter, startWith, tap } from 
 import { Role } from 'src/app/common/constant';
 import { UserData } from 'src/app/models/user/user-data';
 import { User } from 'src/app/models/user/user.model';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import { DialogService } from 'src/app/services/dialog.service';
 import { UserService } from 'src/app/services/model-services/user.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { DialogComponent } from '../dialog.component';
 
 @Component({
-  selector: 'app-edit-profile',
-  templateUrl: './edit-profile.component.html',
-  styleUrls: ['./edit-profile.component.scss']
+  selector: 'app-edit-profile-dialog',
+  templateUrl: './edit-profile-dialog.component.html',
+  styleUrls: ['./edit-profile-dialog.component.scss']
 })
-export class EditProfileComponent extends DialogComponent implements OnInit {
+export class EditProfileDialogComponent extends DialogComponent implements OnInit {
 
   formSubmit$ = new Subject<void>();
   destroyed$ = new Subject<void>();
@@ -35,7 +33,7 @@ export class EditProfileComponent extends DialogComponent implements OnInit {
   })
 
   constructor(
-    override dialogRef: MatDialogRef<EditProfileComponent>,
+    override dialogRef: MatDialogRef<EditProfileDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public user: User,
     private readonly userService: UserService,
     private readonly notification: NotificationService,

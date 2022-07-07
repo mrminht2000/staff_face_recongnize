@@ -6,6 +6,7 @@ import { EventCalendar } from 'src/app/models/event/event-calendar';
 import { BehaviorSubject } from 'rxjs';
 import { EventService } from 'src/app/services/model-services/event.service';
 import { toEventCalendarArray } from 'src/app/common/event-helpers';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-calendar',
@@ -19,7 +20,8 @@ export class CalendarComponent implements OnInit {
   afterGetEvent$ = new BehaviorSubject<EventCalendar[]>([]);
 
   constructor(
-    private readonly eventService: EventService
+    private readonly eventService: EventService,
+    private readonly dialog: DialogService
   ) {
     const name = Calendar.name
   }
@@ -46,7 +48,12 @@ export class CalendarComponent implements OnInit {
         droppable: false,
         contentHeight: 'auto',
         eventClick: (arg) => {
-          console.log(arg.event.id);
+          this.dialog.openEventDetail({
+            eventName: arg.event.title,
+            startTime: arg.event.start as Date,
+            endTime: arg.event.end as Date,
+            allDay: arg.event.allDay
+          })
         }
       };
     })

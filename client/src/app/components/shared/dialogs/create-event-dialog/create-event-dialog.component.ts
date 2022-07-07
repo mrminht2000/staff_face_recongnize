@@ -31,11 +31,11 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-create-event',
-  templateUrl: './create-event.component.html',
-  styleUrls: ['./create-event.component.scss']
+  selector: 'app-create-event-dialog',
+  templateUrl: './create-event-dialog.component.html',
+  styleUrls: ['./create-event-dialog.component.scss']
 })
-export class CreateEventComponent extends DialogComponent implements OnInit, OnDestroy {
+export class CreateEventDialogComponent extends DialogComponent implements OnInit, OnDestroy {
   formSubmit$ = new Subject<void>();
   destroyed$ = new Subject<void>();
 
@@ -47,7 +47,7 @@ export class CreateEventComponent extends DialogComponent implements OnInit, OnD
   });
 
   constructor(
-    override dialogRef: MatDialogRef<CreateEventComponent>,
+    override dialogRef: MatDialogRef<CreateEventDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: CreateEventReq,
     private readonly eventService: EventService,
     private readonly authService: AuthenticationService,

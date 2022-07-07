@@ -38,21 +38,22 @@ import { StaffsProfileComponent } from './components/main/users/staffs/staffs-pr
 import { NotFoundComponent } from './components/shared/not-found/not-found.component';
 import { LoadingComponent } from './components/shared/loading/loading.component';
 import { NotificationComponent } from './components/shared/notification/notification.component';
-import { CreateVacationComponent } from './components/shared/dialogs/create-vacation/create-vacation.component';
+import { CreateVacationDialogComponent } from './components/shared/dialogs/create-vacation-dialog/create-vacation-dialog.component';
 import { AuthorizationHeaderService } from './services/intercepts/authorization-header.service';
 import { UnconfirmedEventsComponent } from './components/main/users/calendar/unconfirmed-events/unconfirmed-events.component';
-import { CreateEventComponent } from './components/shared/dialogs/create-event/create-event.component';
+import { CreateEventDialogComponent } from './components/shared/dialogs/create-event-dialog/create-event-dialog.component';
 
 import { ErrorHandlerService } from './services/intercepts/error-handler.service';
 import { LoadingHandlerService } from './services/intercepts/loading-handler.service';
-import { ConfirmationComponent } from './components/shared/dialogs/confirmation/confirmation.component';
-import { UnconfirmedEventsDialogComponent } from './components/shared/dialogs/unconfirmed-events-dialog/unconfirmed-events-dialog.component';
+import { ConfirmationDialogComponent } from './components/shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { EventsListDialogComponent } from './components/shared/dialogs/events-list-dialog/events-list-dialog.component';
 import { ProfileSettingsComponent } from './components/main/users/staffs/staffs-profile/profile-settings/profile-settings.component';
-import { EditProfileComponent } from './components/shared/dialogs/edit-profile/edit-profile.component';
+import { EditProfileDialogComponent } from './components/shared/dialogs/edit-profile-dialog/edit-profile-dialog.component';
 import { DashboardComponent } from './components/main/dashboard/dashboard.component';
-import { ProfileUserComponent } from './components/shared/dialogs/profile-user/profile-user.component';
-import { ChangePasswordComponent } from './components/shared/dialogs/change-password/change-password.component';
-import { CreateUserComponent } from './components/shared/dialogs/create-user/create-user.component';
+import { ProfileUserDialogComponent } from './components/shared/dialogs/profile-user-dialog/profile-user-dialog.component';
+import { ChangePasswordDialogComponent } from './components/shared/dialogs/change-password-dialog/change-password-dialog.component';
+import { CreateUserDialogComponent } from './components/shared/dialogs/create-user-dialog/create-user-dialog.component';
+import { EventDetailDialogComponent } from './components/shared/dialogs/event-detail-dialog/event-detail-dialog.component';
 
 @NgModule({
   declarations: [
@@ -77,17 +78,18 @@ import { CreateUserComponent } from './components/shared/dialogs/create-user/cre
     NotFoundComponent,
     LoadingComponent,
     NotificationComponent,
-    CreateVacationComponent,
+    CreateVacationDialogComponent,
     UnconfirmedEventsComponent,
-    CreateEventComponent,
-    ConfirmationComponent,
-    UnconfirmedEventsDialogComponent,
+    CreateEventDialogComponent,
+    ConfirmationDialogComponent,
+    EventsListDialogComponent,
     ProfileSettingsComponent,
-    EditProfileComponent,
+    EditProfileDialogComponent,
     DashboardComponent,
-    ProfileUserComponent,
-    ChangePasswordComponent,
-    CreateUserComponent
+    ProfileUserDialogComponent,
+    ChangePasswordDialogComponent,
+    CreateUserDialogComponent,
+    EventDetailDialogComponent
   ],
   imports: [
     BrowserModule,

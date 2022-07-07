@@ -32,12 +32,12 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-create-vacation',
-  templateUrl: './create-vacation.component.html',
-  styleUrls: ['./create-vacation.component.scss'],
+  selector: 'app-create-vacation-dialog',
+  templateUrl: './create-vacation-dialog.component.html',
+  styleUrls: ['./create-vacation-dialog.component.scss'],
   providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }],
 })
-export class CreateVacationComponent extends DialogComponent implements OnInit, OnDestroy {
+export class CreateVacationDialogComponent extends DialogComponent implements OnInit, OnDestroy {
   formSubmit$ = new Subject<void>();
   destroyed$ = new Subject<void>();
 
@@ -48,7 +48,7 @@ export class CreateVacationComponent extends DialogComponent implements OnInit, 
   });
 
   constructor(
-    override dialogRef: MatDialogRef<CreateVacationComponent>,
+    override dialogRef: MatDialogRef<CreateVacationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: CreateEventReq,
     private readonly eventService: EventService,
     private readonly authService: AuthenticationService,

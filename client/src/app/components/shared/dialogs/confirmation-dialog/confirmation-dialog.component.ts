@@ -4,14 +4,14 @@ import { DialogData } from 'src/app/models/dialog-data';
 import { DialogComponent } from '../dialog.component';
 
 @Component({
-  selector: 'app-confirmation',
-  templateUrl: './confirmation.component.html',
-  styleUrls: ['./confirmation.component.scss']
+  selector: 'app-confirmation-dialog',
+  templateUrl: './confirmation-dialog.component.html',
+  styleUrls: ['./confirmation-dialog.component.scss']
 })
-export class ConfirmationComponent extends DialogComponent {
+export class ConfirmationDialogComponent extends DialogComponent {
 
   constructor(
-    override dialogRef: MatDialogRef<ConfirmationComponent>,
+    override dialogRef: MatDialogRef<ConfirmationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { 
     super();

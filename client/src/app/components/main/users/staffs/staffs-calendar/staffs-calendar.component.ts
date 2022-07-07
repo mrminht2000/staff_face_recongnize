@@ -2,14 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CalendarOptions } from '@fullcalendar/angular';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { BehaviorSubject, Subject, Subscription, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from 'src/app/services/model-services/event.service';
 import { toEventCalendarArray } from 'src/app/common/event-helpers';
 import { EventCalendar } from 'src/app/models/event/event-calendar';
-import { MatDialog } from '@angular/material/dialog';
-import { CreateVacationComponent } from '../../../../shared/dialogs/create-vacation/create-vacation.component'
-import { CreateEventComponent } from '../../../../shared/dialogs/create-event/create-event.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
@@ -62,7 +59,12 @@ export class StaffsCalendarComponent implements OnInit, OnDestroy {
         droppable: false,
         contentHeight: 'auto',
         eventClick: (arg) => {
-          console.log(arg.event.id);
+          this.dialog.openEventDetail({
+            eventName: arg.event.title,
+            startTime: arg.event.start as Date,
+            endTime: arg.event.end as Date,
+            allDay: arg.event.allDay
+          })
         }
       };
     })
@@ -92,7 +94,7 @@ export class StaffsCalendarComponent implements OnInit, OnDestroy {
   }
 
   openEventDialog() {
-    this.dialog.openCreateVacation();
+    this.dialog.openCreateEvent();
   }
 
   isOwner(){

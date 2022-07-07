@@ -10,11 +10,11 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { DialogComponent } from '../dialog.component';
 
 @Component({
-  selector: 'app-create-user',
-  templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.scss']
+  selector: 'app-create-user-dialog',
+  templateUrl: './create-user-dialog.component.html',
+  styleUrls: ['./create-user-dialog.component.scss']
 })
-export class CreateUserComponent extends DialogComponent implements OnInit {
+export class CreateUserDialogComponent extends DialogComponent implements OnInit {
   formSubmit$ = new Subject<void>();
   destroyed$ = new Subject<void>();
 
@@ -34,7 +34,7 @@ export class CreateUserComponent extends DialogComponent implements OnInit {
   })
 
   constructor(
-    override dialogRef: MatDialogRef<CreateUserComponent>,
+    override dialogRef: MatDialogRef<CreateUserDialogComponent>,
     private readonly userService: UserService,
     private readonly notification: NotificationService,
   ) { 
