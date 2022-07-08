@@ -26,20 +26,16 @@ export class EventService {
   }
 
   createUserEvent(req: CreateEventReq) {
-    return this.httpClient.post(this.eventApi + '/event', req, {
-      params: {userid: this.authService.currentUser.id}
-    });
+    return this.httpClient.post(this.eventApi + '/event', req);
   }
 
   createVacationByUser(req: CreateEventReq) {
-    return this.httpClient.post(this.eventApi + '/vacation', req, {
-      params: {userid: this.authService.currentUser.id}
-    });
+    return this.httpClient.post(this.eventApi + '/vacation', req);
   }
 
   getEvent(id: number) {
     return this.httpClient.get<Event>(this.eventApi + '/event', {
-      params: {id: id, userid: this.authService.currentUser.id}
+      params: {id: id}
     }).pipe(
       catchError(() => of({} as Event))
     );

@@ -17,5 +17,7 @@ export interface Event {
 
     isConfirmed: boolean;
 
+    userId: number;
+
     user: User;
 }

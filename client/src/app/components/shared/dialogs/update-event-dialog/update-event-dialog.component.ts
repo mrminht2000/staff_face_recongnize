@@ -74,9 +74,10 @@ export class UpdateEventDialogComponent extends DialogComponent implements OnIni
             startTime: eventValue.startTime,
             endTime: eventValue.endTime,
             allDay: eventValue.allDay,
-            eventType: this.event.eventType
+            eventType: this.event.eventType,
+            userId: this.event.userId
           } as Event)
-          .subscribe((res) => {
+          .subscribe(_ => {
             this.notification.showSuccess('Chỉnh sửa sự kiện thành công');
             this.confirm();
           });

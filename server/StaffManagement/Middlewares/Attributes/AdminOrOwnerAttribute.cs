@@ -9,7 +9,7 @@ namespace StaffManagement.Middlewares.Attributes
     {
         public void OnAuthorization(AuthorizationFilterContext context)
             {
-            var id = context.HttpContext.Request.Query["userId"];
+            var id = context.HttpContext?.Request.Headers["UserId"];
             var currentId = context.HttpContext.Items["Account"];
 
             if (!string.IsNullOrEmpty(id) && id.ToString().Trim() == currentId.ToString().Trim())

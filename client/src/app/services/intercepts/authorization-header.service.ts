@@ -21,7 +21,8 @@ export class AuthorizationHeaderService {
         if (isLoggedIn && !!token) {
             request = request.clone({
                 setHeaders: { 
-                  Authorization: `Bearer ${token}` 
+                  Authorization: `Bearer ${token}`,
+                  UserId: this.authService.currentUser.id + ``
                 }
             });
         }
