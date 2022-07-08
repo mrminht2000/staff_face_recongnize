@@ -55,13 +55,13 @@ namespace StaffManagement.Infras.Persistence.Repositories
             return new UserResult(result);
         }
 
-        public async Task UpdateUserAsync(User user, CancellationToken cancellationToken)
+        public async Task UpdateUserAsync(User request, CancellationToken cancellationToken)
         {
             var query = _dbContext.Set<User>().AsQueryable();
 
-            if (user != null)
+            if (request != null)
             {
-                query = query.Where(@user => user.Id == user.Id);
+                query = query.Where(@user => @user.Id == request.Id);
 
             }
             else
@@ -76,12 +76,12 @@ namespace StaffManagement.Infras.Persistence.Repositories
 
             var item = query.FirstOrDefault();
 
-            if (user.Password == null)
+            if (request.Password == null)
             {
-                user.Password = item.Password;
+                request.Password = item.Password;
             }
 
-            _dbContext.Update(user);
+            _dbContext.Update(request);
 
             await _dbContext.CommitAsync(cancellationToken);
         }

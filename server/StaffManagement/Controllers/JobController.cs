@@ -1,0 +1,72 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using StaffManagement.Core.Persistence.Models;
+using StaffManagement.Core.Services.Interfaces;
+using StaffManagement.Middlewares.Attributes;
+using StaffManagement.ViewModels;
+using System;
+using System.Threading.Tasks;
+
+namespace StaffManagement.Controllers
+{
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class JobController : ControllerBase
+    {
+        private readonly IJobService _jobService;
+        public JobController(IJobService jobService)
+        {
+            _jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
+        }
+
+        [AdminRequire]
+        [HttpPost]
+        [Route("create")]
+        public async Task<IActionResult> CreateJobAsync(Job req)
+        {
+            await _jobService.CreateJobAsync(req);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("job")]
+        public async Task<Job> GetJobAsync(long jobId)
+        {
+            var result = await _jobService.QueryJobAsync(jobId);
+
+            return result;
+        }
+
+        [HttpGet]
+        public async Task<JobQueryResp> GetJobsAsync()
+        {
+            var result = await _jobService.QueryJobsAsync();
+
+            return new JobQueryResp
+            {
+                Jobs = result.Data
+            };
+        }
+
+        [AdminRequire]
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> UpdateJobAsync(Job req)
+        {
+            await _jobService.UpdateJobAsync(req);
+
+            return Ok();
+        }
+
+        [AdminRequire]
+        [HttpDelete]
+        [Route("delete")]
+        public async Task<IActionResult> DeleteJobAsync(long jobId)
+        {
+            await _jobService.DeleteJobAsync(jobId);
+
+            return Ok(0);
+        }
+    }
+}

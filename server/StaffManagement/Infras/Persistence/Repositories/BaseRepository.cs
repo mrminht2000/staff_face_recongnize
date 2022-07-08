@@ -1,12 +1,10 @@
 ﻿using StaffManagement.Core.Common;
 using StaffManagement.Core.Persistence.Repositories;
-using StaffManagement.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
 namespace StaffManagement.Infras.Persistence.Repositories
 {
@@ -22,6 +20,8 @@ namespace StaffManagement.Infras.Persistence.Repositories
         public virtual async Task<TModel> CreateAsync(TModel obj, CancellationToken cancellationToken)
         {
             var model = await _dbContext.Set<TModel>().AddAsync(obj, cancellationToken);
+
+            await _dbContext.CommitAsync(cancellationToken);
 
             return model.Entity;
 ;       }

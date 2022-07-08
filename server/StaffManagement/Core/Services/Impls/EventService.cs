@@ -19,14 +19,12 @@ namespace StaffManagement.Core.Services.Impls
     {
         private readonly IEventRepository _eventRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IAuthenticationContext _authenticationContext;
         private const int MaxVacationDay = 3;
-        public EventService(IEventRepository eventRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IAuthenticationContext authenticationContext)
+        public EventService(IEventRepository eventRepository, IUserRepository userRepository, IAuthenticationContext authenticationContext)
         {
             _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _authenticationContext = authenticationContext ?? throw new ArgumentNullException(nameof(authenticationContext));
         }
 
@@ -43,8 +41,6 @@ namespace StaffManagement.Core.Services.Impls
             }
 
             await _eventRepository.CreateAsync(@event, cancellationToken);
-
-            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task CreateVacationAsync(Event @event, CancellationToken cancellationToken = default)
@@ -70,8 +66,6 @@ namespace StaffManagement.Core.Services.Impls
             }
 
             var result = await _eventRepository.CreateAsync(@event, cancellationToken);
-
-            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task<Event> QueryEventByIdAsync(long id, CancellationToken cancellationToken = default)
