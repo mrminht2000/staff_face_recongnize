@@ -42,6 +42,8 @@ namespace StaffManagement
             {
                 o.AllowInputFormatterExceptionMessages = false;
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                o.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                o.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

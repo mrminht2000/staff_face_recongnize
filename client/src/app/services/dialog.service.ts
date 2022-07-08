@@ -13,8 +13,10 @@ import { EventDetailDialogComponent } from '../components/shared/dialogs/event-d
 import { ProfileUserDialogComponent } from '../components/shared/dialogs/profile-user-dialog/profile-user-dialog.component';
 import { EventsListDialogComponent } from '../components/shared/dialogs/events-list-dialog/events-list-dialog.component';
 import { DialogData } from '../models/dialog-data';
-import { EventValue } from '../models/event/event-value';
+import { Event } from '../models/event/event.model';
 import { User } from '../models/user/user.model';
+import { UpdateEventDialogComponent } from '../components/shared/dialogs/update-event-dialog/update-event-dialog.component';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +25,7 @@ export class DialogService {
 
   constructor(
     private readonly dialog: MatDialog,
-    private readonly overlay: Overlay
+    private readonly authService: AuthenticationService
   ) {
   }
 
@@ -35,19 +37,21 @@ export class DialogService {
     });
   }
 
-  openCreateVacation() {
+  openCreateVacation(isCompanyEvent?: boolean) {
     this.dialogRef = this.dialog.open(CreateVacationDialogComponent, {
+      data: isCompanyEvent ? null : this.authService.currentUser.id,
       width: '700px'
     });
   }
 
-  openCreateEvent() {
+  openCreateEvent(isCompanyEvent?: boolean) {
     this.dialogRef = this.dialog.open(CreateEventDialogComponent, {
+      data: isCompanyEvent ? null : this.authService.currentUser.id,
       width: '700px'
     });
   }
 
-  openEventDetail(event: EventValue) {
+  openEventDetail(event: Event) {
     this.dialogRef = this.dialog.open(EventDetailDialogComponent, {
       data: event,
       width: '500px'
@@ -59,6 +63,13 @@ export class DialogService {
       data: user,
       width: '700px'
     });
+  }
+
+  openEditEvent(event: Event) {
+    this.dialogRef = this.dialog.open(UpdateEventDialogComponent, {
+      data: event,
+      width: '700px'
+    })
   }
 
   openCreateUser() {

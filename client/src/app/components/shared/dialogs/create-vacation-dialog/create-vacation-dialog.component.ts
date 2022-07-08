@@ -13,9 +13,7 @@ import { CreateEventReq } from 'src/app/models/event/dtos/create-event-req';
 import { VacationValue } from 'src/app/models/event/vacation-value';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { EventService } from 'src/app/services/model-services/event.service';
-import { AuthenticationService } from 'src/app/services/authentication.service';
 import { EventType } from 'src/app/common/constant';
-import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/services/notification.service';
 import { DialogComponent } from '../dialog.component';
 
@@ -49,10 +47,8 @@ export class CreateVacationDialogComponent extends DialogComponent implements On
 
   constructor(
     override dialogRef: MatDialogRef<CreateVacationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: CreateEventReq,
+    @Inject(MAT_DIALOG_DATA) public userId: number,
     private readonly eventService: EventService,
-    private readonly authService: AuthenticationService,
-    private readonly router: Router,
     private readonly notification: NotificationService
   ) {
     super ();
@@ -84,7 +80,7 @@ export class CreateVacationDialogComponent extends DialogComponent implements On
             startTime: eventValue.startTime,
             endTime: eventValue.endTime,
             allDay: true,
-            userId: this.authService.currentUser.id,
+            userId: this.userId,
             eventType: EventType.Vacation,
           } as CreateEventReq)
           .subscribe((res) => {

@@ -73,16 +73,26 @@ namespace StaffManagement.Controllers
                 EndTime = req.EndTime,
                 AllDay = req.AllDay,
                 Per = req.Per,
-                IsConfirmed = req.IsConfirmed,
+                IsConfirmed = false,
                 UserId = req.UserId
             });
 
             return Ok();
         }
 
+        [AdminOrOwner]
         [HttpGet]
-        [Route("info")]
-        public async Task<EventQueryResp> QueryAsync(long userId)
+        [Route("event")]
+        public async Task<Event> QueryEventAsync(long id)
+        {
+            var result = await _eventService.QueryEventByIdAsync(id);
+
+            return result;
+        }
+
+        [HttpGet]
+        [Route("user")]
+        public async Task<EventQueryResp> QueryEventsByUserIdAsync(long userId)
         {
             var result = await _eventService.QueryEventsByUserIdAsync(new QueryEventRequest
             {
@@ -137,15 +147,15 @@ namespace StaffManagement.Controllers
 
         [AdminOrOwner]
         [HttpPut]
-        [Route("edit")]
-        public async Task<IActionResult> EditEventAsync([FromBody] Event req)
+        [Route("update")]
+        public async Task<IActionResult> UpdateEventAsync([FromBody] Event req)
         {
             if (req == null)
             {
                 return BadRequest();
             }
 
-            await _eventService.EditEventAsync(req);
+            await _eventService.UpdateEventAsync(req);
 
             return Ok();
         }

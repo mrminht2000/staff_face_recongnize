@@ -54,6 +54,7 @@ import { ProfileUserDialogComponent } from './components/shared/dialogs/profile-
 import { ChangePasswordDialogComponent } from './components/shared/dialogs/change-password-dialog/change-password-dialog.component';
 import { CreateUserDialogComponent } from './components/shared/dialogs/create-user-dialog/create-user-dialog.component';
 import { EventDetailDialogComponent } from './components/shared/dialogs/event-detail-dialog/event-detail-dialog.component';
+import { UpdateEventDialogComponent } from './components/shared/dialogs/update-event-dialog/update-event-dialog.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { EventDetailDialogComponent } from './components/shared/dialogs/event-de
     ProfileUserDialogComponent,
     ChangePasswordDialogComponent,
     CreateUserDialogComponent,
-    EventDetailDialogComponent
+    EventDetailDialogComponent,
+    UpdateEventDialogComponent
   ],
   imports: [
     BrowserModule,

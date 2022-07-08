@@ -1,10 +1,10 @@
 <div class="card card-primary card-outline">
     <div class="card-body box-profile">
         <ul class="list-group list-group-unbordered mb-3">
-            <li class="list-group-item">
+            <div>
                 <b>Sự kiện</b>
-                <h3 class="float-right">{{event.eventName}}</h3>
-            </li>
+                <h2 class="float-right">{{event.eventName}}</h2>
+            </div>
             <li class="list-group-item">
                 <b>Ngày bắt đầu</b>
                 <h3 class="float-right">{{event.startTime | date: 'dd/MM/yyyy'}}</h3>
@@ -14,5 +14,9 @@
                 <h3 class="float-right">{{event.endTime | date: 'dd/MM/yyyy'}}</h3>
             </li>
         </ul>
+    </div>
+    <div class="card-footer d-flex" *ngIf="editableEvent()">
+        <button class="btn btn-info" (click)="editEvent()">Chỉnh sửa</button>
+        <button class="btn btn-danger ml-auto" (click)="deleteEvent()">Xoá sự kiện</button>
     </div>
 </div>

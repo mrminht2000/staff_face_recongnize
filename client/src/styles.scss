@@ -65,3 +65,7 @@ a {
     overflow: auto;
     pointer-events: auto;
 }
+
+.sticky-top {
+    z-index: 999 !important; 
+}

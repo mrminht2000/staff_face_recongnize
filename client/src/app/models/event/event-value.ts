@@ -1,4 +1,6 @@
 export interface EventValue {
+    id: number;
+
     eventName: string;
 
     startTime: Date;

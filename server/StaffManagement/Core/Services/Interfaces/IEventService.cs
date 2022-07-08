@@ -11,7 +11,9 @@ namespace StaffManagement.Core.Services.Interfaces
         Task CreateEventAsync(Event @event, CancellationToken cancellationToken = default);
 
         Task CreateVacationAsync(Event @event, CancellationToken cancellationToken = default);
-        
+
+        Task<Event> QueryEventByIdAsync(long id, CancellationToken cancellationToken = default);
+
         Task<QueryResult<Event>> QueryEventsByUserIdAsync(QueryEventRequest request, CancellationToken cancellationToken = default);
 
         Task<UserResult> QueryUnconfirmedEventsAsync(CancellationToken cancellationToken = default);
@@ -22,7 +24,7 @@ namespace StaffManagement.Core.Services.Interfaces
 
         Task<QueryResult<Event>> QueryCompanyEventsAsync(CancellationToken cancellationToken = default);
 
-        Task EditEventAsync(Event request, CancellationToken cancellationToken = default);
+        Task UpdateEventAsync(Event request, CancellationToken cancellationToken = default);
 
         Task AcceptEventAsync(Event request, CancellationToken cancellationToken = default);
 

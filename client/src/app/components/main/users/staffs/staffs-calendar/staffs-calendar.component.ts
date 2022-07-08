@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from 'src/app/services/model-services/event.service';
 import { toEventCalendarArray } from 'src/app/common/event-helpers';
 import { EventCalendar } from 'src/app/models/event/event-calendar';
+import { Event } from 'src/app/models/event/event.model';
 import { DialogService } from 'src/app/services/dialog.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
@@ -18,10 +19,11 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class StaffsCalendarComponent implements OnInit, OnDestroy {
   calendarOptions: CalendarOptions = {};
   externalEvent = [];
-  events = [] as EventCalendar[];
+  eventResult: Event[] = [];
   destroyed$ = new Subject<boolean>();
   userId = 0;
   afterGetEvent$ = new BehaviorSubject<EventCalendar[]>([]);
+  onQueryEvent$ = new Subject();
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
@@ -38,9 +40,12 @@ export class StaffsCalendarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void { 
-    this.eventService.getEventsByUser(this.userId).subscribe(res => {
-      this.afterGetEvent$.next(toEventCalendarArray(res.events));
-    })
+    this.onQueryEvent$.subscribe((res) => {
+      this.eventService.getEventsByUser(this.userId).subscribe((res) => {
+        this.eventResult = res.events;
+        this.afterGetEvent$.next(toEventCalendarArray(res.events));
+      });
+    });
 
     this.afterGetEvent$.pipe(
     ).subscribe(events =>{
@@ -59,30 +64,13 @@ export class StaffsCalendarComponent implements OnInit, OnDestroy {
         droppable: false,
         contentHeight: 'auto',
         eventClick: (arg) => {
-          this.dialog.openEventDetail({
-            eventName: arg.event.title,
-            startTime: arg.event.start as Date,
-            endTime: arg.event.end as Date,
-            allDay: arg.event.allDay
-          })
+          this.dialog.openEventDetail(this.eventResult.find((event) => event.id.toString() == arg.event.id) || {} as Event);
+          this.reloadAfterChange();
         }
       };
     })
 
-    this.dialog.confirmed().pipe(
-      takeUntil(this.destroyed$)
-    ).subscribe((confirmed) => {
-      if (confirmed) {
-        this.router
-          .navigateByUrl('/', { skipLocationChange: true })
-          .then(() =>
-            this.router.navigate([
-              '/staffs/calendar',
-              this.authService.currentUser.id,
-            ])
-          );
-      }
-    })
+    this.onQueryEvent$.next(true);
   }
 
   ngOnDestroy(): void {
@@ -91,13 +79,23 @@ export class StaffsCalendarComponent implements OnInit, OnDestroy {
 
   openVacationDialog() {
     this.dialog.openCreateVacation();
+    this.reloadAfterChange();
   }
 
   openEventDialog() {
     this.dialog.openCreateEvent();
+    this.reloadAfterChange();
   }
 
   isOwner(){
     return this.authService.currentUser.id == this.userId;
+  }
+
+  reloadAfterChange(){
+    this.dialog.confirmed().subscribe(res => {
+      if (res) {
+        this.onQueryEvent$.next(true);
+      }
+    })
   }
 }

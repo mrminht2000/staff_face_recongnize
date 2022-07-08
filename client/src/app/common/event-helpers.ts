@@ -6,21 +6,22 @@ export const toEventCalendar = (event: Event): EventCalendar => {
     var color
     switch(event.eventType) {
         case EventType.Default: {
+            color = EventColor.default;
             break;
         }
 
         case EventType.Register: {
-            color = '#28a745';
+            color = EventColor.register;
             break;
         }
 
         case EventType.Vacation: {
-            color = '#ffc107';
+            color = EventColor.vacation;
             break;
         }
 
         case EventType.Absent: {
-            color = '#dc3545';
+            color = EventColor.absent;
             break;
         }
     }
@@ -42,3 +43,10 @@ export const toEventCalendar = (event: Event): EventCalendar => {
 export const toEventCalendarArray = (events: Event[]): EventCalendar[] => {
     return events?.map(event => toEventCalendar(event));
 }
+
+export const EventColor = { 
+    default: '#007bff',
+    register: '#28a745',
+    vacation: '#ffc107',
+    absent: '#dc3545'
+} 

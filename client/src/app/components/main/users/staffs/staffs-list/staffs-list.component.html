@@ -86,7 +86,15 @@
                     <ng-container matColumnDef="workingStatus">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Trạng thái làm việc</th>
                         <td mat-cell *matCellDef="let element">
-                            <span class="tag tag-success">Đang làm việc</span>
+                            <span class="tag tag-success" *ngIf="element.status == 0">
+                                Đang làm việc
+                            </span>
+                            <span class="tag tag-warning" *ngIf="element.status == 1">
+                                Chưa chấm công
+                            </span>
+                            <span class="tag tag-danger" *ngIf="element.status == 2">
+                                Xin nghỉ
+                            </span>
                         </td>
                     </ng-container>
 

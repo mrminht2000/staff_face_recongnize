@@ -1,45 +1,24 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {
-  filter,
-  map,
-  startWith,
-  Subject,
-  takeUntil,
-  withLatestFrom,
-} from 'rxjs';
-import { CreateEventReq } from 'src/app/models/event/dtos/create-event-req';
-import { EventService } from 'src/app/services/model-services/event.service';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import { EventType } from 'src/app/common/constant';
-import { Router } from '@angular/router';
-import { NotificationService } from 'src/app/services/notification.service';
+import { Subject, withLatestFrom, startWith, map, filter, takeUntil, tap } from 'rxjs';
 import { EventValue } from 'src/app/models/event/event-value';
+import { Event } from 'src/app/models/event/event.model'
+import { EventService } from 'src/app/services/model-services/event.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { DialogComponent } from '../dialog.component';
 
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'DD-MM-YYYY',
-  },
-  display: {
-    dateInput: 'DD-MM-YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
-
 @Component({
-  selector: 'app-create-event-dialog',
-  templateUrl: './create-event-dialog.component.html',
-  styleUrls: ['./create-event-dialog.component.scss']
+  selector: 'app-update-event-dialog',
+  templateUrl: './update-event-dialog.component.html',
+  styleUrls: ['./update-event-dialog.component.scss']
 })
-export class CreateEventDialogComponent extends DialogComponent implements OnInit, OnDestroy {
+export class UpdateEventDialogComponent extends DialogComponent implements OnInit {
   formSubmit$ = new Subject<void>();
   destroyed$ = new Subject<void>();
+  event!: Event;
 
-  createEventForm = new FormGroup({
+  updateEventForm = new FormGroup({
     eventName: new FormControl(''),
     startTime: new FormControl(''),
     endTime: new FormControl(''),
@@ -47,20 +26,28 @@ export class CreateEventDialogComponent extends DialogComponent implements OnIni
   });
 
   constructor(
-    override dialogRef: MatDialogRef<CreateEventDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public userId: number,
+    override dialogRef: MatDialogRef<UpdateEventDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: EventValue,
     private readonly eventService: EventService,
-    private readonly authService: AuthenticationService,
-    private readonly router: Router,
     private readonly notification: NotificationService
   ) {
     super();
+
+    this.eventService.getEvent(this.data.id).subscribe(res => {
+      this.event = res;
+      this.updateEventForm.patchValue({
+        eventName: res.eventName,
+        startTime: res.startTime,
+        endTime: res.endTime,
+        allDay: res.allDay
+      })
+    })
   }
 
   ngOnInit() {
     this.formSubmit$
       .pipe(
-        withLatestFrom(this.createEventForm.valueChanges.pipe(startWith({}))),
+        withLatestFrom(this.updateEventForm.valueChanges.pipe(startWith({}))),
         map(([, eventValue]) => eventValue as EventValue),
         filter((value) => {
           if (!(!!value && !!value.eventName && !!value.startTime)) {
@@ -74,21 +61,24 @@ export class CreateEventDialogComponent extends DialogComponent implements OnIni
 
           return true;
         }),
+        tap(value => {
+          value.id = this.data.id;
+        }),
         takeUntil(this.destroyed$)
       )
       .subscribe((eventValue) => {
         this.eventService
-          .createUserEvent({
+          .updateEvent({
+            id: this.event.id,
             eventName: eventValue.eventName,
             startTime: eventValue.startTime,
             endTime: eventValue.endTime,
             allDay: eventValue.allDay,
-            userId: this.userId,
-            eventType: EventType.Default
-          } as CreateEventReq)
+            eventType: this.event.eventType
+          } as Event)
           .subscribe((res) => {
+            this.notification.showSuccess('Chỉnh sửa sự kiện thành công');
             this.confirm();
-            this.notification.showSuccess('Thêm sự kiện thành công');
           });
       });
   }

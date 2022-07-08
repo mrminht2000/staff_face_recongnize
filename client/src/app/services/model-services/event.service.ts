@@ -37,8 +37,16 @@ export class EventService {
     });
   }
 
+  getEvent(id: number) {
+    return this.httpClient.get<Event>(this.eventApi + '/event', {
+      params: {id: id, userid: this.authService.currentUser.id}
+    }).pipe(
+      catchError(() => of({} as Event))
+    );
+  }
+
   getEventsByUser(userId: number) {
-    return this.httpClient.get<GetEventResp>(this.eventApi + '/info', {
+    return this.httpClient.get<GetEventResp>(this.eventApi + '/user', {
       params: {userId: userId}
     }).pipe(
       catchError(() => of({} as GetEventResp))
@@ -48,14 +56,6 @@ export class EventService {
   getCompanyEvents() {
     return this.httpClient.get<GetEventResp>(this.eventApi).pipe(
       catchError(() => of({} as GetEventResp))
-    );
-  }
-
-  getEventById(id: number) {
-    return this.httpClient.get<Event>(this.eventApi + '/info', {
-      params: {eventId: id}
-    }).pipe(
-      catchError(() => of({} as Event))
     );
   }
 
@@ -73,8 +73,8 @@ export class EventService {
     );
   }
 
-  editEvent(event: Event) {
-    return this.httpClient.put(this.eventApi + '/edit', event)
+  updateEvent(event: Event) {
+    return this.httpClient.put(this.eventApi + '/update', event)
   }
 
   acceptEvent(event: Event) {

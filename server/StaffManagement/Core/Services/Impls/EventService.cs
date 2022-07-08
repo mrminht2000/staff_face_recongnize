@@ -10,6 +10,8 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using StaffManagement.Extensions;
+using StaffManagement.Core.Context;
+using static StaffManagement.Core.Common.Enum.UserEnum;
 
 namespace StaffManagement.Core.Services.Impls
 {
@@ -18,12 +20,14 @@ namespace StaffManagement.Core.Services.Impls
         private readonly IEventRepository _eventRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuthenticationContext _authenticationContext;
         private const int MaxVacationDay = 3;
-        public EventService(IEventRepository eventRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
+        public EventService(IEventRepository eventRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IAuthenticationContext authenticationContext)
         {
             _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _authenticationContext = authenticationContext ?? throw new ArgumentNullException(nameof(authenticationContext));
         }
 
         public async Task CreateEventAsync(Event @event, CancellationToken cancellationToken = default)
@@ -50,7 +54,7 @@ namespace StaffManagement.Core.Services.Impls
                 throw new ArgumentNullException(nameof(@event));
             }
 
-            if (@event.EventType == (int)EventType.Vacation && @event.StartTime.Date < DateTime.Now.Date)
+            if (@event.EventType == (int)EventType.Vacation && @event.StartTime < DateTime.Now.Date.AddHours(-7))
             {
                 throw new ArgumentNullException("Ngày bắt đầu không được nhỏ hơn ngày hiện tại");
             }
@@ -60,9 +64,28 @@ namespace StaffManagement.Core.Services.Impls
                 throw new ArgumentNullException("Ngày kết thúc không được nhỏ hơn ngày bắt đầu");
             }
 
+            if (_authenticationContext.UserRole >= (int)Role.Admin)
+            {
+                @event.IsConfirmed = true;
+            }
+
             var result = await _eventRepository.CreateAsync(@event, cancellationToken);
 
             await _unitOfWork.CommitAsync(cancellationToken);
+        }
+
+        public async Task<Event> QueryEventByIdAsync(long id, CancellationToken cancellationToken = default)
+        {
+            Expression<Func<Event, bool>> filters = @event => id == @event.Id;
+
+            var result = await _eventRepository.GetValueAsync(new QueryParams<Event>(filters), cancellationToken);
+            
+            if (result == null || result.Data.Count == 0)
+            {
+                throw new NullReferenceException("Event not found");
+            }
+
+            return result.Data.FirstOrDefault();
         }
 
         public async Task<QueryResult<Event>> QueryEventsByUserIdAsync(QueryEventRequest request, CancellationToken cancellationToken = default)
@@ -121,7 +144,7 @@ namespace StaffManagement.Core.Services.Impls
             return result;
         }
 
-        public async Task EditEventAsync(Event request, CancellationToken cancellationToken = default)
+        public async Task UpdateEventAsync(Event request, CancellationToken cancellationToken = default)
         {
             Expression<Func<Event, bool>> filters = @event => request.Id == @event.Id;
 
@@ -153,6 +176,5 @@ namespace StaffManagement.Core.Services.Impls
 
             await _eventRepository.DeleteAsync(new QueryParams<Event>(filters), cancellationToken);
         }
-
     }
 }
