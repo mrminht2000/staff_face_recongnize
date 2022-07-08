@@ -15,8 +15,7 @@ export class EventService {
   private readonly eventApi: string;
 
   constructor(
-    private readonly httpClient: HttpClient,
-    private readonly authService: AuthenticationService
+    private readonly httpClient: HttpClient
   ) { 
     this.eventApi =  new URL('/api/event', environment.apiUrl).href;
   }

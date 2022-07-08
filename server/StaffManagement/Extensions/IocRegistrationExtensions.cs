@@ -36,6 +36,8 @@ namespace StaffManagement.Extensions
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.AddScoped<IJobRepository, JobRepository>();
         }
 
         public static void AddCoreService(this IServiceCollection services)
@@ -44,6 +46,8 @@ namespace StaffManagement.Extensions
             services.AddScoped<IAuthUserService, AuthUserService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IJobService, JobService>();
+            services.AddScoped<IDepartmentService, DepartmentService>();
         }
 
         public static void AddAuthenticationContext(this IServiceCollection services)

@@ -21,7 +21,6 @@ namespace StaffManagement.Controllers
 
         [AdminRequire]
         [HttpPost]
-        [Route("create")]
         public async Task<IActionResult> CreateJobAsync(Job req)
         {
             await _jobService.CreateJobAsync(req);
@@ -51,7 +50,6 @@ namespace StaffManagement.Controllers
 
         [AdminRequire]
         [HttpPut]
-        [Route("update")]
         public async Task<IActionResult> UpdateJobAsync(Job req)
         {
             await _jobService.UpdateJobAsync(req);
@@ -61,12 +59,11 @@ namespace StaffManagement.Controllers
 
         [AdminRequire]
         [HttpDelete]
-        [Route("delete")]
         public async Task<IActionResult> DeleteJobAsync(long jobId)
         {
             await _jobService.DeleteJobAsync(jobId);
 
-            return Ok(0);
+            return Ok();
         }
     }
 }

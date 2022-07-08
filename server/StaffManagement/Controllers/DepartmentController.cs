@@ -21,7 +21,6 @@ namespace StaffManagement.Controllers
 
         [AdminRequire]
         [HttpPost]
-        [Route("create")]
         public async Task<IActionResult> CreateDepartmentAsync(Department req)
         {
             await _departmentService.CreateDepartmentAsync(req);
@@ -30,10 +29,10 @@ namespace StaffManagement.Controllers
         }
 
         [HttpGet]
-        [Route("Department")]
-        public async Task<Department> GetDepartmentAsync(long DepartmentId)
+        [Route("department")]
+        public async Task<Department> GetDepartmentAsync(long departmentId)
         {
-            var result = await _departmentService.QueryDepartmentAsync(DepartmentId);
+            var result = await _departmentService.QueryDepartmentAsync(departmentId);
 
             return result;
         }
@@ -51,7 +50,6 @@ namespace StaffManagement.Controllers
 
         [AdminRequire]
         [HttpPut]
-        [Route("update")]
         public async Task<IActionResult> UpdateDepartmentAsync(Department req)
         {
             await _departmentService.UpdateDepartmentAsync(req);
@@ -61,12 +59,11 @@ namespace StaffManagement.Controllers
 
         [AdminRequire]
         [HttpDelete]
-        [Route("delete")]
-        public async Task<IActionResult> DeleteDepartmentAsync(long DepartmentId)
+        public async Task<IActionResult> DeleteDepartmentAsync(long departmentId)
         {
-            await _departmentService.DeleteDepartmentAsync(DepartmentId);
+            await _departmentService.DeleteDepartmentAsync(departmentId);
 
-            return Ok(0);
+            return Ok();
         }
     }
 }

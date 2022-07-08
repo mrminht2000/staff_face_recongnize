@@ -3,8 +3,12 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subject, withLatestFrom, map, takeUntil, filter, startWith, tap } from 'rxjs';
 import { Role } from 'src/app/common/constant';
+import { Department } from 'src/app/models/department/department.model';
+import { Job } from 'src/app/models/job/job.model';
 import { UserData } from 'src/app/models/user/user-data';
 import { User } from 'src/app/models/user/user.model';
+import { DepartmentService } from 'src/app/services/model-services/department.service';
+import { JobService } from 'src/app/services/model-services/job.service';
 import { UserService } from 'src/app/services/model-services/user.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { DialogComponent } from '../dialog.component';
@@ -18,6 +22,8 @@ export class EditProfileDialogComponent extends DialogComponent implements OnIni
 
   formSubmit$ = new Subject<void>();
   destroyed$ = new Subject<void>();
+  jobs: Job[] = [];
+  departments: Department[] = [];
 
   roles = Object.values(Role);
   roleKeys = this.roles.slice(0, this.roles.length / 2);
@@ -37,8 +43,16 @@ export class EditProfileDialogComponent extends DialogComponent implements OnIni
     @Inject(MAT_DIALOG_DATA) public user: User,
     private readonly userService: UserService,
     private readonly notification: NotificationService,
+    private readonly departmentService: DepartmentService,
+    private readonly jobService: JobService
   ) { 
     super();
+    this.jobService.getJobs().subscribe(res => {
+      this.jobs = res.jobs;
+    })
+    this.departmentService.getDepartments().subscribe(res => {
+      this.departments = res.departments;
+    })
   }
 
   ngOnInit(): void {
