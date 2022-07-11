@@ -17,9 +17,9 @@ namespace StaffManagement.Infras.Persistence.Repositories
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
+        public void CreateUser(User user)
         {
-            await _dbContext.Set<User>().AddAsync(user, cancellationToken);
+            _dbContext.Set<User>().Add(user);
         }
 
         public async Task<UserResult> GetUserAsync(UserParams @params, CancellationToken cancellationToken)
@@ -55,7 +55,7 @@ namespace StaffManagement.Infras.Persistence.Repositories
             return new UserResult(result);
         }
 
-        public async Task UpdateUserAsync(User request, CancellationToken cancellationToken)
+        public void UpdateUser(User request)
         {
             var query = _dbContext.Set<User>().AsQueryable();
 
@@ -82,11 +82,9 @@ namespace StaffManagement.Infras.Persistence.Repositories
             }
 
             _dbContext.Update(request);
-
-            await _dbContext.CommitAsync(cancellationToken);
         }
 
-        public async Task DeleteUserAsync(UserParams @params, CancellationToken cancellationToken)
+        public void DeleteUser(UserParams @params)
         {
             var query = _dbContext.Set<User>().AsQueryable();
 
@@ -108,8 +106,6 @@ namespace StaffManagement.Infras.Persistence.Repositories
             var item = query.Include(user => user.Events).FirstOrDefault();
 
             _dbContext.Remove(item);
-
-            await _dbContext.CommitAsync(cancellationToken);
         }
     }
 }

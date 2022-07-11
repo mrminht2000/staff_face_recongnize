@@ -17,16 +17,13 @@ namespace StaffManagement.Infras.Persistence.Repositories
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public virtual async Task<TModel> CreateAsync(TModel obj, CancellationToken cancellationToken)
+        public virtual void Create(TModel obj)
         {
-            var model = await _dbContext.Set<TModel>().AddAsync(obj, cancellationToken);
+            _dbContext.Set<TModel>().Add(obj);
 
-            await _dbContext.CommitAsync(cancellationToken);
-
-            return model.Entity;
 ;       }
 
-        public virtual async Task<QueryResult<TModel>> GetValueAsync(QueryParams<TModel> @params, 
+        public virtual async Task<QueryResult<TModel>> GetAsync(QueryParams<TModel> @params, 
             CancellationToken cancellationToken)
         {
             var query = _dbContext.Set<TModel>().AsQueryable();
@@ -42,7 +39,7 @@ namespace StaffManagement.Infras.Persistence.Repositories
             return new QueryResult<TModel>(data);
         }
 
-        public virtual async Task UpdateAsync(QueryParams<TModel> @params, TModel obj, CancellationToken cancellationToken)
+        public virtual void Update(QueryParams<TModel> @params, TModel obj)
         {
             var query = _dbContext.Set<TModel>().AsQueryable();
 
@@ -65,11 +62,9 @@ namespace StaffManagement.Infras.Persistence.Repositories
             item = obj;
 
             _dbContext.Update(item);
-
-            await _dbContext.CommitAsync(cancellationToken);
         }
 
-        public virtual async Task DeleteAsync(QueryParams<TModel> @params, CancellationToken cancellationToken)
+        public virtual void Delete(QueryParams<TModel> @params)
         {
             var query = _dbContext.Set<TModel>().AsQueryable();
 
@@ -91,8 +86,6 @@ namespace StaffManagement.Infras.Persistence.Repositories
             var item = query.FirstOrDefault();
 
             _dbContext.Remove(item);
-
-            await _dbContext.CommitAsync(cancellationToken);
         }
     }
 }

@@ -20,12 +20,14 @@ namespace StaffManagement.Core.Services.Impls
         private readonly IEventRepository _eventRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAuthenticationContext _authenticationContext;
+        private readonly IUnitOfWork _unitOfWork;
         private const int MaxVacationDay = 3;
-        public EventService(IEventRepository eventRepository, IUserRepository userRepository, IAuthenticationContext authenticationContext)
+        public EventService(IEventRepository eventRepository, IUserRepository userRepository, IAuthenticationContext authenticationContext, IUnitOfWork unitOfWork)
         {
             _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _authenticationContext = authenticationContext ?? throw new ArgumentNullException(nameof(authenticationContext));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));    
         }
 
         public async Task CreateEventAsync(Event @event, CancellationToken cancellationToken = default)
@@ -40,7 +42,9 @@ namespace StaffManagement.Core.Services.Impls
                 throw new ArgumentNullException("Ngày kết thúc không được nhỏ hơn ngày bắt đầu");
             }
 
-            await _eventRepository.CreateAsync(@event, cancellationToken);
+            _eventRepository.Create(@event);
+
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task CreateVacationAsync(Event @event, CancellationToken cancellationToken = default)
@@ -65,14 +69,16 @@ namespace StaffManagement.Core.Services.Impls
                 @event.IsConfirmed = true;
             }
 
-            var result = await _eventRepository.CreateAsync(@event, cancellationToken);
+            _eventRepository.Create(@event);
+
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task<Event> QueryEventByIdAsync(long id, CancellationToken cancellationToken = default)
         {
             Expression<Func<Event, bool>> filters = @event => id == @event.Id;
 
-            var result = await _eventRepository.GetValueAsync(new QueryParams<Event>(filters), cancellationToken);
+            var result = await _eventRepository.GetAsync(new QueryParams<Event>(filters), cancellationToken);
             
             if (result == null || result.Data.Count == 0)
             {
@@ -88,7 +94,7 @@ namespace StaffManagement.Core.Services.Impls
             Expression<Func<Event, bool>> filters = @event => request.UserId == @event.UserId;
 
             var result = await _eventRepository
-                .GetValueAsync(new QueryParams<Event>(filters), cancellationToken);
+                .GetAsync(new QueryParams<Event>(filters), cancellationToken);
 
             return result;
         }
@@ -98,7 +104,7 @@ namespace StaffManagement.Core.Services.Impls
             Expression<Func<Event, bool>> filters = @event => @event.UserId == null;
 
             var result = await _eventRepository
-                .GetValueAsync(new QueryParams<Event>(filters), cancellationToken);
+                .GetAsync(new QueryParams<Event>(filters), cancellationToken);
 
             return result;
         }
@@ -108,7 +114,7 @@ namespace StaffManagement.Core.Services.Impls
             Expression<Func<Event, bool>> filters = @event => request.UserId == @event.UserId && @event.IsConfirmed == false;
 
             var result = await _eventRepository
-                .GetValueAsync(new QueryParams<Event>(filters), cancellationToken);
+                .GetAsync(new QueryParams<Event>(filters), cancellationToken);
 
             return result;
         }
@@ -133,7 +139,7 @@ namespace StaffManagement.Core.Services.Impls
             Expression<Func<Event, bool>> filters = @event => request.UserId == @event.UserId && @event.EventType == (int)EventType.Vacation;
 
             var result = await _eventRepository
-                .GetValueAsync(new QueryParams<Event>(filters), cancellationToken);
+                .GetAsync(new QueryParams<Event>(filters), cancellationToken);
 
             return result;
         }
@@ -142,7 +148,9 @@ namespace StaffManagement.Core.Services.Impls
         {
             Expression<Func<Event, bool>> filters = @event => request.Id == @event.Id;
 
-            await _eventRepository.UpdateAsync(new QueryParams<Event>(filters), request, cancellationToken);
+            _eventRepository.Update(new QueryParams<Event>(filters), request);
+
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task AcceptEventAsync(Event request, CancellationToken cancellationToken = default)
@@ -161,14 +169,18 @@ namespace StaffManagement.Core.Services.Impls
                 request.EventType = (int)EventType.Vacation;
             }
 
-            await _eventRepository.UpdateAsync(new QueryParams<Event>(filters), request, cancellationToken);
+            _eventRepository.Update(new QueryParams<Event>(filters), request);
+
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task DeleteEventAsync(QueryEventRequest request, CancellationToken cancellationToken = default)
         {
             Expression<Func<Event, bool>> filters = @event => request.EventId == @event.Id;
 
-            await _eventRepository.DeleteAsync(new QueryParams<Event>(filters), cancellationToken);
+            _eventRepository.Delete(new QueryParams<Event>(filters));
+
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
     }
 }

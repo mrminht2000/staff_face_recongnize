@@ -7,9 +7,9 @@ namespace StaffManagement.Core.Persistence.Repositories
 {
     public interface IBaseRepository<TModel>
     {
-        Task<TModel> CreateAsync(TModel obj, CancellationToken cancellationToken);
-        Task<QueryResult<TModel>> GetValueAsync(QueryParams<TModel> @params, CancellationToken cancellationToken);
-        Task UpdateAsync(QueryParams<TModel> @params, TModel obj, CancellationToken cancellationToken);
-        Task DeleteAsync(QueryParams<TModel> @params, CancellationToken cancellationToken);
+        void Create(TModel obj);
+        Task<QueryResult<TModel>> GetAsync(QueryParams<TModel> @params, CancellationToken cancellationToken);
+        void Update(QueryParams<TModel> @params, TModel obj);
+        void Delete(QueryParams<TModel> @params);
     }
 }

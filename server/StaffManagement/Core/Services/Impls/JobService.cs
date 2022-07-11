@@ -13,9 +13,12 @@ namespace StaffManagement.Core.Services.Impls
     public class JobService : IJobService
     {
         private readonly IJobRepository _jobRepository;
-        public JobService(IJobRepository jobRepository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public JobService(IJobRepository jobRepository, IUnitOfWork unitOfWork)
         {
             _jobRepository = jobRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task CreateJobAsync(Job request, CancellationToken cancellationToken = default)
@@ -25,14 +28,16 @@ namespace StaffManagement.Core.Services.Impls
                 throw new ArgumentNullException("Bad request");
             }
 
-            await _jobRepository.CreateAsync(request, cancellationToken);
+            _jobRepository.Create(request);
+
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task<Job> QueryJobAsync(long id, CancellationToken cancellationToken = default)
         {
             Expression<Func<Job, bool>> filters = @job => id == @job.Id;
 
-            var result = await _jobRepository.GetValueAsync(new QueryParams<Job>(filters), cancellationToken);
+            var result = await _jobRepository.GetAsync(new QueryParams<Job>(filters), cancellationToken);
 
             if (result == null || result.Data.Count == 0)
             {
@@ -44,7 +49,7 @@ namespace StaffManagement.Core.Services.Impls
 
         public async Task<QueryResult<Job>> QueryJobsAsync(CancellationToken cancellationToken = default)
         {
-            var result = await _jobRepository.GetValueAsync(new QueryParams<Job>(null), cancellationToken);
+            var result = await _jobRepository.GetAsync(new QueryParams<Job>(null), cancellationToken);
 
             return result;
         }
@@ -53,14 +58,18 @@ namespace StaffManagement.Core.Services.Impls
         {
             Expression<Func<Job, bool>> filters = @job => request.Id == @job.Id;
 
-            await _jobRepository.UpdateAsync(new QueryParams<Job>(filters), request, cancellationToken);
+            _jobRepository.Update(new QueryParams<Job>(filters), request);
+
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task DeleteJobAsync(long id, CancellationToken cancellationToken = default)
         {
             Expression<Func<Job, bool>> filters = @job => id == @job.Id;
 
-            await _jobRepository.DeleteAsync(new QueryParams<Job>(filters), cancellationToken);
+            _jobRepository.Delete(new QueryParams<Job>(filters));
+
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
     }
 }

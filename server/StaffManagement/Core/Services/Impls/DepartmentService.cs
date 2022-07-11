@@ -13,9 +13,11 @@ namespace StaffManagement.Core.Services.Impls
     public class DepartmentService : IDepartmentService
     {
         private readonly IDepartmentRepository _departmentRepository;
-        public DepartmentService(IDepartmentRepository departmentRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public DepartmentService(IDepartmentRepository departmentRepository, IUnitOfWork unitOfWork)
         {
             _departmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task CreateDepartmentAsync(Department request, CancellationToken cancellationToken = default)
@@ -25,14 +27,15 @@ namespace StaffManagement.Core.Services.Impls
                 throw new ArgumentNullException("Bad request");
             }
 
-            await _departmentRepository.CreateAsync(request, cancellationToken);
+            _departmentRepository.Create(request);
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task<Department> QueryDepartmentAsync(long id, CancellationToken cancellationToken = default)
         {
             Expression<Func<Department, bool>> filters = @department => id == @department.Id;
 
-            var result = await _departmentRepository.GetValueAsync(new QueryParams<Department>(filters), cancellationToken);
+            var result = await _departmentRepository.GetAsync(new QueryParams<Department>(filters), cancellationToken);
 
             if (result == null || result.Data.Count == 0)
             {
@@ -44,7 +47,7 @@ namespace StaffManagement.Core.Services.Impls
 
         public async Task<QueryResult<Department>> QueryDepartmentsAsync(CancellationToken cancellationToken = default)
         {
-            var result = await _departmentRepository.GetValueAsync(new QueryParams<Department>(null), cancellationToken);
+            var result = await _departmentRepository.GetAsync(new QueryParams<Department>(null), cancellationToken);
 
             return result;
         }
@@ -53,14 +56,18 @@ namespace StaffManagement.Core.Services.Impls
         {
             Expression<Func<Department, bool>> filters = @department => request.Id == @department.Id;
 
-            await _departmentRepository.UpdateAsync(new QueryParams<Department>(filters), request, cancellationToken);
+            _departmentRepository.Update(new QueryParams<Department>(filters), request);
+
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task DeleteDepartmentAsync(long id, CancellationToken cancellationToken = default)
         {
             Expression<Func<Department, bool>> filters = @department => id == @department.Id;
 
-            await _departmentRepository.DeleteAsync(new QueryParams<Department>(filters), cancellationToken);
+            _departmentRepository.Delete(new QueryParams<Department>(filters));
+
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
     }
 }

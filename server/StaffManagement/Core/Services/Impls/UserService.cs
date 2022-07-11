@@ -34,7 +34,7 @@ namespace StaffManagement.Core.Services.Impls
                 throw new ArgumentNullException(nameof(@user));
             }
 
-            await _userRepository.CreateUserAsync(@user, cancellationToken);
+            _userRepository.CreateUser(@user);
             await _unitOfWork.CommitAsync(cancellationToken);
         }
 
@@ -117,14 +117,16 @@ namespace StaffManagement.Core.Services.Impls
                 request.IsConfirmed = false;
             }
 
-            await _userRepository.UpdateUserAsync(request, cancellationToken);
+            _userRepository.UpdateUser(request);
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
 
         public async Task DeleteUserAsync(QueryUserRequest request, CancellationToken cancellationToken = default)
         {
             Expression<Func<User, bool>> filters = @user => request.Id == @user.Id;
 
-            await _userRepository.DeleteUserAsync(new UserParams(filters), cancellationToken);
+            _userRepository.DeleteUser(new UserParams(filters));
+            await _unitOfWork.CommitAsync(cancellationToken);
         }
     }
 }
