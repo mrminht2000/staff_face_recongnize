@@ -1,0 +1,9 @@
+torch==1.8.0
+torchvision==0.9.0
+opencv-python==4.5.1.48
+numpy==1.19.2
+kivy==2.1.0
+facenet-pytorch==2.5.2
+pyqt5
+python-dotenv
+requests

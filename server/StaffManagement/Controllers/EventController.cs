@@ -6,6 +6,7 @@ using StaffManagement.Core.Services.Interfaces;
 using StaffManagement.ViewModels;
 using StaffManagement.Middlewares.Attributes;
 using StaffManagement.Core.Persistence.Models;
+using static StaffManagement.Core.Common.Enum.EventEnum;
 
 namespace StaffManagement.Controllers
 {
@@ -76,6 +77,16 @@ namespace StaffManagement.Controllers
                 IsConfirmed = false,
                 UserId = req.UserId
             });
+
+            return Ok();
+        }
+
+
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> RegisterEventAsync([FromBody] RegisterEventReq req)
+        {
+            await _eventService.RegisterEventAsync(req.UserName, req.StartTime);
 
             return Ok();
         }

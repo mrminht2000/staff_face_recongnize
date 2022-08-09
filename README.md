@@ -38,3 +38,22 @@ Sử dụng ASP .Net bản 3.1
 # Description
 
 ...
+
+# App chấm công
+
+Sử dụng Python
+
+## Install package
+Chạy `pip install requirement.txt` để cài đặt các module
+
+## Development server
+Chạy `python -u main.py`
+
+## Build
+
+
+## Running unit tests
+
+# Description
+
+...

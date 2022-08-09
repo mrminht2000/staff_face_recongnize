@@ -65,16 +65,16 @@ namespace StaffManagement.Core.Services.Impls
         {
             var users = await _userRepository.GetUserEventsAsync(new UserParams(), cancellationToken);
 
-            var dateNow = DateTime.Now.Date.AddHours(-7);
+            var dateNow = DateTime.UtcNow.Date;
 
             var result = users.Users.Select(u =>
             {
                 var user = u;
                 user.Events = user.Events.Where(e =>
                     e.IsConfirmed == true &&
-                    e.EventType != (int)EventType.Default &&
-                    ((e.EndTime == null && e.StartTime == dateNow) ||
-                    (e.EndTime != null && e.StartTime <= dateNow && e.EndTime.GetValueOrDefault() >= dateNow))
+                    e.EventType != (int)EventType.Default &
+                    ((e.EndTime == null && e.StartTime.Date == dateNow) ||
+                    (e.EndTime != null && e.StartTime.Date <= dateNow && e.EndTime.GetValueOrDefault().Date >= dateNow))
                 ).ToList();
 
                 var absentCount = user.Events.Where(e => e.EventType == (int)EventType.Vacation || e.EventType == (int)EventType.Absent).Count();

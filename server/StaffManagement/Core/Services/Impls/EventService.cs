@@ -74,6 +74,39 @@ namespace StaffManagement.Core.Services.Impls
             await _unitOfWork.CommitAsync(cancellationToken);
         }
 
+        public async Task RegisterEventAsync(string userName, DateTime startTime, CancellationToken cancellationToken = default)
+        {
+            if (String.IsNullOrEmpty(userName))
+            {
+                throw new NullReferenceException("UserName is null");
+            }
+
+            Expression<Func<User, bool>> filters = @user => @user.UserName.ToLower().Equals(userName.ToLower());
+
+            var users = await _userRepository.GetUserAsync(new UserParams(filters), cancellationToken);
+
+            if (users.Users.Count == 0)
+            {
+                throw new NullReferenceException("User Not Found");
+            }
+
+            var @event = new Event
+            {
+                EventName = "Điểm danh",
+                EventType = (int)EventType.Register,
+                AllDay = false,
+                StartTime = startTime,
+                EndTime = null,
+                IsConfirmed = true,
+                Per = null,
+                UserId = users.Users.FirstOrDefault().Id
+            };
+
+            _eventRepository.Create(@event);
+
+            await _unitOfWork.CommitAsync(cancellationToken);
+        }
+
         public async Task<Event> QueryEventByIdAsync(long id, CancellationToken cancellationToken = default)
         {
             Expression<Func<Event, bool>> filters = @event => id == @event.Id;

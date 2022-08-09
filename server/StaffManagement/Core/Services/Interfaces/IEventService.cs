@@ -1,6 +1,7 @@
 ﻿using StaffManagement.Core.Common;
 using StaffManagement.Core.Persistence.Models;
 using StaffManagement.Core.Services.Dtos;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,6 +12,8 @@ namespace StaffManagement.Core.Services.Interfaces
         Task CreateEventAsync(Event @event, CancellationToken cancellationToken = default);
 
         Task CreateVacationAsync(Event @event, CancellationToken cancellationToken = default);
+
+        Task RegisterEventAsync(string userName, DateTime startTime, CancellationToken cancellationToken = default);
 
         Task<Event> QueryEventByIdAsync(long id, CancellationToken cancellationToken = default);
 
