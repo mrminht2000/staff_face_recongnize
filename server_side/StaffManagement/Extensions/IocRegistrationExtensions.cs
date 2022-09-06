@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StaffManagement.API.Core.Context;
-using StaffManagement.API.Core.Persistence.Repositories;
-using StaffManagement.API.Core.Services.Impls;
-using StaffManagement.API.Core.Services.Interfaces;
-using StaffManagement.API.Infras.Persistence;
-using StaffManagement.API.Infras.Persistence.Repositories;
+using StaffManagement.Core.Core.Context;
+using StaffManagement.Core.Core.Persistence.Repositories;
+using StaffManagement.Core.Core.Services.Impls;
+using StaffManagement.Core.Core.Services.Interfaces;
+using StaffManagement.Core.Infras.Persistence;
+using StaffManagement.Core.Infras.Persistence.Repositories;
 using System;
 
 namespace StaffManagement.API.Extensions
@@ -37,6 +37,7 @@ namespace StaffManagement.API.Extensions
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IJobRepository, JobRepository>();
+            services.AddScoped<IWorkingProgressRepository, WorkingProgressRepository>();
         }
 
         public static void AddCoreService(this IServiceCollection services)
@@ -47,6 +48,7 @@ namespace StaffManagement.API.Extensions
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IJobService, JobService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<IWorkingProgressService, WorkingProgressService>();
         }
 
         public static void AddAuthenticationContext(this IServiceCollection services)

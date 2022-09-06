@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using StaffManagement.API.Core.Services.Dtos;
-using StaffManagement.API.Core.Services.Interfaces;
-using StaffManagement.API.ViewModels;
+using StaffManagement.Core.Core.Services.Dtos;
+using StaffManagement.Core.Core.Services.Interfaces;
+using StaffManagement.Core.ViewModels;
 using System;
 using System.Threading.Tasks;
 

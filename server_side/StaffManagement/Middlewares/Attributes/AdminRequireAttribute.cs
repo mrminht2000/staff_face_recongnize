@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using static StaffManagement.API.Core.Common.Enum.UserEnum;
+using static StaffManagement.Core.Core.Common.Enum.UserEnum;
 
 namespace StaffManagement.API.Middlewares.Attributes
 {

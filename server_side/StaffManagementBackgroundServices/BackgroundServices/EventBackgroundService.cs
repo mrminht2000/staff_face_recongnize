@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using StaffManagement.BackgroundServices.Core.Services.Interfaces;
+using StaffManagement.Core.Core.Services.Interfaces;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +25,16 @@ namespace StaffManagement.BackgroundServices.BackgroundServices
         {
             try
             {
+                var now = DateTime.Now;
+                var hours = (23 - now.Hour >= 0) ? 23 - now.Hour : (23 + 24) - now.Hour;
+                var minutes = 59 - now.Minute;
+                var seconds = 59 - now.Second;
+                var secondsTillMidnight = hours * 3600 + minutes * 60 + seconds; // Execute at the end of the day
+
+                _logger.LogInformation("Waiting {0:00}:{0:00}:{1:00} until working time", hours, minutes, seconds);
+                await Task.Delay(TimeSpan.FromSeconds(secondsTillMidnight), stoppingToken);
+
+
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
@@ -38,12 +48,12 @@ namespace StaffManagement.BackgroundServices.BackgroundServices
 
                         foreach (var user in users.Users)
                         {
-                            await _eventService.DeleteRegisterEventsByUserId(user.Id);
+                            await _eventService.ProccessRegisterEventsByUserIdAsync(user.Id);
 
                             Console.WriteLine("Delete user " + user.UserName + "'s unused events successfully!");
                         }
                     }
-                    await WaitForNextSchedule();
+                    await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
                 }
 
             }
@@ -52,11 +62,6 @@ namespace StaffManagement.BackgroundServices.BackgroundServices
                 Console.WriteLine(ex);
                 throw;
             }
-        }
-
-        private async Task WaitForNextSchedule()
-        {
-            await Task.Delay(TimeSpan.FromSeconds(5));
         }
     }
 }

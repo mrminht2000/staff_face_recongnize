@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using StaffManagement.API.Core.Services.Dtos;
+using StaffManagement.Core.Core.Services.Dtos;
 using System;
 using System.Net;
 using System.Text;

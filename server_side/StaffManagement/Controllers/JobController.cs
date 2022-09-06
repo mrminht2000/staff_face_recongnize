@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StaffManagement.API.Core.Persistence.Models;
-using StaffManagement.API.Core.Services.Interfaces;
+using StaffManagement.Core.Core.Persistence.Models;
+using StaffManagement.Core.Core.Services.Interfaces;
 using StaffManagement.API.Middlewares.Attributes;
-using StaffManagement.API.ViewModels;
+using StaffManagement.Core.ViewModels;
 using System;
 using System.Threading.Tasks;
 

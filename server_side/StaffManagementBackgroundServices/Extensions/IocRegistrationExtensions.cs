@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StaffManagement.BackgroundServices.Core.Persistence.Repositories;
-using StaffManagement.BackgroundServices.Core.Services.Impls;
-using StaffManagement.BackgroundServices.Core.Services.Interfaces;
-using StaffManagement.BackgroundServices.Infras.Persistence;
-using StaffManagement.BackgroundServices.Infras.Persistence.Repositories;
+using StaffManagement.Core.Core.Persistence.Repositories;
+using StaffManagement.Core.Core.Services.Impls;
+using StaffManagement.Core.Core.Services.Interfaces;
+using StaffManagement.Core.Infras.Persistence;
+using StaffManagement.Core.Infras.Persistence.Repositories;
 using System;
 
 namespace StaffManagement.BackgroundServices.Extensions
@@ -26,12 +26,14 @@ namespace StaffManagement.BackgroundServices.Extensions
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IWorkingProgressRepository, WorkingProgressRepository>();
         }
 
         public static void AddCoreServices(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IWorkingProgressService, WorkingProgressService>();
         }
     }
 }
