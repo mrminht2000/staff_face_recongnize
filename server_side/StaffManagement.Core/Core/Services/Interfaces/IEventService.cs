@@ -19,6 +19,12 @@ namespace StaffManagement.Core.Core.Services.Interfaces
 
         Task<QueryResult<Event>> QueryEventsByUserIdAsync(QueryEventRequest request, CancellationToken cancellationToken = default);
 
+        Task<QueryResult<Event>> QueryEventsByUserIdAsync(QueryEventRequest request, DateTime date, CancellationToken cancellationToken = default);
+
+        Task<QueryResult<Event>> QueryRegisterEventsByUserIdAsync(long userId, CancellationToken cancellationToken = default);
+
+        Task<QueryResult<Event>> QueryRegisterEventsByUserIdAsync(long userId, DateTime date, CancellationToken cancellationToken = default);
+
         Task<UserResult> QueryUnconfirmedEventsAsync(CancellationToken cancellationToken = default);
 
         Task<QueryResult<Event>> QueryUnconfirmedEventsByUserIdAsync(QueryEventRequest request, CancellationToken cancellationToken = default);

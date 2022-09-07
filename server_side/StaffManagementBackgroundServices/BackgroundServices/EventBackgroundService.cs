@@ -12,6 +12,7 @@ namespace StaffManagement.BackgroundServices.BackgroundServices
     {
         private IEventService _eventService;
         private IUserService _userService;
+        private IWorkingProgressService _workingProgressService;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<EventBackgroundService> _logger;
 
@@ -26,13 +27,13 @@ namespace StaffManagement.BackgroundServices.BackgroundServices
             try
             {
                 var now = DateTime.Now;
-                var hours = (23 - now.Hour >= 0) ? 23 - now.Hour : (23 + 24) - now.Hour;
+                var hours = (22 - now.Hour >= 0) ? 22 - now.Hour : (22 + 24) - now.Hour;
                 var minutes = 59 - now.Minute;
                 var seconds = 59 - now.Second;
-                var secondsTillMidnight = hours * 3600 + minutes * 60 + seconds; // Execute at the end of the day
+                var secondsTillWorking = hours * 3600 + minutes * 60 + seconds; // Execute at the end of the day
 
                 _logger.LogInformation("Waiting {0:00}:{0:00}:{1:00} until working time", hours, minutes, seconds);
-                await Task.Delay(TimeSpan.FromSeconds(secondsTillMidnight), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(secondsTillWorking), stoppingToken);
 
 
                 while (!stoppingToken.IsCancellationRequested)
@@ -41,18 +42,24 @@ namespace StaffManagement.BackgroundServices.BackgroundServices
 
                     using (IServiceScope scope = _serviceProvider.CreateScope())
                     {
+                        _logger.LogInformation("Event worker is starting .....");
+
                         _userService = scope.ServiceProvider.GetService<IUserService>();
                         _eventService = scope.ServiceProvider.GetService<IEventService>();
+                        _workingProgressService = scope.ServiceProvider.GetService<IWorkingProgressService>();
 
                         var users = await _userService.QueryUsersAsync();
 
                         foreach (var user in users.Users)
                         {
                             await _eventService.ProccessRegisterEventsByUserIdAsync(user.Id);
+                            await _workingProgressService.UpdateWorkingDayAsync(user.Id);
 
-                            Console.WriteLine("Delete user " + user.UserName + "'s unused events successfully!");
-                        }
+                            Console.WriteLine("Update user " + user.UserName + "'s register events successfully!");
+                        } 
                     }
+
+                    _logger.LogInformation("Waiting for the next day till working time");
                     await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
                 }
 

@@ -16,7 +16,7 @@ namespace StaffManagement.Core.Infras.Persistence.EntityTypeConfigurations
                 .HasColumnType("BIGINT");
 
             builder.Property(t => t.WorkingDayInMonth)
-                .HasColumnType("TINYINT");
+                .HasColumnType("FLOAT");
 
             builder.Property(t => t.LateTimeByHours)
                 .IsRequired()

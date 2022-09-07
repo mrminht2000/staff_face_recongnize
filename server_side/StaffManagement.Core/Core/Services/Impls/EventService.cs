@@ -4,7 +4,7 @@ using StaffManagement.Core.Core.Persistence.Models;
 using StaffManagement.Core.Core.Persistence.Repositories;
 using StaffManagement.Core.Core.Services.Dtos;
 using StaffManagement.Core.Core.Services.Interfaces;
-using StaffManagement.Core.Extensions;
+using StaffManagement.Core.Core.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +20,15 @@ namespace StaffManagement.Core.Core.Services.Impls
     {
         private readonly IEventRepository _eventRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IWorkingProgressService _workingProgressService;
         private readonly IAuthenticationContext _authenticationContext;
         private readonly IUnitOfWork _unitOfWork;
         private const int MaxVacationDay = 3;
 
-        public EventService(IEventRepository eventRepository, IUserRepository userRepository, IAuthenticationContext authenticationContext, IUnitOfWork unitOfWork, IWorkingProgressService workingProgressService)
+        public EventService(IEventRepository eventRepository, IUserRepository userRepository, IAuthenticationContext authenticationContext, IUnitOfWork unitOfWork)
         {
             _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _authenticationContext = authenticationContext ?? throw new ArgumentNullException(nameof(authenticationContext));
-            _workingProgressService = workingProgressService ?? throw new ArgumentNullException(nameof(workingProgressService));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
@@ -136,10 +134,32 @@ namespace StaffManagement.Core.Core.Services.Impls
             return result;
         }
 
-        public async Task<QueryResult<Event>> QueryRegesterEventsByUserIdAsync(long userId, CancellationToken cancellationToken = default)
+        public async Task<QueryResult<Event>> QueryEventsByUserIdAsync(QueryEventRequest request, DateTime date, CancellationToken cancellationToken = default)
         {
 
+            Expression<Func<Event, bool>> filters = @event => request.UserId == @event.UserId 
+                                                        && @event.StartTime >= date && @event.StartTime <= date.AddDays(1).AddTicks(-1); ;
+
+            var result = await _eventRepository
+                .GetAsync(new QueryParams<Event>(filters), cancellationToken);
+
+            return result;
+        }
+
+        public async Task<QueryResult<Event>> QueryRegisterEventsByUserIdAsync(long userId, CancellationToken cancellationToken = default)
+        {
             Expression<Func<Event, bool>> filters = @event => userId == @event.UserId && @event.EventType == (int)EventType.Register;
+
+            var result = await _eventRepository
+                .GetAsync(new QueryParams<Event>(filters), cancellationToken);
+
+            return result;
+        }
+
+        public async Task<QueryResult<Event>> QueryRegisterEventsByUserIdAsync(long userId, DateTime date, CancellationToken cancellationToken = default)
+        {
+            Expression<Func<Event, bool>> filters = @event => userId == @event.UserId && @event.EventType == (int)EventType.Register 
+                                                        && @event.StartTime >= date && @event.StartTime <= date.AddDays(1).AddTicks(-1);
 
             var result = await _eventRepository
                 .GetAsync(new QueryParams<Event>(filters), cancellationToken);
@@ -223,7 +243,7 @@ namespace StaffManagement.Core.Core.Services.Impls
 
             var vacations = await QueryVacationEventByUserIdAsync(new QueryEventRequest { UserId = request.UserId }, cancellationToken);
 
-            var vacationDays = vacations.Data.CountDays();
+            var vacationDays = EventHelpers.CountDays(vacations.Data);
 
             if (vacationDays > MaxVacationDay)
             {
@@ -250,7 +270,7 @@ namespace StaffManagement.Core.Core.Services.Impls
 
         public async Task ProccessRegisterEventsByUserIdAsync(long userId, CancellationToken cancellationToken = default)
         {
-            var registerEvents = await QueryRegesterEventsByUserIdAsync(userId, cancellationToken);
+            var registerEvents = await QueryRegisterEventsByUserIdAsync(userId, cancellationToken);
 
             if (registerEvents.Data.Count > 2)
             {
@@ -268,6 +288,7 @@ namespace StaffManagement.Core.Core.Services.Impls
             if (registerEvents.Data.Count > 0)
             {
                 var checkInEvent = registerEvents.Data[0];
+                var checkOutEvent = new Event();
 
                 checkInEvent.EventName = "Check-in";
                 Expression<Func<Event, bool>> checkInFilters = @event => checkInEvent.Id == @event.Id;
@@ -275,7 +296,7 @@ namespace StaffManagement.Core.Core.Services.Impls
 
                 if (registerEvents.Data.Count > 1)
                 {
-                    var checkOutEvent = registerEvents.Data[registerEvents.Data.Count - 1];
+                    checkOutEvent = registerEvents.Data[registerEvents.Data.Count - 1];
 
                     checkOutEvent.EventName = "Check-out";
 

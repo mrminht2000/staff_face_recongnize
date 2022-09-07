@@ -10,6 +10,6 @@ namespace StaffManagement.Core.Core.Services.Interfaces
 
         Task<WorkingProgress> GetByUserIdAsync(long userId, CancellationToken cancellationToken = default);
 
-        Task CreateOrUpdateAsync(WorkingProgress workingProgress, CancellationToken cancellationToken = default);
+        Task UpdateWorkingDayAsync(long userId, CancellationToken cancellationToken = default);
     }
 }

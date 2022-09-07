@@ -6,7 +6,7 @@ namespace StaffManagement.Core.Core.Persistence.Models
     {
         public long Id { get; set; }
 
-        public byte WorkingDayInMonth { get; set; }
+        public double WorkingDayInMonth { get; set; }
 
         public double LateTimeByHours { get; set; }
 

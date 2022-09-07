@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StaffManagement.Core.Core.Context;
 using StaffManagement.Core.Core.Persistence.Repositories;
 using StaffManagement.Core.Core.Services.Impls;
 using StaffManagement.Core.Core.Services.Interfaces;
@@ -34,6 +35,7 @@ namespace StaffManagement.BackgroundServices.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IWorkingProgressService, WorkingProgressService>();
+            services.AddScoped<IAuthenticationContext>( sp => new AuthenticationContext(0 , 0));
         }
     }
 }
