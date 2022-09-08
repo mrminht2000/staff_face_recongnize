@@ -23,6 +23,7 @@ export class SalaryTableComponent implements OnInit {
     'job',
     'startDay',
     'workingProgress',
+    'lateTime',
     'salary'
   ]
 

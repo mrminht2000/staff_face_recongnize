@@ -5,6 +5,7 @@ using StaffManagement.Core.Infras.Persistence.EntityTypeConfigurations;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using static StaffManagement.Core.Core.Common.Enum.EventEnum;
 
 namespace StaffManagement.Core.Infras.Persistence
 {
@@ -118,6 +119,85 @@ namespace StaffManagement.Core.Infras.Persistence
                     StartDay = new DateTime(),
                     IsConfirmed = true,
                 });
+            }
+
+            // Events
+            var today = DateTime.UtcNow.AddHours(7).Date;
+
+            var firstDayMonth = new DateTime(today.Year, today.Month, 1); // first day this month
+            long eventId = 1;
+
+            for (var i = 1; i <= 10; i++)
+            {
+                var startDay = firstDayMonth;
+                var count = 1;
+                while (startDay <= today && count < 31)
+                {
+                    var eventChoice = rand.Next(1, 10);
+                    if (eventChoice <= 2)
+                    {
+                        modelBuilder.Entity<Event>().HasData(new Event
+                        {
+                            Id = eventId,
+                            EventName = "Nghi khong luong",
+                            EventType = (int)EventType.Absent,
+                            StartTime = startDay.AddHours(-7),
+                            AllDay = true,
+                            IsConfirmed = true,
+                            UserId = i
+                        });
+
+                        eventId++;
+                    }
+
+                    if (eventChoice > 2 && eventChoice <= 4)
+                    {
+                        modelBuilder.Entity<Event>().HasData(new Event
+                        {
+                            Id = eventId,
+                            EventName = "Nghi co luong",
+                            EventType = (int)EventType.Vacation,
+                            StartTime = startDay.AddHours(-7),
+                            AllDay = true,
+                            IsConfirmed = true,
+                            UserId = i
+                        });
+
+                        eventId++;
+                    }
+
+                    if (eventChoice > 4)
+                    {
+                        modelBuilder.Entity<Event>().HasData(new Event
+                        {
+                            Id = eventId,
+                            EventName = "Check-in",
+                            EventType = (int)EventType.Register,
+                            StartTime = startDay.AddHours(rand.Next(7, 9) -7),
+                            AllDay = false,
+                            IsConfirmed = true,
+                            UserId = i
+                        });
+
+                        eventId++;
+
+                        modelBuilder.Entity<Event>().HasData(new Event
+                        {
+                            Id = eventId,
+                            EventName = "Check-out",
+                            EventType = (int)EventType.Register,
+                            StartTime = startDay.AddHours(rand.Next(17, 19) -7),
+                            AllDay = false,
+                            IsConfirmed = true,
+                            UserId = i
+                        });
+
+                        eventId++;
+                    }
+
+                    startDay = startDay.AddDays(1);
+                    count++;
+                }
             }
         }
 

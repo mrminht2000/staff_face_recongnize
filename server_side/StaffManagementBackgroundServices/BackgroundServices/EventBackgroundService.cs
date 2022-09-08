@@ -32,6 +32,7 @@ namespace StaffManagement.BackgroundServices.BackgroundServices
                 var seconds = 59 - now.Second;
                 var secondsTillWorking = hours * 3600 + minutes * 60 + seconds; // Execute at the end of the day
 
+                secondsTillWorking = 0;
                 _logger.LogInformation("Waiting {0:00}:{0:00}:{1:00} until working time", hours, minutes, seconds);
                 await Task.Delay(TimeSpan.FromSeconds(secondsTillWorking), stoppingToken);
 

@@ -18,13 +18,6 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex">
-                <div class="card-tools mr-auto">
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                        <a class="btn btn-info btn-block form-control" (click)="openCreateUserDialog()">
-                            <i class="fas fa-edit"></i> Tạo tài khoản
-                        </a>
-                    </div>
-                </div>
                 <div class="card-tools ml-auto">
                     <div class="input-group input-group-sm" style="width: 150px;">
                         <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
@@ -78,14 +71,19 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Tiến độ làm việc</th>
                         <td mat-cell *matCellDef="let element">
                             <div class="progress progress-xs" style="width: 70%;">
-                                <div class="progress-bar progress-bar-info" style="width: 71%"></div>
+                                <div class="progress-bar progress-bar-info" [style.width.%] = "100*element.workingProgress.workingDayInMonth/21"></div>
                             </div>
                         </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="lateTime">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Đi muộn/Về sớm</th>
+                        <td mat-cell *matCellDef="let element">{{ element.workingProgress.lateTimeByHours | number : '1.1-2'}} giờ</td>
+                    </ng-container>
+
                     <ng-container matColumnDef="salary">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ngày tham gia</th>
-                        <td mat-cell *matCellDef="let element">{{element.job.salary * element.workingProgress.workingDayInMonth }} $</td>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Lương tháng này</th>
+                        <td mat-cell *matCellDef="let element">{{element.job.salary * (element.workingProgress.workingDayInMonth / 21) | number : '1.2-2'}} $</td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

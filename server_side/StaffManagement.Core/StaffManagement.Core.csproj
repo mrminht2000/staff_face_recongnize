@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20220908054320_InitialCreate.cs" />
+    <Compile Remove="Migrations\20220908054320_InitialCreate.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <_ContentIncludedByDefault Remove="appsettings - Example.Development.json" />
     <_ContentIncludedByDefault Remove="appsettings - Example.json" />
   </ItemGroup>

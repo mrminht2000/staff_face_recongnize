@@ -70,12 +70,11 @@ namespace StaffManagement.Core.Core.Services.Impls
 
                     if (userEvent.EventType == (int)EventType.Register && userEvent.EventName.Equals("Check-in")) {
                         checkInEvent = userEvent.StartTime;
-                        continue;
                     }
 
-                    if (userEvent.EventType == (int)EventType.Register && userEvent.EventName.Equals("Check-in"))
+                    if (userEvent.EventType == (int)EventType.Register && userEvent.EventName.Equals("Check-out"))
                     {
-                        checkInEvent = userEvent.StartTime;
+                        checkOutEvent = userEvent.StartTime;
                     }
                 }
 
