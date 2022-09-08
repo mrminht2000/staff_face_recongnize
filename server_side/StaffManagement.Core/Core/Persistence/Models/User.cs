@@ -27,12 +27,12 @@ namespace StaffManagement.Core.Core.Persistence.Models
 
         public bool IsConfirmed { get; set; }
 
-        public virtual ICollection<Event> Events { get; set; }
+        public List<Event> Events { get; set; }
 
-        public virtual Department? Department { get; set; }
+        public Department? Department { get; set; }
 
-        public virtual Job? Job { get; set; }
+        public Job? Job { get; set; }
 
-        public virtual WorkingProgress? WorkingProgress { get; set; }
+        public WorkingProgress? WorkingProgress { get; set; }
     }
 }

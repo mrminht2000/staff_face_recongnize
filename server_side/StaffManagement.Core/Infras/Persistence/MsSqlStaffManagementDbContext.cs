@@ -13,11 +13,14 @@ namespace StaffManagement.Core.Infras.Persistence
         public MsSqlStaffManagementDbContext(string connectionString)
             : base(GetOptions(connectionString))
         {
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public MsSqlStaffManagementDbContext(DbContextOptions<MsSqlStaffManagementDbContext> options)
             : base(options)
-        { }
+        {
+            this.ChangeTracker.LazyLoadingEnabled = false;
+        }
 
         private static DbContextOptions GetOptions(string connectionString)
         {

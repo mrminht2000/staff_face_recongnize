@@ -14,6 +14,6 @@ namespace StaffManagement.Core.Core.Persistence.Models
 
         public long UserId { get; set; }
 
-        public virtual User User { get; set; }
+        public User User { get; set; }
     }
 }

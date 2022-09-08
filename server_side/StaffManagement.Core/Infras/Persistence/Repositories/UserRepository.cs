@@ -49,8 +49,8 @@ namespace StaffManagement.Core.Infras.Persistence.Repositories
 
             }
 
-            var result = await query.Include(user => user.WorkingProgress)
-                                    .Include(user => user.Job)
+            var result = await query.Include(user => user.Job)
+                                    .Include(user => user.WorkingProgress)
                                     .ToListAsync(cancellationToken);
 
             return new UserResult(result);

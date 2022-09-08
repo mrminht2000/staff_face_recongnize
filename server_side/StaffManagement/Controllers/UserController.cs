@@ -74,9 +74,9 @@ namespace StaffManagement.API.Controllers
         [AdminRequire]
         [HttpGet]
         [Route("working")]
-        public async Task<UserQueryResp> QueryUserWorkingStatusAsync()
+        public async Task<UserQueryResp> QueryUserWorkingProgressAsync()
         {
-            var result = await _userService.QueryUserWorkingStatusAsync();
+            var result = await _userService.QueryUserWorkingProgressAsync();
 
             return new UserQueryResp
             {

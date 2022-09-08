@@ -29,6 +29,12 @@ export class UserService {
     );
   }
 
+  getUserWorkingProgress() {
+    return this.httpClient.get<GetUserResp>(this.userApi + '/working').pipe(
+      catchError(() => of({} as GetUserResp))
+    );
+  }
+
   getUsersEvents() {
     return this.httpClient.get<GetUserResp>(this.userApi + '/events').pipe(
       catchError(() => of({} as GetUserResp))

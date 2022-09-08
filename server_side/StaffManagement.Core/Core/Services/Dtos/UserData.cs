@@ -14,6 +14,7 @@ namespace StaffManagement.Core.Core.Services.Dtos
         public string Email { get; set; }
         public Department? Department { get; set; }
         public Job? Job { get; set; }
+        public WorkingProgress? WorkingProgress { get; set; }
         public ICollection<Event>? Events { get; set; }
         public DateTime StartDay { get; set; }
         public bool IsConfirmed { get; set; }
@@ -29,6 +30,7 @@ namespace StaffManagement.Core.Core.Services.Dtos
             Email = user.Email;
             Department = user.Department;
             Job = user.Job;
+            WorkingProgress = user.WorkingProgress;
             Events = user.Events;
             StartDay = user.StartDay;
             IsConfirmed = user.IsConfirmed;

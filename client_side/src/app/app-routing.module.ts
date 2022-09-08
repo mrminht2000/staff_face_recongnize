@@ -16,6 +16,7 @@ import { AuthGuardService as AuthGuard } from './services/guard-services/auth-gu
 import { LoginGuardService as LoginGuard } from './services/guard-services/login-guard.service';
 import { UnconfirmedEventsComponent } from './components/main/users/calendar/unconfirmed-events/unconfirmed-events.component';
 import { DashboardComponent } from './components/main/dashboard/dashboard.component';
+import { SalaryTableComponent } from './components/main/users/salary-table/salary-table.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent, 
@@ -30,6 +31,7 @@ const routes: Routes = [
     ]},
     {path: 'staffs', children: [
       {path: 'all', component: StaffsListComponent, data: {expectedRole: Role.Admin}},
+      {path: 'salary', component: SalaryTableComponent, data: {expectedRole: Role.Admin}},
       {path: ':id', component:StaffsProfileComponent},
       {path: ':id/calendar', component: StaffsCalendarComponent}
     ]}

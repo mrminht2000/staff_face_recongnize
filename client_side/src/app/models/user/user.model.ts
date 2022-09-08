@@ -1,6 +1,7 @@
 import { Department } from "../department/department.model";
 import { Job } from "../job/job.model";
 import { Event } from "../event/event.model"
+import { WorkingProgress } from "../working-progress/working-progress.model";
 
 export interface User {
     id: number;
@@ -22,6 +23,8 @@ export interface User {
     department: Department;
 
     job: Job;
+
+    workingProgress: WorkingProgress;
 
     events: Event[];
 
