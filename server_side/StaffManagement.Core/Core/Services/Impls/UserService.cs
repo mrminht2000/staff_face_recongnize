@@ -122,6 +122,12 @@ namespace StaffManagement.Core.Core.Services.Impls
 
             throw new ArgumentNullException();
         }
+        public async Task<UserResult> QueryUserWorkingStatusAsync(CancellationToken cancellationToken = default)
+        {
+            var users = await _userRepository.GetUserWorkingProgressAsync(new UserParams(), cancellationToken);
+
+            return users;
+        }
 
         public async Task UpdateUserAsync(User request, CancellationToken cancellationToken = default)
         {

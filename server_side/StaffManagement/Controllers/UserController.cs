@@ -71,6 +71,19 @@ namespace StaffManagement.API.Controllers
             };
         }
 
+        [AdminRequire]
+        [HttpGet]
+        [Route("working")]
+        public async Task<UserQueryResp> QueryUserWorkingStatusAsync()
+        {
+            var result = await _userService.QueryUserWorkingStatusAsync();
+
+            return new UserQueryResp
+            {
+                Users = result.Users
+            };
+        }
+
         [HttpGet]
         [Route("info")]
         public async Task<UserData> QueryUserByIdAsync([FromQuery] UserQueryReq req)

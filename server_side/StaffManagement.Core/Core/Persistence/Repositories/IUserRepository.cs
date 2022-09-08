@@ -12,6 +12,8 @@ namespace StaffManagement.Core.Core.Persistence.Repositories
 
         Task<UserResult> GetUserAsync(UserParams @param, CancellationToken cancellationToken);
 
+        Task<UserResult> GetUserWorkingProgressAsync(UserParams @params, CancellationToken cancellationToken);
+
         Task<UserResult> GetUserEventsAsync(UserParams @userParams, CancellationToken cancellationToken);
 
         void UpdateUser(User user);

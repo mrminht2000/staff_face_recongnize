@@ -18,6 +18,8 @@ namespace StaffManagement.Core.Core.Services.Interfaces
 
         Task<UserResult> QueryUserWorkingDaysAsync(CancellationToken cancellationToken = default);
 
+        Task<UserResult> QueryUserWorkingStatusAsync(CancellationToken cancellationToken = default);
+
         Task UpdateUserAsync(User @user, CancellationToken cancellationToken = default);
 
         Task DeleteUserAsync(QueryUserRequest request, CancellationToken cancellationToken = default);

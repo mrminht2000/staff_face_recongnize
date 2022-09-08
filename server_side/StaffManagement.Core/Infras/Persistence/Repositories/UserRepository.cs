@@ -39,6 +39,23 @@ namespace StaffManagement.Core.Infras.Persistence.Repositories
             return new UserResult(result);
         }
 
+        public async Task<UserResult> GetUserWorkingProgressAsync(UserParams @params, CancellationToken cancellationToken)
+        {
+            var query = _dbContext.Set<User>().AsQueryable();
+
+            if (@params.Filters != null)
+            {
+                query = query.Where(@params.Filters);
+
+            }
+
+            var result = await query.Include(user => user.WorkingProgress)
+                                    .Include(user => user.Job)
+                                    .ToListAsync(cancellationToken);
+
+            return new UserResult(result);
+        }
+
         public async Task<UserResult> GetUserEventsAsync(UserParams @userParams, CancellationToken cancellationToken)
         {
             var query = _dbContext.Set<User>().AsQueryable();
