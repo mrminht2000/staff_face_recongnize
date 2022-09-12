@@ -42,6 +42,8 @@ namespace StaffManagement.Core.Infras.Persistence
 
         public DbSet<Job> Jobs { get; set; }
 
+        public DbSet<WorkingProgress> WorkingProgresses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserEntityTypeConfiguration).Assembly);
@@ -131,7 +133,7 @@ namespace StaffManagement.Core.Infras.Persistence
             {
                 var startDay = firstDayMonth;
                 var count = 1;
-                while (startDay <= today && count < 31)
+                while (startDay <= today && count < 31) 
                 {
                     var eventChoice = rand.Next(1, 10);
                     if (eventChoice <= 2)

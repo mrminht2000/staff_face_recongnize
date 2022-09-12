@@ -22,7 +22,7 @@ export class JobService {
   }
 
   getJobById(id: number) {
-    return this.httpClient.get<Job>(this.jobApi + '/job', {
+    return this.httpClient.get<Job>(this.jobApi, {
       params: {jobId: id}
     });
   }

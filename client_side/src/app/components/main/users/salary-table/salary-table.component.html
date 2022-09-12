@@ -59,7 +59,9 @@
 
                     <ng-container matColumnDef="job">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Chức vụ</th>
-                        <td mat-cell *matCellDef="let element">{{element.job.name}}</td>
+                        <td mat-cell *matCellDef="let element">
+                            <a (click)="openJobDetailDialog(element.job)">{{element.job.name}}</a>
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="startDay">

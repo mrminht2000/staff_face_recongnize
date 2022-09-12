@@ -1,0 +1,20 @@
+<div class="card card-primary card-outline">
+    <div class="card-body box-profile">
+        <ul class="list-group list-group-unbordered mb-3">
+            <div>
+                <b>Chức vụ</b>
+                <h2 class="float-right">{{job.name}}</h2>
+            </div>
+            <li class="list-group-item">
+                <b>Mô tả</b>
+                <h3 class="float-right">{{job.description}}</h3>
+            </li>
+            <li class="list-group-item">
+                <b>Lương cơ bản</b>
+                <h3 class="float-right">{{job.salary}}$/{{job.salaryPer == 'm' ? 'tháng' : 'ngày'}}</h3>
+            </li>
+        </ul>
+    </div>
+    <div class="card-footer d-flex">
+    </div>
+</div>

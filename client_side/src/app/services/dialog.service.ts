@@ -17,6 +17,8 @@ import { Event } from '../models/event/event.model';
 import { User } from '../models/user/user.model';
 import { UpdateEventDialogComponent } from '../components/shared/dialogs/update-event-dialog/update-event-dialog.component';
 import { AuthenticationService } from './authentication.service';
+import { Job } from '../models/job/job.model';
+import { JobDetailDialogComponent } from '../components/shared/dialogs/job-detail-dialog/job-detail-dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -88,6 +90,13 @@ export class DialogService {
   openEditUser(user: User) {
     this.dialogRef = this.dialog.open(EditProfileDialogComponent, {
       data: user,
+      width: '700px'
+    })
+  }
+
+  openJobDetail(job: Job) {
+    this.dialogRef = this.dialog.open(JobDetailDialogComponent, {
+      data: job,
       width: '700px'
     })
   }
