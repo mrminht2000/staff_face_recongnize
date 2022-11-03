@@ -9,4 +9,4 @@ services:
       - ~/apps/mssql/data:/var/lib/mssqlql/data
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=*Ngocminhht2000
+      - SA_PASSWORD=Password!

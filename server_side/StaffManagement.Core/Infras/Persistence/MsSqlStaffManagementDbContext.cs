@@ -126,12 +126,12 @@ namespace StaffManagement.Core.Infras.Persistence
             // Events
             var today = DateTime.UtcNow.AddHours(7).Date;
 
-            var firstDayMonth = new DateTime(today.Year, today.Month, 1); // first day this month
+            var firstDayofLastMonth = new DateTime(today.Year, (today.Month - 1 > 0 ? today.Month - 1 : 1), 1); // first day this month
             long eventId = 1;
 
             for (var i = 1; i <= 10; i++)
             {
-                var startDay = firstDayMonth;
+                var startDay = firstDayofLastMonth;
                 var count = 1;
                 while (startDay <= today && count < 31) 
                 {
@@ -152,7 +152,7 @@ namespace StaffManagement.Core.Infras.Persistence
                         eventId++;
                     }
 
-                    if (eventChoice > 2 && eventChoice <= 4)
+                    if (eventChoice > 2 && eventChoice <= 3)
                     {
                         modelBuilder.Entity<Event>().HasData(new Event
                         {
