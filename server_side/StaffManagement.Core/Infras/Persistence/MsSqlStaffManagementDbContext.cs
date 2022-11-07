@@ -124,7 +124,7 @@ namespace StaffManagement.Core.Infras.Persistence
             }
 
             // Events
-            var today = DateTime.UtcNow.AddHours(7).Date;
+            var today = DateTime.Now.Date;
 
             var firstDayofLastMonth = new DateTime(today.Year, (today.Month - 1 > 0 ? today.Month - 1 : 1), 1); // first day this month
             long eventId = 1;
@@ -133,7 +133,7 @@ namespace StaffManagement.Core.Infras.Persistence
             {
                 var startDay = firstDayofLastMonth;
                 var count = 1;
-                while (startDay <= today && count < 31) 
+                while (startDay <= today.AddDays(10) && count < 61) 
                 {
                     var eventChoice = rand.Next(1, 10);
                     if (eventChoice <= 2)
@@ -143,7 +143,7 @@ namespace StaffManagement.Core.Infras.Persistence
                             Id = eventId,
                             EventName = "Nghi khong luong",
                             EventType = (int)EventType.Absent,
-                            StartTime = startDay.AddHours(-7),
+                            StartTime = startDay,
                             AllDay = true,
                             IsConfirmed = true,
                             UserId = i
@@ -159,7 +159,7 @@ namespace StaffManagement.Core.Infras.Persistence
                             Id = eventId,
                             EventName = "Nghi co luong",
                             EventType = (int)EventType.Vacation,
-                            StartTime = startDay.AddHours(-7),
+                            StartTime = startDay,
                             AllDay = true,
                             IsConfirmed = true,
                             UserId = i
@@ -175,7 +175,7 @@ namespace StaffManagement.Core.Infras.Persistence
                             Id = eventId,
                             EventName = "Check-in",
                             EventType = (int)EventType.Register,
-                            StartTime = startDay.AddHours(rand.Next(7, 9) -7),
+                            StartTime = startDay.AddHours(rand.Next(7, 9)),
                             AllDay = false,
                             IsConfirmed = true,
                             UserId = i
@@ -188,7 +188,7 @@ namespace StaffManagement.Core.Infras.Persistence
                             Id = eventId,
                             EventName = "Check-out",
                             EventType = (int)EventType.Register,
-                            StartTime = startDay.AddHours(rand.Next(17, 19) -7),
+                            StartTime = startDay.AddHours(rand.Next(17, 19)),
                             AllDay = false,
                             IsConfirmed = true,
                             UserId = i

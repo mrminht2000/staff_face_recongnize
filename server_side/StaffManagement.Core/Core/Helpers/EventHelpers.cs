@@ -32,7 +32,7 @@ namespace StaffManagement.Core.Core.Helpers
                 return (0, TimeSpan.FromSeconds(0));
             }
 
-            var vnCheckIn = checkIn?.AddHours(7);
+            var vnCheckIn = checkIn;
             var startTime = vnCheckIn?.Date.AddHours(8); // 8h AM
             var startLate = startTime < vnCheckIn ? vnCheckIn - startTime : TimeSpan.FromSeconds(0);
 
@@ -41,7 +41,7 @@ namespace StaffManagement.Core.Core.Helpers
                 return (0.5, startLate ?? TimeSpan.FromSeconds(0));
             }
 
-            var vnCheckOut = checkOut?.AddHours(7);
+            var vnCheckOut = checkOut;
             var endTime = vnCheckOut?.Date.AddHours(18); // 6h PM
             var endSoon = endTime > vnCheckOut ? endTime - vnCheckOut : TimeSpan.FromSeconds(0);
 

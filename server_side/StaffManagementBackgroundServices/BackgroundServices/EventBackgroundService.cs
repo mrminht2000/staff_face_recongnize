@@ -26,17 +26,6 @@ namespace StaffManagement.BackgroundServices.BackgroundServices
         {
             try
             {
-                var now = DateTime.Now;
-                var hours = (22 - now.Hour >= 0) ? 22 - now.Hour : (22 + 24) - now.Hour;
-                var minutes = 59 - now.Minute;
-                var seconds = 59 - now.Second;
-                var secondsTillWorking = hours * 3600 + minutes * 60 + seconds; // Execute at the end of the day
-
-                secondsTillWorking = 0;
-                _logger.LogInformation("Waiting {0:00}:{0:00}:{1:00} until working time", hours, minutes, seconds);
-                await Task.Delay(TimeSpan.FromSeconds(secondsTillWorking), stoppingToken);
-
-
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
@@ -56,12 +45,16 @@ namespace StaffManagement.BackgroundServices.BackgroundServices
                             await _eventService.ProccessRegisterEventsByUserIdAsync(user.Id);
                             await _workingProgressService.UpdateWorkingDayAsync(user.Id);
 
-                            Console.WriteLine("Update user " + user.UserName + "'s register events successfully!");
+                            _logger.LogInformation("Update user " + user.UserName + "'s register events successfully!");
                         } 
                     }
 
-                    _logger.LogInformation("Waiting for the next day till working time");
-                    await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
+                    var secondsTillWorking = TimeWaitUntilWorking();
+
+                    _logger.LogInformation("The next task is working at {0:dd/MM/yyyy HH:mm:ss}", DateTime.Now.AddSeconds(secondsTillWorking));
+                    
+                    await Task.Delay(TimeSpan.FromSeconds(TimeWaitUntilWorking()), stoppingToken);
+
                 }
 
             }
@@ -70,6 +63,23 @@ namespace StaffManagement.BackgroundServices.BackgroundServices
                 Console.WriteLine(ex);
                 throw;
             }
+        }
+
+        private double TimeWaitUntilWorking()
+        {
+            var now = DateTime.Now;
+            var todayWorkingTime = now.Date.AddHours(22);
+            double secondsTillWorking = 0;
+            if (DateTime.Compare(now, todayWorkingTime) >= 0)
+            {
+                secondsTillWorking = todayWorkingTime.AddDays(1).Subtract(now).TotalSeconds;
+            }
+            else
+            {
+                secondsTillWorking = todayWorkingTime.Subtract(now).TotalSeconds;
+            }
+
+            return secondsTillWorking;
         }
     }
 }
