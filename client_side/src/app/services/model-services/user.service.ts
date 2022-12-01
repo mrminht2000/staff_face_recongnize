@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, of } from 'rxjs';
+import { ChangePasswordReq } from 'src/app/models/user/dtos/change-password-req';
 import { CreateUserReq } from 'src/app/models/user/dtos/create-user-req';
 import { GetUserResp } from 'src/app/models/user/dtos/get-user-resp';
 import { UserData } from 'src/app/models/user/user-data';
@@ -51,6 +52,10 @@ export class UserService {
 
   updateUser(user: UserData) {
     return this.httpClient.put(this.userApi + '/edit', user);
+  }
+
+  changePassword(req: ChangePasswordReq) {
+    return this.httpClient.put(this.userApi + '/change-password', req);
   }
 
   deleteUser(id: number) {

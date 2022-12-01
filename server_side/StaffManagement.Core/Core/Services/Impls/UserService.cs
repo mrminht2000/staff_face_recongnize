@@ -38,11 +38,17 @@ namespace StaffManagement.Core.Core.Services.Impls
 
         public async Task CreateUserAsync(User @user, CancellationToken cancellationToken = default)
         {
+            if (_authenContext.UserRole <= @user.Role)
+            {
+                throw new Exception("You don't have enough permission");
+            }
+
             if (@user == null)
             {
                 throw new ArgumentNullException(nameof(@user));
             }
 
+            user.Password = @user.Password.GenerateMD5();
             _userRepository.CreateUser(@user);
             await _unitOfWork.CommitAsync(cancellationToken);
         }
@@ -131,6 +137,11 @@ namespace StaffManagement.Core.Core.Services.Impls
 
         public async Task UpdateUserAsync(User request, CancellationToken cancellationToken = default)
         {
+            if (_authenContext.UserRole <= request.Role)
+            {
+                throw new Exception("You don't have enough permission");
+            }
+
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
@@ -151,8 +162,56 @@ namespace StaffManagement.Core.Core.Services.Impls
             await _unitOfWork.CommitAsync(cancellationToken);
         }
 
+        public async Task ChangePasswordAsync(ChangePasswordRequest request, CancellationToken cancellationToken = default)
+        {
+            Expression<Func<User, bool>> filters = @user => request.UserId == @user.Id;
+
+            var result = await _userRepository.GetUserAsync(new UserParams(filters), cancellationToken);
+            
+            if (result == null)
+            {
+                throw new ArgumentNullException("User cannot be null");
+            }
+
+            var user = result.BaseUsers.FirstOrDefault();
+
+            if (_authenContext.UserRole < user.Role)
+            {
+                throw new Exception("You don't have enough permission");
+            }
+
+            if (_authenContext.UserRole == user.Role && _authenContext.UserId != user.Id)
+            {
+                throw new Exception("You don't have enough permission");
+            }
+
+            if (!request.NewPassword.Equals(request.RePassword))
+            {
+                throw new Exception("RePassword must match New Password");
+            }
+            
+            if (_authenContext.UserId == user.Id)
+            {
+                if (!request.OldPassword.GenerateMD5().Equals(user.Password))
+                {
+                    throw new Exception("Old Password is wrong");
+                }
+            }
+
+
+            user.Password = request.NewPassword.GenerateMD5();
+            _userRepository.UpdateUser(user);
+            await _unitOfWork.CommitAsync(cancellationToken);
+        }
+
         public async Task DeleteUserAsync(QueryUserRequest request, CancellationToken cancellationToken = default)
         {
+            var user = await QueryUserByIdAsync(request, cancellationToken);
+            if (_authenContext.UserRole <= user.Role)
+            {
+                throw new Exception("You don't have enough permission");
+            }
+
             Expression<Func<User, bool>> filters = @user => request.Id == @user.Id;
 
             _userRepository.DeleteUser(new UserParams(filters));

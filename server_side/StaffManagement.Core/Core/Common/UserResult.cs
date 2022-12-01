@@ -10,8 +10,11 @@ namespace StaffManagement.Core.Core.Common
 
         public UserData User { get; private set; }
 
+        public List<User> BaseUsers { get; private set; }
+
         public UserResult(List<User> users)
         {
+            BaseUsers = users;
             Users = users.ConvertAll(user => new UserData(user));
         }
 

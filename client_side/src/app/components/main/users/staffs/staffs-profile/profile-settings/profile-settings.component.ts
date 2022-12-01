@@ -27,6 +27,10 @@ export class ProfileSettingsComponent implements OnInit {
     this.dialog.openEditUser(this.user);
   }
 
+  openChangePasswordDialog() {
+    this.dialog.openChangePassword(this.user);
+  }
+
   openProfileDialog() {
     this.dialog.openProfileUser(this.user);
   }

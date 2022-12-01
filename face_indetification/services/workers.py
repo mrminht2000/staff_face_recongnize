@@ -40,7 +40,7 @@ class RecognizeWorker(QThread):
         if res and res.ok:
             print(self.name + " registered")
         else:
-            print(res.json()['Message'])
+            print(res)
                 
     def stop(self):
         self.thread_active = False

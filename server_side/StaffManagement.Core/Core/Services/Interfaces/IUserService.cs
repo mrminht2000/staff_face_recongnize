@@ -22,6 +22,8 @@ namespace StaffManagement.Core.Core.Services.Interfaces
 
         Task UpdateUserAsync(User @user, CancellationToken cancellationToken = default);
 
+        Task ChangePasswordAsync(ChangePasswordRequest request, CancellationToken cancellationToken = default);
+
         Task DeleteUserAsync(QueryUserRequest request, CancellationToken cancellationToken = default);
     }
 

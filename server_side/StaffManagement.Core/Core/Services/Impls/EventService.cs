@@ -126,7 +126,7 @@ namespace StaffManagement.Core.Core.Services.Impls
         public async Task<QueryResult<Event>> QueryEventsByUserIdAsync(QueryEventRequest request, CancellationToken cancellationToken = default)
         {
 
-            Expression<Func<Event, bool>> filters = @event => request.UserId == @event.UserId;
+            Expression<Func<Event, bool>> filters = @event => request.UserId == @event.UserId || @event.UserId == null;
 
             var result = await _eventRepository
                 .GetAsync(new QueryParams<Event>(filters), cancellationToken);
@@ -148,7 +148,9 @@ namespace StaffManagement.Core.Core.Services.Impls
 
         public async Task<QueryResult<Event>> QueryRegisterEventsByUserIdAsync(long userId, CancellationToken cancellationToken = default)
         {
-            Expression<Func<Event, bool>> filters = @event => userId == @event.UserId && @event.EventType == (int)EventType.Register;
+            var today = DateTime.UtcNow.AddHours(7).Date;
+            Expression<Func<Event, bool>> filters = @event => userId == @event.UserId && @event.EventType == (int)EventType.Register 
+                                                    && @event.StartTime.AddHours(7).Date == today;
 
             var result = await _eventRepository
                 .GetAsync(new QueryParams<Event>(filters), cancellationToken);

@@ -143,7 +143,7 @@ namespace StaffManagement.Core.Infras.Persistence
                             Id = eventId,
                             EventName = "Nghi khong luong",
                             EventType = (int)EventType.Absent,
-                            StartTime = startDay,
+                            StartTime = startDay.AddHours(-7),
                             AllDay = true,
                             IsConfirmed = true,
                             UserId = i
@@ -159,7 +159,7 @@ namespace StaffManagement.Core.Infras.Persistence
                             Id = eventId,
                             EventName = "Nghi co luong",
                             EventType = (int)EventType.Vacation,
-                            StartTime = startDay,
+                            StartTime = startDay.AddHours(-7),
                             AllDay = true,
                             IsConfirmed = true,
                             UserId = i
@@ -175,7 +175,7 @@ namespace StaffManagement.Core.Infras.Persistence
                             Id = eventId,
                             EventName = "Check-in",
                             EventType = (int)EventType.Register,
-                            StartTime = startDay.AddHours(rand.Next(7, 9)),
+                            StartTime = startDay.AddHours(rand.Next(7, 9) - 7),
                             AllDay = false,
                             IsConfirmed = true,
                             UserId = i
@@ -188,7 +188,7 @@ namespace StaffManagement.Core.Infras.Persistence
                             Id = eventId,
                             EventName = "Check-out",
                             EventType = (int)EventType.Register,
-                            StartTime = startDay.AddHours(rand.Next(17, 19)),
+                            StartTime = startDay.AddHours(rand.Next(17, 19) - 7),
                             AllDay = false,
                             IsConfirmed = true,
                             UserId = i

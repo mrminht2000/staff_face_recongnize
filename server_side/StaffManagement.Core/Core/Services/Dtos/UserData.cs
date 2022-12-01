@@ -15,7 +15,7 @@ namespace StaffManagement.Core.Core.Services.Dtos
         public Department? Department { get; set; }
         public Job? Job { get; set; }
         public WorkingProgress? WorkingProgress { get; set; }
-        public ICollection<Event>? Events { get; set; }
+        public List<Event>? Events { get; set; }
         public DateTime StartDay { get; set; }
         public bool IsConfirmed { get; set; }
         public int? Status { get; set; }

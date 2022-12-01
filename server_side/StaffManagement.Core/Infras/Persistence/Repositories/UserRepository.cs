@@ -24,7 +24,7 @@ namespace StaffManagement.Core.Infras.Persistence.Repositories
 
         public async Task<UserResult> GetUserAsync(UserParams @params, CancellationToken cancellationToken)
         {
-            var query = _dbContext.Set<User>().AsQueryable();
+            var query = _dbContext.Set<User>().AsQueryable().AsNoTracking();
 
             if (@params.Filters != null)
             {
@@ -75,7 +75,7 @@ namespace StaffManagement.Core.Infras.Persistence.Repositories
 
         public void UpdateUser(User request)
         {
-            var query = _dbContext.Set<User>().AsQueryable();
+            var query = _dbContext.Set<User>().AsQueryable().AsNoTracking();
 
             if (request != null)
             {

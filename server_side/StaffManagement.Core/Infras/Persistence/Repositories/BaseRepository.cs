@@ -84,10 +84,11 @@ namespace StaffManagement.Core.Infras.Persistence.Repositories
             {
                 throw new NullReferenceException("Record not found");
             }
-
-            var item = query.FirstOrDefault();
-
-            _dbContext.Remove(item);
+            
+            foreach (var item in query)
+            {
+                _dbContext.Remove(item);
+            }
         }
     }
 }

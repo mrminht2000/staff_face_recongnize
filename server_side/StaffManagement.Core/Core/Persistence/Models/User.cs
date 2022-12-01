@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StaffManagement.Core.Core.Services.Dtos;
+using System;
 using System.Collections.Generic;
 
 namespace StaffManagement.Core.Core.Persistence.Models

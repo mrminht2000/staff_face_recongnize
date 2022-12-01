@@ -107,6 +107,25 @@ namespace StaffManagement.API.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        [Route("change-password")]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordReq req)
+        {
+            if (req == null)
+            {
+                return BadRequest();
+            }
+
+            await _userService.ChangePasswordAsync(new ChangePasswordRequest { 
+                UserId = req.UserId, 
+                NewPassword = req.NewPassword, 
+                OldPassword = req.OldPassword,
+                RePassword = req.RePassword,
+            });
+
+            return Ok();
+        }
+
         [HttpDelete]
         [Route("delete")]
         public async Task<IActionResult> DeleteUserAsync([FromQuery] UserQueryReq req)
